@@ -20,9 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
+import e2su.utbm.sy43project.ui.components.NoobleHeader
 
 // TODO: Check how to round the corners of the the buttons now that I changed their background color
-// TODO: Create function to check if the email is valid
 
 var ErrorMailMessage : String = ""
 
@@ -30,7 +30,6 @@ var ErrorMailMessage : String = ""
 fun LoginBlock() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .background(Color.LightGray)
@@ -99,20 +98,20 @@ fun LoginBlock() {
 }
 
 @Composable
-fun LoginView(name: String) {
+fun LoginView() {
     Row(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            .fillMaxSize(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Column(modifier = Modifier.padding(start = 8.dp)) {
-            Text(
+        Column() {
+            NoobleHeader()
+            /*Text(
                 text = "Il faut se login, $name",
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp)
-            )
+            )*/
+            LoginBlock()
         }
     }
 }
@@ -121,6 +120,6 @@ fun LoginView(name: String) {
 @Composable
 fun LoginPreview() {
     SY43ProjectTheme {
-        LoginBlock()
+        LoginView()
     }
 }
