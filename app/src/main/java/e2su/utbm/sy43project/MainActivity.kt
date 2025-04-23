@@ -44,16 +44,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                } else {
-                    LoginView(
-                        modifier = Modifier.fillMaxSize(),
-                        login = LoginModel(
-                            "", ""
-                        ),
-                        onLoginLaunched = { login ->
-                            isConnected = true
-                        }
-                    )
                 }
             }
         }
