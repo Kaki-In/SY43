@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SY43ProjectTheme {
-                LoginView("François")
+                LoginView()
             }
         }
     }
