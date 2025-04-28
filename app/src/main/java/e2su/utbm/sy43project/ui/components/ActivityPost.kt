@@ -28,15 +28,16 @@ fun ActivityPost(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(80.dp)
             .background(Color.LightGray)
-            .padding(16.dp)
-            .border(1.dp, Color.Gray),
+            .border(1.dp, Color.Red)
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically // Centre verticalement les éléments
     ) {
         Column(
             modifier = Modifier
                 .weight(1f) // Prend tout l'espace disponible à gauche
-                .padding(16.dp),
+                .padding(8.dp),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
