@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import e2su.utbm.sy43project.ui.components.NoobleFooter
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.components.NoobleHeader
 
@@ -116,6 +117,7 @@ fun LoginView(navController: NavHostController) {
             Button(onClick = { navController.navigate("activity") }) {
                 Text(text = "Go to Profile Screen")
             }
+            NoobleFooter()
         }
     }
 }

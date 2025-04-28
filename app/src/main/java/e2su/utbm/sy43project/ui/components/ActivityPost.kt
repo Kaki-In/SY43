@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
 import e2su.utbm.sy43project.R
 
@@ -27,29 +29,33 @@ fun ActivityPost(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.LightGray)
-    ){
+            .padding(16.dp)
+            .border(1.dp, Color.Gray),
+        verticalAlignment = Alignment.CenterVertically // Centre verticalement les éléments
+    ) {
         Column(
             modifier = Modifier
-                .height(100.dp),
+                .weight(1f) // Prend tout l'espace disponible à gauche
+                .padding(16.dp),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(16.dp)
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = date,
                 fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                modifier = Modifier.padding(16.dp)
+                color = Color.Gray
             )
         }
+        Spacer(modifier = Modifier.weight(1f)) // Pousse l'icône vers la droite
         Image(
             painter = painterResource(user),
             contentDescription = "User Icon",
             modifier = Modifier
-                .size(40.dp),
+                .size(80.dp)
+                .padding(16.dp)
         )
     }
 }
