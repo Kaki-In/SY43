@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.views.ActivityView
+import e2su.utbm.sy43project.ui.views.ClassOverview
 import e2su.utbm.sy43project.ui.views.ClassSelectView
 import e2su.utbm.sy43project.ui.views.ClassView
 import e2su.utbm.sy43project.ui.views.LoginView
@@ -61,7 +62,8 @@ class MainActivity : ComponentActivity() {
                     composable("class") { ClassView(navController) }
                     composable("profile") { ProfileView(navController) }
                     composable("activity") { ActivityView(navController) }
-                    composable("select") { ClassSelectView(navController) }
+                    composable("select") { ClassSelectView(navController, courses = listOf()) }
+                    composable("class_overview") { ClassOverview(navController) }
                 }
             }
         }

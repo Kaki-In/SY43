@@ -15,25 +15,46 @@ import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.components.ActivityPost
 import e2su.utbm.sy43project.ui.components.NoobleFooter
 import e2su.utbm.sy43project.ui.components.NoobleHeader
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import e2su.utbm.sy43project.ui.components.ClassButton
 
 @Composable
 fun ClassSelectView(
     navController: NavHostController,
+    courses: List<String>, // Liste des cours
     modifier: Modifier = Modifier
 ) {
-    Column(){
+    Column {
         NoobleHeader()
-        Text(
-            text = "Activities",
-            modifier = modifier.padding(16.dp)
-        )
-        Spacer(modifier = modifier.height(16.dp))
-        ActivityPost("Blabla", "22/12/2023", R.drawable.book)
-        ActivityPost("blublu", "22/12/2023", R.drawable.book)
-        ActivityPost("zeifu", "22/12/2023", R.drawable.book)
-        ActivityPost("Blabla", "22/12/2023", R.drawable.book)
-        ActivityPost("blublu", "22/12/2023", R.drawable.book)
-        ActivityPost("zeifu", "22/12/2023", R.drawable.book)
+        Text(text = "Cours suivis", modifier = modifier.padding(16.dp))
+        //Spacer(modifier = modifier.height(16.dp))
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2), // Deux colonnes
+            modifier = modifier.padding(16.dp) ,
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp), // Espacement horizontal
+            verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp) // Espacement vertical
+        ) {
+            items(courses) { course ->
+                ClassButton(
+                    text = course,
+                    navController = navController
+                )
+            }
+        }
         NoobleFooter()
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun ClassSelectPreview() {
+    val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
+    val courses = listOf("Math", "Physics", "Chemistry", "Biology")
+    ClassSelectView(navController = fakeNavController, courses = courses)
 }

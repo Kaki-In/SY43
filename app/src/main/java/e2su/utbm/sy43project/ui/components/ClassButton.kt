@@ -1,5 +1,6 @@
 package e2su.utbm.sy43project.ui.components
 
+import android.R.attr.shape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -13,7 +14,9 @@ import androidx.compose.ui.res.painterResource
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -26,12 +29,15 @@ import e2su.utbm.sy43project.R
 @Composable
 fun ClassButton(
     text: String,
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = { navController.navigate(text) },
+        colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
-            .size(100.dp) // Taille carrée : 100x100 dp
+            .aspectRatio(1f)
     ) {
         Text(text = text)
     }
