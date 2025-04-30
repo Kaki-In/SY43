@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = "login") {
                     composable("login") { LoginView(navController) }
                     composable("class") { ClassView(navController) }
-                    composable("profile") { ProfileView(navController) }
+                    composable("profile") { ProfileView(navController, courses = listOf()) }
                     composable("activity") { ActivityView(navController) }
                     composable("select") { ClassSelectView(navController, courses = listOf()) }
                     composable("class_overview") { ClassOverview(navController) }
