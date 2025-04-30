@@ -47,21 +47,21 @@ fun NoobleFooter(
         ) {
             Image(
                 painter = painterResource(R.drawable.book),
-                contentDescription = "Menu Icon",
+                contentDescription = "Classes Icon",
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
             )
             Image(
-                painter = painterResource(R.drawable.book),
-                contentDescription = "Menu Icon",
+                painter = painterResource(R.drawable.bell),
+                contentDescription = "Activites Icon",
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
             )
             Image(
-                painter = painterResource(R.drawable.book),
-                contentDescription = "Menu Icon",
+                painter = painterResource(R.drawable.cart),
+                contentDescription = "Additional Content Icon",
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)

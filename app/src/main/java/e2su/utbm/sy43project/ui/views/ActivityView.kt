@@ -20,7 +20,6 @@ fun ActivityView(
     modifier: Modifier = Modifier
 ) {
     Column(){
-        NoobleHeader()
         Text(
             text = "Activities",
             modifier = modifier.padding(16.dp)
@@ -32,7 +31,6 @@ fun ActivityView(
         ActivityPost("Blabla", "22/12/2023", R.drawable.book)
         ActivityPost("blublu", "22/12/2023", R.drawable.book)
         ActivityPost("zeifu", "22/12/2023", R.drawable.book)
-        NoobleFooter()
     }
 }
 

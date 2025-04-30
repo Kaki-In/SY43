@@ -1,9 +1,12 @@
 package e2su.utbm.sy43project.ui.views
 
+import e2su.utbm.sy43project.R;
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -16,11 +19,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.ui.components.NoobleFooter
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.components.NoobleHeader
+import e2su.utbm.sy43project.ui.theme.NoobleGreen
+import java.nio.file.WatchEvent
 
 // TODO: Check how to round the corners of the the buttons now that I changed their background color
 
@@ -98,15 +109,30 @@ fun LoginBlock() {
 }
 
 @Composable
+fun NoobleLoginHeader() {
+    Box (modifier = Modifier.background(NoobleGreen).fillMaxWidth()) {
+        Image(
+            painter = painterResource(R.mipmap.ic_launcher_foreground),
+            contentDescription = null
+        )
+
+        Text (
+            "Nooble",
+            modifier = Modifier.align(Alignment.Center),
+            color = Color(0xFFFFFFFF),
+            fontSize = 50.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
 fun LoginView(navController: NavHostController) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalArrangement = Arrangement.Center
-    ) {
+    Scaffold { innerPadding ->
         Column() {
-            NoobleHeader()
-            Spacer(modifier = Modifier.size(70.dp))
+            Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()).background(NoobleGreen).fillMaxWidth())
+            NoobleLoginHeader()
+            Spacer(modifier = Modifier.size(30.dp))
             /*Text(
                 text = "Il faut se login, $name",
                 fontWeight = FontWeight.Bold,
@@ -117,7 +143,6 @@ fun LoginView(navController: NavHostController) {
             Button(onClick = { navController.navigate("activity") }) {
                 Text(text = "Go to Profile Screen")
             }
-            NoobleFooter()
         }
     }
 }
