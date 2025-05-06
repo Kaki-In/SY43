@@ -1,6 +1,6 @@
 package e2su.utbm.sy43project.ui.components
 
-import android.preference.PreferenceActivity
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text

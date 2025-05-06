@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.models
+package e2su.nooble.models
 
 data class LoginModel (
     var mail: String,
