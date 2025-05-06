@@ -67,6 +67,7 @@ fun NoobleFooter(
                     .padding(8.dp)
             )
         }
+        HomeButton(navController)
     }
 }
 

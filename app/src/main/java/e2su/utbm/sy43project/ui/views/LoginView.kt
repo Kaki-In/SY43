@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -47,19 +48,12 @@ fun LoginBlock() {
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
     ) {
-        Row {
-            Text(
-                text = "Email",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(16.dp)
-            )
-            Text(
-                text = ErrorMailMessage,
-                fontWeight = FontWeight.Bold,
-                color = Color.Red,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
+        Text(
+            text = ErrorMailMessage,
+            fontWeight = FontWeight.Bold,
+            color = Color.Red,
+            modifier = Modifier.padding(16.dp)
+        )
         TextField(
             value = email,
             onValueChange = {
@@ -67,17 +61,15 @@ fun LoginBlock() {
                 ErrorMailMessage = if (it.contains("@") && it.contains(".")) "" else "Invalid email"
             },
             placeholder = { Text("example@hey.yo") },
+            label = { Text("Email") },
             modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = "Password",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(16.dp)
         )
         TextField(
             value = password,
             onValueChange = { password = it },
+            label = { Text("Password") },
             placeholder = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
         Button(
