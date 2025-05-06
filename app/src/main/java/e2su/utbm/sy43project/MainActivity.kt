@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.views.ActivityView
 import e2su.utbm.sy43project.ui.views.ClassOverview
@@ -59,11 +61,31 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = "login") {
                     composable("login") { LoginView(navController) }
-                    composable("class") { ClassView(navController) }
-                    composable("profile") { ProfileView(navController, courses = listOf()) }
-                    composable("activity") { ActivityView(navController) }
-                    composable("select") { ClassSelectView(navController, courses = listOf()) }
-                    composable("class_overview") { ClassOverview(navController) }
+                    composable("class") {
+                        NoobleIntegrated(content={
+                            ClassView(navController)
+                        })
+                    }
+                    composable("profile") {
+                        NoobleIntegrated(content={
+                            ProfileView(navController, courses = listOf())
+                        })
+                    }
+                    composable("activity") {
+                        NoobleIntegrated(content={
+                            ActivityView(navController)
+                        })
+                    }
+                    composable("select") {
+                        NoobleIntegrated(content={
+                            ClassSelectView(navController, courses = listOf())
+                        })
+                    }
+                    composable("class_overview") {
+                        NoobleIntegrated(content={
+                            ClassOverview(navController)
+                        })
+                    }
                 }
             }
         }

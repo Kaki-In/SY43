@@ -21,11 +21,7 @@ fun ActivityView(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = Modifier
-            .padding(16.dp),
-    ){
-        NoobleHeader()
+    Column(){
         Text(
             text = "Activities",
             modifier = modifier.padding(16.dp)
@@ -37,8 +33,6 @@ fun ActivityView(
         ActivityPost("Blabla", "22/12/2023", R.drawable.book)
         ActivityPost("blublu", "22/12/2023", R.drawable.book)
         ActivityPost("zeifu", "22/12/2023", R.drawable.book)
-        HomeButton(navController)
-        NoobleFooter()
     }
 }
 

@@ -34,7 +34,7 @@ fun NoobleHeader(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
-            painter = painterResource(R.drawable.book),
+            painter = painterResource(R.drawable.menu_burger),
             contentDescription = "Menu Icon",
             modifier = Modifier
                 .size(40.dp)
@@ -47,7 +47,7 @@ fun NoobleHeader(
             modifier = Modifier.padding(8.dp)
         )
         Image(
-            painter = painterResource(R.drawable.clock),
+            painter = painterResource(R.drawable.profile),
             contentDescription = "Profile Icon",
             modifier = Modifier
                 .size(50.dp)
