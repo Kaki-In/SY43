@@ -19,19 +19,15 @@ import e2su.utbm.sy43project.ui.components.NoobleHeader
 
 @Composable
 fun ClassOverview(
-    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column(){
-        NoobleHeader()
         Text(
             text = "Titre UE",
             modifier = modifier.padding(16.dp)
         )
         Spacer(modifier = modifier.height(16.dp))
         //Créer composant pour les sections de l'UE ?
-        HomeButton(navController)
-        NoobleFooter()
     }
 }
 

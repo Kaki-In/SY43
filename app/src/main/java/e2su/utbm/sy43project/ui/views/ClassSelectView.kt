@@ -26,12 +26,10 @@ import e2su.utbm.sy43project.ui.components.HomeButton
 
 @Composable
 fun ClassSelectView(
-    navController: NavHostController,
     courses: List<String>, // Liste des cours
     modifier: Modifier = Modifier
 ) {
     Column {
-        NoobleHeader()
         Text(text = "Cours suivis", modifier = modifier.padding(16.dp))
         //Spacer(modifier = modifier.height(16.dp))
         LazyVerticalGrid(
@@ -47,8 +45,6 @@ fun ClassSelectView(
                 )
             }
         }
-        HomeButton(navController)
-        NoobleFooter()
     }
 }
 
@@ -56,7 +52,6 @@ fun ClassSelectView(
 @Preview(showBackground = true)
 @Composable
 fun ClassSelectPreview() {
-    val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
     val courses = listOf("Math", "Physics", "Chemistry", "Biology")
-    ClassSelectView(navController = fakeNavController, courses = courses)
+    ClassSelectView(courses = courses)
 }

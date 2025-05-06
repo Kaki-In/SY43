@@ -18,6 +18,7 @@ import androidx.compose.foundation.border
 import e2su.utbm.sy43project.R
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
 import e2su.utbm.sy43project.ui.views.LoginBlock
 
@@ -25,6 +26,7 @@ import e2su.utbm.sy43project.ui.views.LoginBlock
 
 @Composable
 fun NoobleFooter(
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column(

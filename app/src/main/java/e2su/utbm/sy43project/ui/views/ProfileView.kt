@@ -30,12 +30,11 @@ import e2su.utbm.sy43project.ui.components.HomeButton
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 
 @Composable
-fun ProfileView(navController: NavController, courses: List<String>) {
+fun ProfileView(courses: List<String>) {
     Column(
         modifier = Modifier
             .padding(16.dp),
     ) {
-        NoobleHeader()
         Row {
             CircularImage(imageRes = R.drawable.woof, size = 80)
             Column {
@@ -72,15 +71,12 @@ fun ProfileView(navController: NavController, courses: List<String>) {
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        HomeButton(navController)
-        NoobleFooter()
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ProfileViewPreview() {
-    val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
     val courses = listOf("Math", "Physics", "Chemistry", "Biology")
-    ProfileView(navController = fakeNavController, courses = courses)
+    ProfileView(courses = courses)
 }

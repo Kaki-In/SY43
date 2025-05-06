@@ -20,7 +20,6 @@ import e2su.utbm.sy43project.ui.components.NoobleHeader
 
 @Composable
 fun ActivityView(
-    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column(){
