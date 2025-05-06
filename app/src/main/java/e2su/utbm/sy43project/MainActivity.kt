@@ -62,28 +62,28 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = "login") {
                     composable("login") { LoginView(navController) }
                     composable("class") {
-                        NoobleIntegrated(content={
+                        NoobleIntegrated(navHostController = navController, content={
                             ClassView(navController)
                         })
                     }
                     composable("profile") {
-                        NoobleIntegrated(content={
-                            ProfileView(navController, courses = listOf())
+                        NoobleIntegrated(navHostController = navController, content={
+                            ProfileView(courses = listOf())
                         })
                     }
                     composable("activity") {
-                        NoobleIntegrated(content={
-                            ActivityView(navController)
+                        NoobleIntegrated(navHostController = navController, content={
+                            ActivityView()
                         })
                     }
                     composable("select") {
-                        NoobleIntegrated(content={
-                            ClassSelectView(navController, courses = listOf())
+                        NoobleIntegrated(navHostController = navController, content={
+                            ClassSelectView(navController = navController, courses = listOf())
                         })
                     }
                     composable("class_overview") {
-                        NoobleIntegrated(content={
-                            ClassOverview(navController)
+                        NoobleIntegrated(navHostController = navController, content={
+                            ClassOverview()
                         })
                     }
                 }

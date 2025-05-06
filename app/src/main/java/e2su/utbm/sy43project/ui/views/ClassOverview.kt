@@ -35,6 +35,5 @@ fun ClassOverview(
 @Preview(showBackground = true)
 @Composable
 fun ActivityViewPreview() {
-    val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
-    ActivityView(navController = fakeNavController)
+    ActivityView()
 }
