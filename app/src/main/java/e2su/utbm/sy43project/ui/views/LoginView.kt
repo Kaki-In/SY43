@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import e2su.utbm.sy43project.ui.components.HomeButton
 import e2su.utbm.sy43project.ui.components.NoobleFooter
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.components.NoobleHeader
@@ -140,8 +141,20 @@ fun LoginView(navController: NavHostController) {
             )*/
             LoginBlock()
             Spacer(modifier = Modifier.size(70.dp))
-            Button(onClick = { navController.navigate("activity") }) {
+            Button(onClick = { navController.navigate("profile") }) {
                 Text(text = "Go to Profile Screen")
+            }
+            Button(onClick = { navController.navigate("activity") }) {
+                Text(text = "Go to Activity Screen")
+            }
+            Button(onClick = { navController.navigate("class_overview") }) {
+                Text(text = "Go to class overview Screen")
+            }
+            Button(onClick = { navController.navigate("class") }) {
+                Text(text = "Go to class Screen")
+            }
+            Button(onClick = { navController.navigate("select") }) {
+                Text(text = "Go to class selection Screen")
             }
         }
     }

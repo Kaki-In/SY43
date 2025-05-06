@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("profile") {
                         NoobleIntegrated(content={
-                            ProfileView(navController)
+                            ProfileView(navController, courses = listOf())
                         })
                     }
                     composable("activity") {
