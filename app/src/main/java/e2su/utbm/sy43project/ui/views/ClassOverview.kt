@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.R
@@ -33,9 +35,10 @@ fun ClassOverview(
     }
 }
 
-/*
+
 @Preview(showBackground = true)
 @Composable
 fun ActivityViewPreview() {
-    ActivityView(NavController)
-}*/
+    val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
+    ActivityView(navController = fakeNavController)
+}

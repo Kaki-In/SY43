@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -152,11 +153,12 @@ fun LoginView(navController: NavHostController) {
     }
 }
 
-/*
+
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
     SY43ProjectTheme {
-        LoginView(NavHostController)
+        val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
+        LoginView(navController = fakeNavController)
     }
-}*/
+}
