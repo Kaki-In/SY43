@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.components.ActivityPost
+import e2su.utbm.sy43project.ui.components.HomeButton
 import e2su.utbm.sy43project.ui.components.NoobleFooter
 import e2su.utbm.sy43project.ui.components.NoobleHeader
 
@@ -27,6 +28,7 @@ fun ClassOverview(
         )
         Spacer(modifier = modifier.height(16.dp))
         //Créer composant pour les sections de l'UE ?
+        HomeButton(navController)
         NoobleFooter()
     }
 }

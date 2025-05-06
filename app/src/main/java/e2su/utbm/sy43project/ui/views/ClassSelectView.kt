@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import e2su.utbm.sy43project.ui.components.ClassButton
+import e2su.utbm.sy43project.ui.components.HomeButton
 
 @Composable
 fun ClassSelectView(
@@ -46,6 +47,7 @@ fun ClassSelectView(
                 )
             }
         }
+        HomeButton(navController)
         NoobleFooter()
     }
 }

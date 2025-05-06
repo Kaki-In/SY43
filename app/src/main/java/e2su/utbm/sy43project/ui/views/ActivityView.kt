@@ -8,9 +8,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.components.ActivityPost
+import e2su.utbm.sy43project.ui.components.HomeButton
 import e2su.utbm.sy43project.ui.components.NoobleFooter
 import e2su.utbm.sy43project.ui.components.NoobleHeader
 
