@@ -31,7 +31,7 @@ fun NoobleFooter(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize() // Remplit tout l'espace disponible
             .background(Color.White), // Fond blanc pour éviter les chevauchements
         verticalArrangement = Arrangement.SpaceBetween // Place le footer en bas
