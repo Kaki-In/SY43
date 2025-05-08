@@ -103,8 +103,8 @@ fun LoginBlock() {
 }
 
 @Composable
-fun NoobleLoginHeader() {
-    Box (modifier = Modifier.background(NoobleGreen).fillMaxWidth()) {
+fun NoobleLoginHeader(modifier: Modifier = Modifier) {
+    Box (modifier = modifier.background(NoobleGreen).fillMaxWidth()) {
         Image(
             painter = painterResource(R.mipmap.ic_launcher_foreground),
             contentDescription = null
@@ -121,9 +121,9 @@ fun NoobleLoginHeader() {
 }
 
 @Composable
-fun LoginView(navController: NavHostController) {
+fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
     Scaffold { innerPadding ->
-        Column() {
+        Column(modifier.padding(innerPadding)) {
             Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()).background(NoobleGreen).fillMaxWidth())
             NoobleLoginHeader()
             Spacer(modifier = Modifier.size(30.dp))

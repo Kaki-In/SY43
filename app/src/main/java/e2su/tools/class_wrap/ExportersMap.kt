@@ -1,16 +1,20 @@
 package e2su.tools.class_wrap;
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import e2su.tools.class_wrap.exceptions.InvalidArgumentException
 import e2su.tools.class_wrap.exceptions.NoSuchExporterException
+import e2su.tools.class_wrap.exporters.ContainerExporter
+import e2su.tools.class_wrap.exporters.FileExporter
+import e2su.tools.class_wrap.exporters.RawTextExporter
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
 public class ExportersMap {
-    val exporters: MutableMap<String, Exporter<Any>> = mutableMapOf<String, Exporter<Any>>()
+    val exporters: MutableMap<String, Exporter<*>> = mutableMapOf<String, Exporter<*>>()
 
-    fun getExporter(name: String): Exporter<Any>
+    fun getExporter(name: String): Exporter<*>
     {
         var exporter = exporters[name]
 
@@ -22,9 +26,10 @@ public class ExportersMap {
         return exporter
     }
 
-    fun addExporter(exporter: Exporter<Any>)
+    fun addExporter(exporter: Exporter<*>): ExportersMap
     {
         this.exporters[ exporter.name ] = exporter
+        return this
     }
 
     fun getExporterTypes(): Set<String>
@@ -33,7 +38,7 @@ public class ExportersMap {
     }
 
     @Composable
-    fun createView(json_data: JSONObject)
+    fun createView(json_data: JSONObject, modifier: Modifier = Modifier)
     {
         val type: String
         var data: Any
@@ -50,8 +55,14 @@ public class ExportersMap {
             throw InvalidArgumentException("could not find data in json object")
         }
 
-        this.getExporter(type).createView(data, this)
+        (this.getExporter(type) as Exporter<Any>).createView(data, this, modifier = modifier)
 
     }
+
 }
+
+public val DEFAULT_EXPORTERS_MAPS = ExportersMap()
+    .addExporter(ContainerExporter())
+    .addExporter(FileExporter())
+    .addExporter(RawTextExporter())
 

@@ -30,8 +30,8 @@ fun ClassSelectView(
     courses: List<String>, // Liste des cours
     modifier: Modifier = Modifier
 ) {
-    Column {
-        Text(text = "Cours suivis", modifier = modifier.padding(16.dp))
+    Column (modifier = modifier ) {
+        Text(text = "Cours suivis", modifier = Modifier.padding(16.dp))
         //Spacer(modifier = modifier.height(16.dp))
         LazyVerticalGrid(
             columns = GridCells.Fixed(2), // Deux colonnes

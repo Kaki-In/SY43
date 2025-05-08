@@ -30,9 +30,9 @@ import e2su.utbm.sy43project.ui.components.HomeButton
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 
 @Composable
-fun ProfileView(courses: List<String>) {
+fun ProfileView(courses: List<String>, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp),
     ) {
         Row {
