@@ -1,6 +1,8 @@
 package e2su.tools.class_wrap.exporters
 
+import android.app.Activity
 import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -13,7 +15,8 @@ class RichTextExporter: Exporter<String>("rich-text") {
     override fun createView(
         data: String,
         map: ExportersMap,
-        modifier: Modifier
+        modifier: Modifier,
+        activity: Activity
     ) {
 
         // We need to create an old xml text for that, since the html parser returns an

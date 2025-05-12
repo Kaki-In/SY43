@@ -1,16 +1,22 @@
 package e2su.tools.class_wrap.exporters
 
+import android.app.Activity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
@@ -22,7 +28,7 @@ import e2su.utbm.sy43project.R
 class FileExporter: Exporter<JSONObject>("file") {
 
     @Composable
-    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier) {
+    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier, activity: Activity) {
         val src: String
         val filename: String
         val description: String
@@ -47,13 +53,19 @@ class FileExporter: Exporter<JSONObject>("file") {
 
         Button(onClick = {
             // TODO : download file
-        }, modifier = modifier) {
+        }, modifier = modifier.height(80.dp)) {
             Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(
                     description,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2
                 )
-                Column (horizontalAlignment = Alignment.CenterHorizontally) {
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .width(65.dp)
+                ) {
                     Image(
                         painter = painterResource(R.drawable.file_download),
                         contentDescription = "download"
@@ -61,6 +73,8 @@ class FileExporter: Exporter<JSONObject>("file") {
 
                     Text(
                         filename,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 }
             }

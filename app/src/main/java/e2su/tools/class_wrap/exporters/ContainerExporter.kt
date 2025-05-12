@@ -1,6 +1,8 @@
 package e2su.tools.class_wrap.exporters
 
+import android.app.Activity
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +23,7 @@ import org.json.JSONObject
 class ContainerExporter: Exporter<JSONObject>("container") {
 
     @Composable
-    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier) {
+    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier, activity: Activity) {
         val children: JSONArray
 
         try {
@@ -38,12 +40,11 @@ class ContainerExporter: Exporter<JSONObject>("container") {
                     .height(1.dp)
             )
 
-            Log.i("Container", "length : " + children.length())
             for (i in 0..(children.length() - 1))
             {
                 var child_data = children.getJSONObject(i)
 
-                map.createView(child_data, modifier = Modifier.padding(5.dp))
+                map.createView(child_data, modifier = Modifier.padding(5.dp), activity)
             }
 
             Spacer(

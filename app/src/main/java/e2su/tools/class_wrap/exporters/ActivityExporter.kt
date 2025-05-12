@@ -1,5 +1,8 @@
 package e2su.tools.class_wrap.exporters
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.web.WebView
@@ -13,7 +16,8 @@ class ActivityExporter: Exporter<JSONObject>("activity") {
     override fun createView(
         data: JSONObject,
         map: ExportersMap,
-        modifier: Modifier
+        modifier: Modifier,
+        activity: Activity
     ) {
         val html = data.getString("html")
 
@@ -30,29 +34,40 @@ class ActivityExporter: Exporter<JSONObject>("activity") {
                 <meta charset='utf-8'/>
                 <style>
                 
-        {$css}
+        $css
         
                 </style>
             </head>
             <body>
                 <div id="MAIN_DIV">
-                
-        {$html}
-        
+        $html
                 </div>
+                <text id="alert">Bonjour</text>
                 <script>
-                
-        {$javascript}
-        var activity = new Activity({$id}, {$arguments});
-        var div = document.getElementById("MAIN_DIV");
-        activity.onRender(div);
+         
+        $javascript
+            
+        function alert(message)
+        {
+            document.getElementById("alert").innerText = message;
+        }
+        
+        window.addEventListener("load", () => {
+            
+            alert("bonjour");
+            
+            var activity = new Activity($id, $arguments);
+            var div = document.getElementById("MAIN_DIV");
+            activity.onRender(div);
+
+        })
         
                 </script>
             </body>
         </html>
         """.trimMargin()
 
-        val webViewState = rememberWebViewStateWithHTMLData(data = content)
+        val webViewState = rememberWebViewStateWithHTMLData(data = content, baseUrl = "https://nooble.flopcreation.fr/")
 
         WebView(
             state = webViewState,
