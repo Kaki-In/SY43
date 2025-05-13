@@ -10,6 +10,6 @@ public abstract class Exporter<T> (name: String) {
     val name = name
 
     @Composable
-    abstract fun createView(data: T, map: ExportersMap, modifier: Modifier, activity: Activity)
+    abstract fun createView(data: T, map: ExportersMap, modifier: Modifier)
 
 }

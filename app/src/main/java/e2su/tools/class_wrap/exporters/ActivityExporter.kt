@@ -16,8 +16,7 @@ class ActivityExporter: Exporter<JSONObject>("activity") {
     override fun createView(
         data: JSONObject,
         map: ExportersMap,
-        modifier: Modifier,
-        activity: Activity
+        modifier: Modifier
     ) {
         val html = data.getString("html")
 

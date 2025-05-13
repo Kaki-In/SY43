@@ -11,7 +11,7 @@ import e2su.tools.class_wrap.ExportersMap
 public class RawTextExporter: Exporter<String>("raw-text") {
 
     @Composable
-    override fun createView(data: String, map: ExportersMap, modifier: Modifier, activity: Activity) {
+    override fun createView(data: String, map: ExportersMap, modifier: Modifier) {
         Text(
             data,
             modifier = modifier

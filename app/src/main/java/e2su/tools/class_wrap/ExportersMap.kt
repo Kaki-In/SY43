@@ -46,7 +46,7 @@ public class ExportersMap {
     }
 
     @Composable
-    fun createView(json_data: JSONObject, modifier: Modifier = Modifier, activity: Activity)
+    fun createView(json_data: JSONObject, modifier: Modifier = Modifier)
     {
         val type: String
         var data: Any
@@ -63,7 +63,7 @@ public class ExportersMap {
             throw InvalidArgumentException("could not find data in json object")
         }
 
-        (this.getExporter(type) as Exporter<Any>).createView(data, this, modifier = modifier, activity = activity)
+        (this.getExporter(type) as Exporter<Any>).createView(data, this, modifier = modifier)
 
     }
 

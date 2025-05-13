@@ -23,7 +23,7 @@ import org.json.JSONObject
 class ContainerExporter: Exporter<JSONObject>("container") {
 
     @Composable
-    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier, activity: Activity) {
+    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier) {
         val children: JSONArray
 
         try {
@@ -44,7 +44,7 @@ class ContainerExporter: Exporter<JSONObject>("container") {
             {
                 var child_data = children.getJSONObject(i)
 
-                map.createView(child_data, modifier = Modifier.padding(5.dp), activity)
+                map.createView(child_data, modifier = Modifier.padding(5.dp))
             }
 
             Spacer(

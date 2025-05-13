@@ -12,8 +12,7 @@ class AudioExporter: Exporter<String>("audio") {
     override fun createView(
         data: String,
         map: ExportersMap,
-        modifier: Modifier,
-        activity: Activity
+        modifier: Modifier
     ) {
         // TODO("download the audio")
     }

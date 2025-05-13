@@ -15,8 +15,7 @@ class RichTextExporter: Exporter<String>("rich-text") {
     override fun createView(
         data: String,
         map: ExportersMap,
-        modifier: Modifier,
-        activity: Activity
+        modifier: Modifier
     ) {
 
         // We need to create an old xml text for that, since the html parser returns an

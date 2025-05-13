@@ -28,7 +28,7 @@ import e2su.utbm.sy43project.R
 class FileExporter: Exporter<JSONObject>("file") {
 
     @Composable
-    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier, activity: Activity) {
+    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier) {
         val src: String
         val filename: String
         val description: String

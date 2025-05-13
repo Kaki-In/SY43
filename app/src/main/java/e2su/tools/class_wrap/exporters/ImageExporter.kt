@@ -12,8 +12,7 @@ public class ImageExporter: Exporter<String>("image") {
     override fun createView(
         data: String,
         map: ExportersMap,
-        modifier: Modifier,
-        activity: Activity
+        modifier: Modifier
     ) {
         // TODO("download the image")
     }

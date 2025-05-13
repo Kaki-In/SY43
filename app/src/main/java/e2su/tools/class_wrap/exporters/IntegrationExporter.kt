@@ -1,40 +1,96 @@
 package e2su.tools.class_wrap.exporters
 
+import android.R.attr.visibility
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.accompanist.web.AccompanistWebChromeClient
-import com.google.accompanist.web.WebView
-import com.google.accompanist.web.rememberWebViewState
-import com.google.accompanist.web.rememberWebViewStateWithHTMLData
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
 import org.json.JSONObject
+import androidx.core.graphics.createBitmap
 
-class CustomChromeClient(val activity: Activity): AccompanistWebChromeClient() {
+/*
 
-    var customView: View? = null
+    The CustomWebViewClient allows to open links in another browser rather than directly in the
+    iframe of the app.
 
-    override fun onHideCustomView() {
-        (activity.window.decorView as FrameLayout).removeView(this.customView)
-        this.customView = null
+ */
+private class CustomWebViewClient(val base_url: String, val context: Context): WebViewClient()
+{
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        if (request === null)
+        {
+            return false
+        }
 
+        val url = request.url.toString()
+
+        val url_is_primary = url == base_url || request.isRedirect || url.startsWith("data:text/HTML")
+
+        if (request.isForMainFrame && !url_is_primary)
+        {
+            Log.i("CustomWebViewClient", "shouldOverrideUrlLoading: " + url)
+
+            val intent = Intent(Intent.ACTION_VIEW);
+            intent.setData(url.toUri());
+
+            try {
+                intent.resolveActivity(context.packageManager)
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("CustomWebViewClient", "shouldOverrideUrlLoading: ", e)
+            }
+
+            return true
+        }
+
+        return false
     }
 
-    override fun onShowCustomView(paramView: View, paramCustomViewCallback: CustomViewCallback) {
-        if (this.customView != null) {
-            onHideCustomView()
-            return
+}
+
+/*
+
+    The CustomWebChromeClient allows to open fullscreen pages (such as youtube videos)
+
+*/
+private class CustomWebChromeClient(val activity: Activity, val webView: WebView): WebChromeClient()
+{
+    var fullscreen: View? = null
+
+    override fun onHideCustomView()
+    {
+        fullscreen?.visibility = View.GONE
+        webView.visibility = View.VISIBLE
+    }
+    @Override
+    override fun onShowCustomView(view: View, callback: CustomViewCallback)
+    {
+        webView.visibility = View.GONE
+
+        if(fullscreen != null)
+        {
+            (activity.window.decorView as FrameLayout).removeView(fullscreen)
         }
-        this.customView = paramView
-        (activity.window.decorView as FrameLayout).addView(this.customView, FrameLayout.LayoutParams(-1, -1))
+
+        view.visibility = View.VISIBLE
+        fullscreen = view
+        (activity.window.decorView as FrameLayout).addView(fullscreen, FrameLayout.LayoutParams(-1, -1))
     }
 }
 
@@ -43,8 +99,7 @@ class IntegrationExporter: Exporter<JSONObject>("integration") {
     override fun createView(
         data: JSONObject,
         map: ExportersMap,
-        modifier: Modifier,
-        activity: Activity
+        modifier: Modifier
     ) {
         val width = data.get("width")
         val height = data.get("height")
@@ -53,7 +108,7 @@ class IntegrationExporter: Exporter<JSONObject>("integration") {
 
         var allowfullscreen = ""
 
-        var content = "<iframe width=\"$width\" height=\"$height\" src=\"$src\" loading=\"lazy\" allow=\""
+        var content = "<iframe frameborder=\"0\" width=\"$width\" height=\"$height\" src=\"$src\" loading=\"lazy\" allow=\""
 
         var added = false;
         for (index in 0..(permissions.length()-1))
@@ -77,15 +132,18 @@ class IntegrationExporter: Exporter<JSONObject>("integration") {
 
         Log.i("IntegrationExporter", "content: " + content+"\"$allowfullscreen>IFRAME ARE NOT WORKING ON YOUR MOBILE</iframe>")
 
-        val webViewState = rememberWebViewStateWithHTMLData(data=content+"\">IFRAME ARE NOT WORKING ON YOUR MOBILE</iframe>")
+        AndroidView(
+            factory = { context ->
+                WebView(
+                    context,
+                ).apply {
+                    settings.javaScriptEnabled = true
+                    loadData(content+"\"$allowfullscreen>IFRAME ARE NOT WORKING ON YOUR MOBILE</iframe>", "text/HTML", "UTF-8")
 
-        WebView(
-            webViewState,
-            chromeClient = CustomChromeClient(activity),
-            onCreated = { obj ->
-                obj.settings.javaScriptEnabled = true
-            },
-            modifier = modifier.fillMaxWidth()
+                    webViewClient = CustomWebViewClient(src, context)
+                    webChromeClient = CustomWebChromeClient(context as Activity, this)
+                }
+            }
         )
     }
 }

@@ -12,8 +12,7 @@ class VideoExporter: Exporter<String>("video") {
     override fun createView(
         data: String,
         map: ExportersMap,
-        modifier: Modifier,
-        activity: Activity
+        modifier: Modifier
     ) {
         // TODO("download the video")
     }
