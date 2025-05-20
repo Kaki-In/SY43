@@ -1,5 +1,7 @@
 package e2su.tools.class_wrap.exporters;
 
+import android.app.Activity
+import androidx.activity.ComponentActivity
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

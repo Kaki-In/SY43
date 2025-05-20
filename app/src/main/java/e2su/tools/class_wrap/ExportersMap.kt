@@ -1,12 +1,20 @@
 package e2su.tools.class_wrap;
 
+import android.app.Activity
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import e2su.tools.class_wrap.exceptions.InvalidArgumentException
 import e2su.tools.class_wrap.exceptions.NoSuchExporterException
+import e2su.tools.class_wrap.exporters.ActivityExporter
+import e2su.tools.class_wrap.exporters.AudioExporter
 import e2su.tools.class_wrap.exporters.ContainerExporter
 import e2su.tools.class_wrap.exporters.FileExporter
+import e2su.tools.class_wrap.exporters.ImageExporter
+import e2su.tools.class_wrap.exporters.IntegrationExporter
 import e2su.tools.class_wrap.exporters.RawTextExporter
+import e2su.tools.class_wrap.exporters.RichTextExporter
+import e2su.tools.class_wrap.exporters.VideoExporter
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -65,4 +73,10 @@ public val DEFAULT_EXPORTERS_MAPS = ExportersMap()
     .addExporter(ContainerExporter())
     .addExporter(FileExporter())
     .addExporter(RawTextExporter())
+    .addExporter(RichTextExporter())
+    .addExporter(ImageExporter())
+    .addExporter(ActivityExporter())
+    .addExporter(IntegrationExporter())
+    .addExporter(VideoExporter())
+    .addExporter(AudioExporter())
 

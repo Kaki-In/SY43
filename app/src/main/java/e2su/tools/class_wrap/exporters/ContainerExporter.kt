@@ -1,6 +1,8 @@
 package e2su.tools.class_wrap.exporters
 
+import android.app.Activity
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,7 +40,6 @@ class ContainerExporter: Exporter<JSONObject>("container") {
                     .height(1.dp)
             )
 
-            Log.i("Container", "length : " + children.length())
             for (i in 0..(children.length() - 1))
             {
                 var child_data = children.getJSONObject(i)
