@@ -1,6 +1,5 @@
 package e2su.utbm.sy43project.ui.components
 
-import android.preference.PreferenceActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -16,7 +15,6 @@ import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
-import e2su.utbm.sy43project.ui.views.LoginBlock
 
 // TODO : Fix icon sizes
 

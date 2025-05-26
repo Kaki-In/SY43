@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.ui.views
+package e2su.utbm.sy43project.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,19 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.R
-import e2su.utbm.sy43project.ui.components.ActivityPost
-import e2su.utbm.sy43project.ui.components.HomeButton
-import e2su.utbm.sy43project.ui.components.NoobleFooter
-import e2su.utbm.sy43project.ui.components.NoobleHeader
+import e2su.utbm.sy43project.ui.views.ActivityPost
 
 @Composable
-fun ActivityView(
+fun ActivityScreen(
     modifier: Modifier = Modifier
 ) {
     Column(){
@@ -41,5 +35,5 @@ fun ActivityView(
 @Preview(showBackground = true)
 @Composable
 fun ActivityPreview() {
-    ActivityView()
+    ActivityScreen()
 }

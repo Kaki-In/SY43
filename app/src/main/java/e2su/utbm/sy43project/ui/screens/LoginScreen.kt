@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.ui.views
+package e2su.utbm.sy43project.ui.screens
 
 import e2su.utbm.sy43project.R;
 import androidx.compose.foundation.Image
@@ -20,21 +20,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import e2su.utbm.sy43project.ui.components.HomeButton
-import e2su.utbm.sy43project.ui.components.NoobleFooter
+import androidx.navigation.testing.TestNavHostController
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
-import e2su.utbm.sy43project.ui.components.NoobleHeader
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
-import java.nio.file.WatchEvent
 
 // TODO: Check how to round the corners of the the buttons now that I changed their background color
 
@@ -158,7 +151,7 @@ fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
 @Composable
 fun LoginPreview() {
     SY43ProjectTheme {
-        val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
+        val fakeNavController = TestNavHostController(LocalContext.current)
         LoginView(navController = fakeNavController)
     }
 }

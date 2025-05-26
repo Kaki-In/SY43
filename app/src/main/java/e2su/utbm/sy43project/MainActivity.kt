@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,14 +14,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import e2su.nooble.models.ClassModel
+import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
-import e2su.utbm.sy43project.ui.views.ActivityView
-import e2su.utbm.sy43project.ui.views.ClassOverview
-import e2su.utbm.sy43project.ui.views.ClassSelectView
-import e2su.utbm.sy43project.ui.views.ClassView
-import e2su.utbm.sy43project.ui.views.LoginView
-import e2su.utbm.sy43project.ui.views.ProfileView
+import e2su.utbm.sy43project.ui.screens.ActivityScreen
+import e2su.utbm.sy43project.ui.screens.OverviewScreen
+import e2su.utbm.sy43project.ui.screens.ClassSelectScreen
+import e2su.utbm.sy43project.ui.screens.ClassScreen
+import e2su.utbm.sy43project.ui.screens.LoginView
+import e2su.utbm.sy43project.ui.screens.ProfileScreen
 
 /*class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,27 +64,55 @@ class MainActivity : ComponentActivity() {
                     composable("login") { LoginView(navController) }
                     composable("class") {
                         NoobleIntegrated(navHostController = navController, content={
-                            ClassView(navController)
+                            ClassScreen(navController)
                         })
                     }
                     composable("profile") {
-                        NoobleIntegrated(navHostController = navController, content={
-                            ProfileView(courses = listOf())
+                        NoobleIntegrated(navHostController = navController, content = {
+                            ProfileScreen(
+                                profil = ProfileModel(
+                                    id = 1,
+                                    name = "John Doe",
+                                    surname = "J-D",
+                                    image = R.drawable.woof,
+                                    mail = "jd@gmail.com",
+                                    description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                    isAdmin = false,
+                                    classes = mutableListOf(
+                                        ClassModel(
+                                            id = 1,
+                                            name = "Math",
+                                            thumbnail = R.drawable.home,
+                                            content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                                        ),
+                                        ClassModel(
+                                            id = 2,
+                                            name = "Science",
+                                            thumbnail = R.drawable.home,
+                                            content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                                        )
+                                    )
+                                ),
+                                onClassClick = { className ->
+                                    navController.navigate("class/$className")
+                                }
+
+                            )
                         })
                     }
                     composable("activity") {
                         NoobleIntegrated(navHostController = navController, content={
-                            ActivityView()
+                            ActivityScreen()
                         })
                     }
                     composable("select") {
                         NoobleIntegrated(navHostController = navController, content={
-                            ClassSelectView(navController = navController, courses = listOf())
+                            ClassSelectScreen(navController = navController, courses = listOf())
                         })
                     }
                     composable("class_overview") {
                         NoobleIntegrated(navHostController = navController, content={
-                            ClassOverview()
+                            OverviewScreen()
                         })
                     }
                 }

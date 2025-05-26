@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.ui.components
+package e2su.utbm.sy43project.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,6 @@ import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.ui.Alignment
-import androidx.navigation.NavController
 import e2su.utbm.sy43project.R
 
 // TODO : Fix icon sizes

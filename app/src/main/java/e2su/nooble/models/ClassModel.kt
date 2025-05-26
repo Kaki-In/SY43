@@ -4,9 +4,9 @@ import android.media.Image
 
 data class ClassModel
 (
-    var id: Integer,
+    var id: Int,
     var name: String,
-    var thumbnail: Image,
+    var thumbnail: Int,
     var content: String
 )
 
