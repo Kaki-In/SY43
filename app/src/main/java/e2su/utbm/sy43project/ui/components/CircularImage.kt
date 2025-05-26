@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import e2su.utbm.sy43project.R
 
 @Composable
-fun CircularImage(imageRes: Int, size: Int) {
+fun CircularImage(imageRes: Int, size: Int, modifier: Modifier) {
     Image(
         painter = painterResource(id = imageRes),
         contentDescription = "Circular Image",
@@ -25,5 +25,5 @@ fun CircularImage(imageRes: Int, size: Int) {
 @Preview(showBackground = true)
 @Composable
 fun CircularImagePreview() {
-    CircularImage(imageRes = R.drawable.book, size = 80)
+    CircularImage(imageRes = R.drawable.book, size = 80, modifier = Modifier)
 }

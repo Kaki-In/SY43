@@ -24,6 +24,7 @@ import e2su.utbm.sy43project.ui.screens.ClassSelectScreen
 import e2su.utbm.sy43project.ui.screens.ClassScreen
 import e2su.utbm.sy43project.ui.screens.LoginView
 import e2su.utbm.sy43project.ui.screens.ProfileScreen
+import e2su.utbm.sy43project.navigation.NavigationManager
 
 /*class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +58,9 @@ import e2su.utbm.sy43project.ui.screens.ProfileScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NavigationManager.setProfileClickAction {
+            navController.navigate("profile")
+        }
         setContent {
             SY43ProjectTheme {
                 val navController = rememberNavController()

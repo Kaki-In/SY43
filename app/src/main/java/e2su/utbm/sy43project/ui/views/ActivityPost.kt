@@ -14,7 +14,10 @@ import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.ui.Alignment
+import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.R
+import e2su.utbm.sy43project.ui.components.ProfilePic
+import e2su.utbm.sy43project.data.SampleData
 
 // TODO : Fix icon sizes
 
@@ -22,7 +25,7 @@ import e2su.utbm.sy43project.R
 fun ActivityPost(
     title: String,
     date: String,
-    user: Int
+    profile: ProfileModel
 ) {
     Row(
         modifier = Modifier
@@ -49,13 +52,11 @@ fun ActivityPost(
                 color = Color.Gray
             )
         }
-        Spacer(modifier = Modifier.weight(1f)) // Pousse l'icône vers la droite
-        Image(
-            painter = painterResource(user),
-            contentDescription = "User Icon",
-            modifier = Modifier
-                .size(80.dp)
-                .padding(16.dp)
+        Spacer(modifier = Modifier.weight(1f))
+        ProfilePic(
+            profile,
+            size = 80,
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
@@ -64,6 +65,6 @@ fun ActivityPost(
 @Composable
 fun PostPreview() {
     SY43ProjectTheme {
-        ActivityPost( "Blabla", "12/12/2023", R.drawable.book)
+        ActivityPost( "Blabla", "12/12/2023", profile = SampleData.sampleProfile)
     }
 }
