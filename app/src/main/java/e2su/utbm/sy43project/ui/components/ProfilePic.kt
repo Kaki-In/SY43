@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.navigation.NavigationManager
+import android.util.Log
 
 @Composable
 fun ProfilePic(
@@ -13,10 +14,12 @@ fun ProfilePic(
     modifier: Modifier = Modifier
 ) {
     CircularImage(
-        imageRes = profil.image,
+        imageRes = profile.image,
         size = size,
-        modifier = modifier.clickable {
+        modifier = Modifier.clickable {
+            Log.e("ProfilePic", "Clicked on profile picture of ${profile.name} ${profile.surname}")
             NavigationManager.navigateToProfile()
         }
+            .then(modifier)
     )
 }

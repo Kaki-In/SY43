@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.views.ActivityPost
+import e2su.utbm.sy43project.data.SampleData
 
 @Composable
 fun ActivityScreen(
@@ -22,12 +23,12 @@ fun ActivityScreen(
             modifier = modifier.padding(16.dp)
         )
         Spacer(modifier = modifier.height(16.dp))
-        ActivityPost("Blabla", "22/12/2023", R.drawable.book)
-        ActivityPost("blublu", "22/12/2023", R.drawable.book)
-        ActivityPost("zeifu", "22/12/2023", R.drawable.book)
-        ActivityPost("Blabla", "22/12/2023", R.drawable.book)
-        ActivityPost("blublu", "22/12/2023", R.drawable.book)
-        ActivityPost("zeifu", "22/12/2023", R.drawable.book)
+        ActivityPost("Blabla", "22/12/2023", SampleData.sampleProfile)
+        ActivityPost("blublu", "22/12/2023", SampleData.sampleProfile)
+        ActivityPost("zeifu", "22/12/2023", SampleData.sampleProfile)
+        ActivityPost("Blabla", "22/12/2023", SampleData.sampleProfile)
+        ActivityPost("blublu", "22/12/2023", SampleData.sampleProfile)
+        ActivityPost("zeifu", "22/12/2023", SampleData.sampleProfile)
     }
 }
 

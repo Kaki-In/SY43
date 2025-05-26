@@ -25,7 +25,8 @@ import e2su.utbm.sy43project.data.SampleData
 fun ActivityPost(
     title: String,
     date: String,
-    profile: ProfileModel
+    profile: ProfileModel,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
@@ -54,7 +55,7 @@ fun ActivityPost(
         }
         Spacer(modifier = Modifier.weight(1f))
         ProfilePic(
-            profile,
+            profile = profile,
             size = 80,
             modifier = Modifier.padding(16.dp)
         )

@@ -19,7 +19,7 @@ import e2su.utbm.sy43project.ui.components.ProfileClassClickable
 
 @Composable
 fun ProfileScreen(
-    profil : ProfileModel,
+    profile : ProfileModel,
     onClassClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -52,7 +52,7 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(profil.classes) { course ->
+            items(profile.classes) { course ->
                 ProfileClassClickable(
                     className = course.name,
                     onClassClick = onClassClick
