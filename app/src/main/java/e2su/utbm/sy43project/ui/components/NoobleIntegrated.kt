@@ -31,7 +31,8 @@ public fun NoobleIntegrated(
                 .fillMaxSize()
         ) {
             NoobleHeader(
-                modifier = Modifier.height(IntrinsicSize.Min)
+                modifier = Modifier.height(IntrinsicSize.Min),
+                onProfileClick = { navHostController.navigate("profile") }
             )
 
             Box(
@@ -44,7 +45,8 @@ public fun NoobleIntegrated(
 
             NoobleFooter(
                 navController = navHostController,
-                modifier = Modifier.height(IntrinsicSize.Min)
+                modifier = Modifier
+                    .height(IntrinsicSize.Min)
             )
         }
     }

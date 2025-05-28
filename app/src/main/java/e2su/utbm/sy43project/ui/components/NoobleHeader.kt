@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
 
@@ -20,8 +21,8 @@ import e2su.utbm.sy43project.ui.theme.NoobleGreen
 
 @Composable
 fun NoobleHeader(
-    //title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onProfileClick: () -> Unit = { /* Default no-op */ }
 ) {
     Row(
         modifier = modifier
@@ -50,6 +51,7 @@ fun NoobleHeader(
             modifier = Modifier
                 .size(50.dp)
                 .padding(8.dp)
+                .clickable( onClick = { onProfileClick })
         )
     }
 }

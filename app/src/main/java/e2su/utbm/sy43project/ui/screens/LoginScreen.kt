@@ -142,6 +142,9 @@ fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
             Button(onClick = { navController.navigate("select") }) {
                 Text(text = "Go to class selection Screen")
             }
+            Button(onClick = { navController.navigate("profile_edit") }) {
+                Text(text = "Go to profile edit Screen")
+            }
         }
     }
 }

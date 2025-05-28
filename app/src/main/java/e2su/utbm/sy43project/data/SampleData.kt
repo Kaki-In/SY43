@@ -3,6 +3,7 @@ package e2su.utbm.sy43project.data
 import e2su.nooble.models.ProfileModel
 import e2su.nooble.models.ClassModel
 import e2su.utbm.sy43project.R
+import e2su.nooble.models.ShopItemModel
 
 object SampleData {
     val sampleClasses = mutableListOf(
@@ -47,4 +48,10 @@ object SampleData {
     )
 
     val previewProfile = sampleProfile
+
+    val shopItems = listOf(
+        ShopItemModel("1", "Contour Doré", 100.0, false),
+        ShopItemModel("2", "Contour Argenté", 50.0, false),
+        ShopItemModel("3", "Contour Mystique", 200.0, true)
+    )
 }

@@ -7,7 +7,8 @@ enum class NavRoutes(val route: String) {
     ACTIVITY("activity"),
     CLASS_SELECT("select"),
     CLASS_OVERVIEW("class_overview"),
-    CLASS_DETAIL("class/{className}");
+    CLASS_DETAIL("class/{className}"),
+    PROFILE_EDIT("profile_edit");
 
     companion object {
         fun createClassRoute(className: String) = "class/$className"

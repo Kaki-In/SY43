@@ -23,6 +23,7 @@ import e2su.utbm.sy43project.navigation.NavigationManager
 import e2su.utbm.sy43project.navigation.NavRoutes
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import e2su.utbm.sy43project.ui.screens.ProfileEditScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -83,6 +84,21 @@ class MainActivity : ComponentActivity() {
                         val className = backStackEntry.arguments?.getString("className") ?: ""
                         NoobleIntegrated(navHostController = navController, content = {
                             ClassScreen(navController)
+                        })
+                    }
+                    composable(NavRoutes.PROFILE_EDIT.route) {
+                        NoobleIntegrated(navHostController = navController, content = {
+                            ProfileEditScreen(
+                                profile = SampleData.sampleProfile,
+                                onSaveClick = { updatedProfile ->
+                                    // TODO: Appel API pour sauvegarder les modifications
+                                    },
+                                onNavigateToProfile = {
+                                   navController.navigate(NavRoutes.PROFILE.route) {
+                                       popUpTo(NavRoutes.PROFILE.route) { inclusive = true}
+                                   }
+                                }
+                            )
                         })
                     }
                 }
