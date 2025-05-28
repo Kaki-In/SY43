@@ -17,6 +17,7 @@ import androidx.compose.foundation.Image
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
 
+
 @Composable
 fun ProfileClassClickable(
     className: String,

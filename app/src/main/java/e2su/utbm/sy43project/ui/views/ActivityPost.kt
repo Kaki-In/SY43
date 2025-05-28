@@ -16,7 +16,7 @@ import androidx.compose.foundation.border
 import androidx.compose.ui.Alignment
 import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.R
-import e2su.utbm.sy43project.ui.components.ProfilePic
+import e2su.utbm.sy43project.ui.components.ProfileButton
 import e2su.utbm.sy43project.data.SampleData
 
 // TODO : Fix icon sizes
@@ -54,7 +54,7 @@ fun ActivityPost(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        ProfilePic(
+        ProfileButton(
             profile = profile,
             size = 80,
             modifier = Modifier.padding(16.dp)
