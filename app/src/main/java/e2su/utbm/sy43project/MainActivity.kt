@@ -117,16 +117,20 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        /**composable(NavRoutes.SHOP.route) {
+                        composable(NavRoutes.SHOP.route) {
                             NoobleIntegrated(
                                 navHostController = navController,
                                 drawerState = drawerState,
                                 scope = scope,
                                 content = {
-                                    ShopScreen()
+                                    ShopScreen(
+                                        userCoins = 500,
+                                        shopItems = SampleData.shopItems,
+                                        onBuyItem = {}
+                                    )
                                 }
                             )
-                        }**/
+                        }
                         composable(
                             route = NavRoutes.CLASS_DETAIL.route,
                             arguments = listOf(

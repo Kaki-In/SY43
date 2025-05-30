@@ -1,6 +1,7 @@
 package e2su.utbm.sy43project.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -11,6 +12,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import e2su.nooble.models.ShopItemModel
 import e2su.utbm.sy43project.ui.components.ShopItem
+import e2su.utbm.sy43project.ui.components.ShopItemPreviewDialog
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.items
 
 @Composable
 fun ShopScreen(
@@ -19,6 +28,8 @@ fun ShopScreen(
     onBuyItem: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var selectedItem by remember { mutableStateOf<ShopItemModel?>(null) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -29,7 +40,7 @@ fun ShopScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.Start
         ) {
             Text(
                 text = "$userCoins pièces",
@@ -38,16 +49,32 @@ fun ShopScreen(
             )
         }
 
-        // Liste des items
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        // Grille des items
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(4.dp)
         ) {
-            items(shopItems) { item ->
+            items(shopItems) { item: ShopItemModel ->
                 ShopItem(
                     item = item,
-                    onBuyClick = { onBuyItem(item.id) }
+                    onBuyClick = { onBuyItem(item.id) },
+                    onItemClick = { selectedItem = item },
+                    modifier = Modifier
+                        .aspectRatio(0.75f)  // Rapport hauteur/largeur fixe
+                        .fillMaxWidth()
                 )
             }
         }
+    }
+
+    // Dialog de prévisualisation
+    selectedItem?.let { item ->
+        ShopItemPreviewDialog(
+            item = item,
+            onBuyClick = { onBuyItem(item.id) },
+            onDismiss = { selectedItem = null }
+        )
     }
 }
