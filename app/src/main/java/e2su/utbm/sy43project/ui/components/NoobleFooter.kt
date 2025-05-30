@@ -18,8 +18,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-
-// TODO : Fix icon sizes
+import androidx.compose.foundation.clickable
+import e2su.utbm.sy43project.navigation.NavRoutes
 
 @Composable
 fun NoobleFooter(
@@ -28,11 +28,11 @@ fun NoobleFooter(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize() // Remplit tout l'espace disponible
-            .background(Color.White), // Fond blanc pour éviter les chevauchements
-        verticalArrangement = Arrangement.SpaceBetween // Place le footer en bas
+            .fillMaxSize()
+            .background(Color.White),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Spacer(modifier = Modifier.weight(1f)) // Espace flexible pour pousser le footer en bas
+        Spacer(modifier = Modifier.weight(1f))
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -50,6 +50,7 @@ fun NoobleFooter(
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
+                    .clickable { navController.navigate(NavRoutes.CLASS_SELECT.route) }
             )
             Image(
                 painter = painterResource(R.drawable.bell),
@@ -57,24 +58,17 @@ fun NoobleFooter(
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
+                    .clickable { navController.navigate(NavRoutes.ACTIVITY.route) }
             )
             Image(
                 painter = painterResource(R.drawable.cart),
-                contentDescription = "Additional Content Icon",
+                contentDescription = "Shop Icon",
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
+                    .clickable { navController.navigate("shop") }
             )
         }
         HomeButton(navController)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FooterPreview() {
-    SY43ProjectTheme {
-        val fakeNavController = androidx.navigation.testing.TestNavHostController(LocalContext.current)
-        NoobleFooter(fakeNavController)
     }
 }

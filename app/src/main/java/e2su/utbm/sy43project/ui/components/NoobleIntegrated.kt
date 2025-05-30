@@ -17,20 +17,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import androidx.compose.material3.DrawerState
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
-public fun NoobleIntegrated(
+fun NoobleIntegrated(
     navHostController: NavHostController,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
     content: @Composable (modifier: Modifier) -> Unit,
-    modifier: Modifier = Modifier)
-{
-    Scaffold (modifier = modifier) { innerPadding ->
-        Column (
+    modifier: Modifier = Modifier
+) {
+    Scaffold(modifier = modifier) { innerPadding ->
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
             NoobleHeader(
+                navController = navHostController,
+                drawerState = drawerState,
+                scope = scope,
                 modifier = Modifier.height(IntrinsicSize.Min),
                 onProfileClick = { navHostController.navigate("profile") }
             )
@@ -45,11 +52,8 @@ public fun NoobleIntegrated(
 
             NoobleFooter(
                 navController = navHostController,
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
+                modifier = Modifier.height(IntrinsicSize.Min)
             )
         }
     }
 }
-
-
