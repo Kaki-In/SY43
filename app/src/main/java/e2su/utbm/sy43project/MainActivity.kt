@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +37,9 @@ import e2su.utbm.sy43project.ui.screens.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.ProfileScreen
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.screens.ShopScreen
+import e2su.utbm.sy43project.ui.screens.BorderPreviewScreen
+import e2su.utbm.sy43project.data.SampleData.getBorderData
+import e2su.nooble.models.ShopItemType
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -128,6 +132,17 @@ class MainActivity : ComponentActivity() {
                                         shopItems = SampleData.shopItems,
                                         onBuyItem = {}
                                     )
+                                }
+                            )
+                        }
+                        composable(NavRoutes.PREV_BORDER.route) {
+                            val shopItems = remember { SampleData.shopItems.filter { it.itemType == ShopItemType.PROFILE_BORDER } }
+
+                            BorderPreviewScreen(
+                                availableBorders = shopItems.mapNotNull { item ->
+                                    item.getBorderData()?.let { borderData ->
+                                        item to borderData
+                                    }
                                 }
                             )
                         }

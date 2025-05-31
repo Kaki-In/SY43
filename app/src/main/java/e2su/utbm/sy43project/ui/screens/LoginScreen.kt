@@ -127,12 +127,6 @@ fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
             )*/
             LoginBlock()
             Spacer(modifier = Modifier.size(70.dp))
-            Button(onClick = { navController.navigate("profile") }) {
-                Text(text = "Go to Profile Screen")
-            }
-            Button(onClick = { navController.navigate("activity") }) {
-                Text(text = "Go to Activity Screen")
-            }
             Button(onClick = { navController.navigate("class_overview") }) {
                 Text(text = "Go to class overview Screen")
             }
@@ -144,6 +138,9 @@ fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
             }
             Button(onClick = { navController.navigate("profile_edit") }) {
                 Text(text = "Go to profile edit Screen")
+            }
+            Button(onClick = { navController.navigate("prev_border") }) {
+                Text(text = "Border prev")
             }
         }
     }

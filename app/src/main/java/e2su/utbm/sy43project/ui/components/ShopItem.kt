@@ -13,13 +13,15 @@ import e2su.nooble.models.ShopItemModel
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
 import e2su.nooble.models.ShopItemType
 import androidx.compose.ui.unit.sp
-import e2su.utbm.sy43project.R
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
+import e2su.utbm.sy43project.R
+import e2su.utbm.sy43project.ui.components.border.BorderPreview
+import e2su.utbm.sy43project.ui.components.border.StaticBorderPreview
 
 
 @Composable
@@ -32,16 +34,17 @@ fun ShopItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(200.dp)  // Hauteur fixe
             .clickable(onClick = onItemClick)
             .padding(4.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = item.name,
@@ -50,21 +53,35 @@ fun ShopItem(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Image de l'item
+            // Image de l'item avec taille fixe
             Box(
                 modifier = Modifier
                     .size(80.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center
             ) {
                 when (item.itemType) {
                     ShopItemType.BADGE -> BadgePreview(item)
-                    ShopItemType.PROFILE_BORDER -> StaticBorderPreview(item.image ?: R.drawable.profile)
+                    ShopItemType.PROFILE_BORDER -> {
+                        // Récupérer les données de bordure
+                        val borderData = e2su.utbm.sy43project.data.SampleData.borderData[item.id]
+                        if (borderData != null) {
+                            BorderPreview(
+                                item = item,
+                                borderData = borderData,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            StaticBorderPreview(item.image ?: R.drawable.profile)
+                        }
+                    }
                 }
             }
 
             Text(
                 text = "${item.price.toInt()} pièces",
                 color = Color.Gray,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp)
             )
 
@@ -73,6 +90,7 @@ fun ShopItem(
                     text = "Déblocage requis",
                     color = Color.Red,
                     fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
@@ -105,10 +123,29 @@ fun ShopItemPreviewDialog(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                Box(modifier = Modifier.size(120.dp)) {
+                // Prévisualisation selon le type d'item
+                Box(
+                    modifier = Modifier
+                        .size(160.dp)
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
                     when (item.itemType) {
                         ShopItemType.BADGE -> BadgePreview(item)
-                        ShopItemType.PROFILE_BORDER -> StaticBorderPreview(item.image ?: R.drawable.profile)
+                        ShopItemType.PROFILE_BORDER -> {
+                            // Récupérer les données de bordure depuis SampleData
+                            val borderData = e2su.utbm.sy43project.data.SampleData.borderData[item.id]
+                            if (borderData != null) {
+                                BorderPreview(
+                                    item = item,
+                                    borderData = borderData,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            } else {
+                                // Fallback si les données ne sont pas trouvées
+                                StaticBorderPreview(item.image ?: R.drawable.profile)
+                            }
+                        }
                     }
                 }
 

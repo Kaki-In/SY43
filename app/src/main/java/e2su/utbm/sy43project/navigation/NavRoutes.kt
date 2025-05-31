@@ -10,6 +10,7 @@ enum class NavRoutes(val route: String) {
     CLASS_DETAIL("class/{className}"),
     PROFILE_EDIT("profile_edit"),
     SHOP("shop"),
+    PREV_BORDER("prev_border"),
     GRADE("grade"),
     SETTINGS("settings"),
     DOWNLOAD("download");
