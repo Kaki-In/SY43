@@ -65,4 +65,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.accompanist.webview)
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.room:room-runtime:2.7.1")
 }

@@ -18,34 +18,39 @@ import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.components.ProfileButton
 import e2su.utbm.sy43project.data.SampleData
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.clickable
 
-// TODO : Fix icon sizes
 
 @Composable
 fun ActivityPost(
     title: String,
     date: String,
     profile: ProfileModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
             .background(Color.LightGray)
             .border(1.dp, Color.Red)
+            .clickable { onClick() } // <-- Ajout du clic ici
             .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically // Centre verticalement les éléments
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             modifier = Modifier
-                .weight(1f) // Prend tout l'espace disponible à gauche
+                .weight(1f)
                 .padding(8.dp),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = date,

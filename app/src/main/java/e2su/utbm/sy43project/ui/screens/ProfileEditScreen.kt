@@ -1,6 +1,7 @@
 package e2su.utbm.sy43project.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,10 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -28,15 +28,14 @@ import androidx.compose.ui.unit.dp
 import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.ui.components.ProfileButton
 
-//TODO: Modifications présentées sous forme verticale
-//TODO: Bouton d'enregistrement qui renvoie vers le profil modifié
-
 @Composable
 fun ProfileEditScreen(
     profile: ProfileModel,
     modifier: Modifier = Modifier,
     onSaveClick: (ProfileModel) -> Unit,
-    onNavigateToProfile: () -> Unit
+    onNavigateToProfile: () -> Unit,
+    onChangePhoto: () -> Unit,
+    onChangeContour: () -> Unit
 ) {
     var nameEditing by remember { mutableStateOf(false) }
     var mailEditing by remember { mutableStateOf(false) }
@@ -54,11 +53,22 @@ fun ProfileEditScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        ProfileButton(
-            profile = profile,
-            size = 120
-        )
-
+        Box(contentAlignment = Alignment.BottomEnd) {
+            Column {
+                ProfileButton(
+                    profile = profile,
+                    size = 120,
+                )
+                Row {
+                    IconButton(onClick = onChangePhoto) {
+                        Icon(Icons.Default.Edit, contentDescription = "Changer la photo")
+                    }
+                    IconButton(onClick = onChangeContour) {
+                        Icon(Icons.Default.Edit, contentDescription = "Changer le contour")
+                    }
+                }
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -129,7 +139,6 @@ fun ProfileEditScreen(
         }
         Button(
             onClick = {
-                // TODO: Appel API pour sauvegarder les modifications
                 val updatedProfile = profile.copy(
                     name = name,
                     mail = mail,

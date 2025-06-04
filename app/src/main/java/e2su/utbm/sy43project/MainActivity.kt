@@ -38,10 +38,12 @@ import e2su.utbm.sy43project.ui.screens.ProfileScreen
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import e2su.utbm.sy43project.ui.screens.ShopScreen
 import e2su.utbm.sy43project.ui.screens.BorderPreviewScreen
-import e2su.utbm.sy43project.data.SampleData.getBorderData
+import e2su.nooble.models.ProfileWithBadgesAndBorders
 import e2su.nooble.models.ShopItemType
+import e2su.nooble.models.BadgeShopItem
+import e2su.nooble.models.BorderShopItem
+import e2su.utbm.sy43project.data.SampleData.getBorderData
 
-@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +59,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // Utiliser le NoobleDrawer comme wrapper de toute l'application
                 NoobleDrawer(
                     navController = navController,
                     drawerState = drawerState
@@ -73,7 +74,11 @@ class MainActivity : ComponentActivity() {
                                 scope = scope,
                                 content = {
                                     ProfileScreen(
-                                        SampleData.sampleProfile,
+                                        ProfileWithBadgesAndBorders(
+                                            profile = SampleData.sampleProfile,
+                                            badges = SampleData.shopItems.filterIsInstance<BadgeShopItem>(),
+                                            borders = SampleData.shopItems.filterIsInstance<BorderShopItem>()
+                                        ),
                                         onClassClick = { className ->
                                             navController.navigate(NavRoutes.createClassRoute(className))
                                         }
@@ -177,6 +182,12 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(NavRoutes.PROFILE.route) {
                                                 popUpTo(NavRoutes.PROFILE.route) { inclusive = true }
                                             }
+                                        },
+                                        onChangePhoto = {
+                                            // TODO: Implémenter la logique pour changer la photo
+                                        },
+                                        onChangeContour = {
+                                            // TODO: Implémenter la logique pour changer le contour
                                         }
                                     )
                                 }
@@ -186,31 +197,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun MainPage() {
-    val context = LocalContext.current
-    Text("Bienvenue sur Nooble !")
-    Spacer(modifier = Modifier.size(16.dp))
-    Button(onClick = {
-
-    }) { Text(
-        text = "Page de login"
-    ) }
-    Spacer(modifier = Modifier.size(16.dp))
-    Button(onClick = {
-
-    }) { Text(
-        text = "Page de profil"
-    ) }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SY43ProjectTheme {
-        MainPage()
     }
 }
