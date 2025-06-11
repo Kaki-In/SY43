@@ -1,8 +1,10 @@
 package e2su.nooble.api.models.requests
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetAccountProfileRequestModel (
-    val userId: @ParameterName("user_id") String
+    @SerialName("user_id")
+    val userId: String
 )

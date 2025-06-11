@@ -1,9 +1,12 @@
 package e2su.nooble.api.models.requests
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AddAccountToClassRequestModel (
-    val userId: @ParameterName("user_id") String,
-    val classId: @ParameterName("class_id") String
+    @SerialName("user_id")
+    val userId: String,
+    @SerialName("class_id")
+    val classId: String
 )

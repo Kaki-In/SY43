@@ -1,9 +1,13 @@
 package e2su.nooble.api.models.requests
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RemoveAccountFromClassRequestModel (
-    val classId: @ParameterName("class_id") String,
-    val userId: @ParameterName("user_id") String
+    @SerialName("class_id")
+    val classId: String,
+
+    @SerialName("user_id")
+    val userId: String
 )

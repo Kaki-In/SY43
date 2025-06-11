@@ -1,9 +1,13 @@
 package e2su.nooble.api.models.responses
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 class BuyBadgeResponseModel (
-    val newQuota: @ParameterName("new_quota") Int,
-    val newLevel: @ParameterName("new_level") Int
+    @SerialName("new_quota")
+    val newQuota: Int,
+
+    @SerialName("new_level")
+    val newLevel: Int
 )

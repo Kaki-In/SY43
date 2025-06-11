@@ -4,10 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GetBadgeInfosResponseModel (
-    @SerialName("max_level")
-    val maxLevel: Int,
-
-    val title: String,
-    val description: String
+data class AddAccountResponseModel (
+    @SerialName("new_account")
+    val newAccountId: String
 )

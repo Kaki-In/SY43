@@ -1,5 +1,6 @@
 package e2su.nooble.api.models.objects
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +14,9 @@ abstract class NoobleApiSectionDataModel ()
 
 @Serializable
 data class NoobleApiContainerSectionDataModel (
-    val isHorizontal: @ParameterName("is_horizontal") Boolean,
-    val isWrapping: @ParameterName("is_wrapping") Boolean,
+    @SerialName("is_horizontal")
+    val isHorizontal: Boolean,
+    @SerialName("is_wrapping")
+    val isWrapping: Boolean,
     val children: List<NoobleApiSectionModel<NoobleApiSectionDataModel>>
 )
