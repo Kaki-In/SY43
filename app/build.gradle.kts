@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.google.accompanist.webview)
     implementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.kotlinx.datetime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

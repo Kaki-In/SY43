@@ -14,6 +14,7 @@ navigationCompose = "2.8.9"
 navigationTesting = "2.9.0"
 accompanistWebviewVersion = "0.36.0"
 materialIconsExtended = "1.7.8"
+kotlinxDatetime = "0.6.2"
 
 [libraries]
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanistWebview" }
@@ -36,6 +37,7 @@ androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-mac
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 google-accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanistWebviewVersion" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
