@@ -43,6 +43,10 @@ import e2su.nooble.models.ShopItemType
 import e2su.nooble.models.BadgeShopItem
 import e2su.nooble.models.BorderShopItem
 import e2su.utbm.sy43project.data.SampleData.getBorderData
+import e2su.utbm.sy43project.ui.screens.DownloadScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import e2su.utbm.sy43project.viewmodels.DownloadViewModel
+import androidx.compose.runtime.collectAsState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +106,7 @@ class MainActivity : ComponentActivity() {
                                 drawerState = drawerState,
                                 scope = scope,
                                 content = {
-                                    ActivityScreen()
+                                    //ActivityScreen()
                                 }
                             )
                         }
@@ -190,6 +194,19 @@ class MainActivity : ComponentActivity() {
                                             // TODO: Implémenter la logique pour changer le contour
                                         }
                                     )
+                                }
+                            )
+                        }
+                        composable(NavRoutes.DOWNLOAD.route) {
+                            val downloadViewModel: DownloadViewModel = viewModel()
+                            val downloadedFiles = downloadViewModel.downloadedFiles.collectAsState(initial = emptyList()).value
+
+                            NoobleIntegrated(
+                                navHostController = navController,
+                                drawerState = drawerState,
+                                scope = scope,
+                                content = {
+                                    DownloadScreen(downloadedFiles = downloadedFiles)
                                 }
                             )
                         }

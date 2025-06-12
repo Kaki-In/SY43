@@ -9,12 +9,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.io.File
+import e2su.utbm.sy43project.dao.DownloadedFileEntity
 
 @Composable
 fun DownloadScreen(
-    downloadedFiles: List<File>, // Liste des fichiers référencés par l'appli
+    downloadedFiles: List<DownloadedFileEntity>,
     modifier: Modifier = Modifier,
-    onFileClick: (File) -> Unit = {}
+    onFileClick: (DownloadedFileEntity) -> Unit = {}
 ) {
     Column(modifier = modifier.padding(16.dp)) {
         Text("Documents téléchargés", style = MaterialTheme.typography.headlineSmall)
@@ -29,7 +30,7 @@ fun DownloadScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(file.name)
-                    Text("${file.length() / 1024} Ko", style = MaterialTheme.typography.bodySmall)
+                    Text("${file.size / 1024} Ko", style = MaterialTheme.typography.bodySmall)
                 }
                 HorizontalDivider()
             }

@@ -34,7 +34,8 @@ import e2su.nooble.models.BadgeShopItem
 fun ProfileScreen(
     profileWithBadgesAndBorders: ProfileWithBadgesAndBorders,
     onClassClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onPPClick: () -> Unit = {},
+    modifier : Modifier = Modifier
 ) {
     var selectedBadge by remember { mutableStateOf<BadgeShopItem?>(null) }
 

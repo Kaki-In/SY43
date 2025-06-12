@@ -49,9 +49,10 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-private val retrofitService = Retrofit.Builder()
+val retrofitService = Retrofit.Builder()
     .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-    .baseUrl("https://api.nooble-angular.flopcreation.fr")
+    //.baseUrl("https://api.nooble-angular.flopcreation.fr")
+    .baseUrl("http://0.0.0.8622") // Use this for local testing
     .build()
 
 interface NoobleApiRetrofitService {

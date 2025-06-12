@@ -74,6 +74,14 @@ fun OverviewScreen(
                     },
                     {
                       "data": {
+                        "src": "https://www.utbm.fr/wp-content/uploads/2023/08/plan_UTBM_Belfort.pdf",
+                        "filename": "plan_UTBM_Belfort.pdf",
+                        "description": "Plan de l'UTBM Belfort"
+                      },
+                      "type": "file"
+                    },
+                    {
+                      "data": {
                         "src": "https://tests-and-previews.flopcreation.fr/downloads/UTBM - Nooble/TD1.zip",
                         "filename": "TD2.zip",
                         "description": "TD2 : PHP objet, Javascript"
@@ -244,9 +252,10 @@ fun OverviewScreen(
     }
 }
 
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun ActivityViewPreview() {
-    ActivityScreen()
+    //ActivityScreen()
 }
+*/
