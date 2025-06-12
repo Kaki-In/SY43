@@ -21,6 +21,7 @@ orgJetbrainsKotlinPluginSerializationGradlePlugin = "2.2.0-RC2"
 kotlinxSerializationJson = "1.8.1"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 okhttp = "5.0.0-alpha.16"
+okhttpUrlconnection = "5.0.0-alpha.16"
 
 [libraries]
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanistWebview" }
@@ -50,6 +51,7 @@ org-jetbrains-kotlin-plugin-serialization-gradle-plugin = { group = "org.jetbrai
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 retrofit2-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-urlconnection = { group = "com.squareup.okhttp3", name = "okhttp-urlconnection", version.ref = "okhttpUrlconnection" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

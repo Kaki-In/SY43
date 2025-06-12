@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GetBadgeInfosResponseModel (
+class GetBadgeInfoResponseModel (
     @SerialName("max_level")
     val maxLevel: Int,
 
