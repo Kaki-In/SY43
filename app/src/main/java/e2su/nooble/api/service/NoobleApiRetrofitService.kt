@@ -1,51 +1,13 @@
 package e2su.nooble.api.service
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import e2su.nooble.api.models.objects.NoobleApiAccountProfileModel
-import e2su.nooble.api.models.objects.NoobleApiActivityModel
-import e2su.nooble.api.models.objects.NoobleApiBadgeModel
-import e2su.nooble.api.models.objects.NoobleApiDecorationModel
-import e2su.nooble.api.models.objects.NoobleApiSafeModel
-import e2su.nooble.api.models.requests.AddAccountRequestModel
-import e2su.nooble.api.models.requests.BuyBadgeRequestModel
-import e2su.nooble.api.models.requests.BuyDecorationRequestModel
-import e2su.nooble.api.models.requests.CreateClassRequestModel
-import e2su.nooble.api.models.requests.CreateDecorationRequestModel
-import e2su.nooble.api.models.requests.DeleteAccountRequestModel
-import e2su.nooble.api.models.requests.DeleteClassRequestModel
-import e2su.nooble.api.models.requests.DeleteDecorationRequestModel
-import e2su.nooble.api.models.requests.DeleteResourceRequestModel
-import e2su.nooble.api.models.requests.EditClassRequestModel
-import e2su.nooble.api.models.requests.ForgotPasswordRequestModel
-import e2su.nooble.api.models.requests.GetAccountProfileRequestModel
-import e2su.nooble.api.models.requests.GetBadgeInfoRequestModel
-import e2su.nooble.api.models.requests.GetClassAccountsRequestModel
-import e2su.nooble.api.models.requests.GetClassDataRequestModel
-import e2su.nooble.api.models.requests.GetDecorationInfoRequestModel
-import e2su.nooble.api.models.requests.GetSelfFilesWithTypeRequestModel
-import e2su.nooble.api.models.requests.GetThreadRequestModel
-import e2su.nooble.api.models.requests.LoginRequestModel
-import e2su.nooble.api.models.requests.MarkThreadAsReadRequestModel
-import e2su.nooble.api.models.requests.ModifyAccountProfileRequestModel
-import e2su.nooble.api.models.requests.ModifyDecorationRequestModel
-import e2su.nooble.api.models.requests.ModifyUserMailRequestModel
-import e2su.nooble.api.models.requests.ModifyUserRoleRequestModel
-import e2su.nooble.api.models.requests.RemoveAccountFromClassRequestModel
-import e2su.nooble.api.models.requests.UpdateProfileRequestModel
-import e2su.nooble.api.models.responses.AddAccountResponseModel
-import e2su.nooble.api.models.responses.BuyBadgeResponseModel
-import e2su.nooble.api.models.responses.BuyDecorationResponseModel
-import e2su.nooble.api.models.responses.CreateClassResponseModel
-import e2su.nooble.api.models.responses.CreateDecorationResponseModel
-import e2su.nooble.api.models.responses.ForgotPasswordResponseModel
-import e2su.nooble.api.models.responses.GetBadgeInfosResponseModel
-import e2su.nooble.api.models.responses.GetClassDataResponseModel
-import e2su.nooble.api.models.responses.GetDecorationInfoResponseModel
-import e2su.nooble.api.models.responses.LoginResponseModel
-import e2su.nooble.api.models.responses.LogInfoResponseModel
+import e2su.nooble.api.models.objects.*
+import e2su.nooble.api.models.requests.*
+import e2su.nooble.api.models.responses.*
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -167,3 +129,10 @@ interface NoobleApiRetrofitService {
     suspend fun markThreadAsRead(request: MarkThreadAsReadRequestModel)
 
 }
+
+object NoobleApi {
+    val service : NoobleApiRetrofitService by lazy {
+        retrofitService.create(NoobleApiRetrofitService::class.java)
+    }
+}
+
