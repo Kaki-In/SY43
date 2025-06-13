@@ -93,7 +93,7 @@ public fun LoginTestScreen(
                 {
                     LoginComposable(connectionViewModel, loginViewModel, noobleApi)
                 } else {
-                    Text("Bonjour " + account.profile.firstName + " " + account.profile.lastName + "! Il vous reste " + account.safe.quota + " nooblards.")
+                    Text("Bonjour " + account.profile.firstName + " " + account.profile.lastName + "! Il vous reste " + account.safe!!.quota + " nooblards.")
                     Button(
                         onClick = {
                             disconnecting = true

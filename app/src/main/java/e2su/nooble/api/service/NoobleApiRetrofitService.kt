@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import e2su.nooble.api.models.objects.*
 import e2su.nooble.api.models.requests.*
 import e2su.nooble.api.models.responses.*
+import e2su.nooble.models.ClassModel
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -46,6 +47,12 @@ interface NoobleApiRetrofitService {
     @POST("/accounts/modify-role")
     suspend fun modifyUserRole(@Body request: ModifyUserRoleRequestModel)
 
+    @GET("/accounts/search")
+    suspend fun searchAccount(request: SearchAccountRequestModel): List<NoobleApiAccountModel>
+
+    @POST("/accounts/update-password")
+    suspend fun updateAccountPassword(request: UpdatePasswordRequestModel)
+
     @GET("/activities/list")
     suspend fun listActivities(): List<String>
 
@@ -75,6 +82,9 @@ interface NoobleApiRetrofitService {
 
     @GET("/classes/get-accounts")
     suspend fun getClassAccounts(request: GetClassAccountsRequestModel): List<String>
+
+    @GET("/classes/search")
+    suspend fun searchClass(request: SearchClassRequestModel): List<NoobleApiClassModel>
 
     @POST("/classes/remove-account")
     suspend fun removeAccountFromClass(@Body request: RemoveAccountFromClassRequestModel)
@@ -181,6 +191,20 @@ class AccountsApi(service: NoobleApiRetrofitService)
             ModifyUserRoleRequestModel(userId, newRole)
         )
     }
+
+    suspend fun updatePassword(lastPassword: String, newPassword: String)
+    {
+        return _service.updateAccountPassword(
+            UpdatePasswordRequestModel(lastPassword, newPassword)
+        )
+    }
+
+    suspend fun searchAccount(pattern: String, count: Int, offset: Int): List<NoobleApiAccountModel>
+    {
+        return _service.searchAccount(
+            SearchAccountRequestModel(pattern, offset, count)
+        )
+    }
 }
 
 class ActivitiesApi(service: NoobleApiRetrofitService)
@@ -271,6 +295,13 @@ class ClassesApi(service: NoobleApiRetrofitService)
     suspend fun removeAccount(classId: String, userId: String) {
         return _service.removeAccountFromClass(
             RemoveAccountFromClassRequestModel(classId, userId)
+        )
+    }
+
+    suspend fun searchClass(pattern: String, count: Int, offset: Int): List<NoobleApiClassModel>
+    {
+        return _service.searchClass(
+            SearchClassRequestModel(pattern, offset, count)
         )
     }
 

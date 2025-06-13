@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class NoobleApiAccountModel (
     @SerialName("id") val id: String,
     @SerialName("profile") val profile: NoobleApiAccountProfileModel,
-    @SerialName("safe") val safe: NoobleApiSafeModel,
+    @SerialName("safe") val safe: NoobleApiSafeModel? = null,
     @SerialName("role") val role: NoobleApiRole,
     @SerialName("mail") val mail: String
 )
