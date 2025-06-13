@@ -27,6 +27,7 @@ import e2su.nooble.api.models.requests.LoginRequestModel
 import e2su.nooble.api.models.responses.LoginResponseModel
 import e2su.nooble.api.service.NoobleApi
 import e2su.utbm.sy43project.data.SampleData
+import e2su.utbm.sy43project.data.models.MainViewModel
 import e2su.utbm.sy43project.navigation.NavRoutes
 import e2su.utbm.sy43project.navigation.NavigationManager
 import e2su.utbm.sy43project.ui.api.RequestViewModel
@@ -47,12 +48,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val accountViewModel = RequestViewModel<Any?, NoobleApiAccountModel?>()
-        val loginViewModel = RequestViewModel<LoginRequestModel, LoginResponseModel>()
-        val disconnectViewModel = RequestViewModel<Any?, Any?>()
+        val noobleApi = NoobleApi(this, "https://api.nooble-angular.flopcreation.fr")
+        val mainViewModel = MainViewModel(noobleApi)
 
         setContent {
-            val noobleApi = NoobleApi(LocalContext.current, "https://api.nooble-angular.flopcreation.fr")
             SY43ProjectTheme {
                 val navController = rememberNavController()
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -81,10 +80,7 @@ class MainActivity : ComponentActivity() {
                                 content =
                                     {
                                         LoginTestScreen(
-                                            accountViewModel,
-                                            loginViewModel,
-                                            disconnectViewModel,
-                                            noobleApi
+                                            mainViewModel.selfViewModel
                                         )
                                     }
                             )
