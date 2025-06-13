@@ -5,9 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoobleApiDecorationModel (
-    val id: String,
-    val price: Int,
-    val name: String,
-    @SerialName("image")
-    val imageId: String
+    @SerialName("id") val id: String,
+    @SerialName("price") val price: Int,
+    @SerialName("name") val name: String,
+    @SerialName("image") val imageId: String
 )

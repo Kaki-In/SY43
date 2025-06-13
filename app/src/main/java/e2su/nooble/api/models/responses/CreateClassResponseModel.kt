@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateClassResponseModel (
-    @SerialName("new_class")
-    val newClassId: String
+    @SerialName("new_class") val newClassId: String
 )

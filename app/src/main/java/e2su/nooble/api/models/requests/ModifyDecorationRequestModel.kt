@@ -5,12 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ModifyDecorationRequestModel (
-    @SerialName("decoration_id")
-    val decorationId: String,
-
-    val name: String,
-    val price: Int,
-
-    @SerialName("image_id")
-    val imageId: String
+    @SerialName("decoration_id") val decorationId: String,
+    @SerialName("name") val name: String,
+    @SerialName("price") val price: Int,
+    @SerialName("image_id") val imageId: String
 )

@@ -5,9 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class GetBadgeInfoResponseModel (
-    @SerialName("max_level")
-    val maxLevel: Int,
-
-    val title: String,
-    val description: String
+    @SerialName("max_level") val maxLevel: Int,
+    @SerialName("title") val title: String,
+    @SerialName("description") val description: String
 )

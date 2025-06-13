@@ -6,8 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class CreateDecorationResponseModel (
-    @SerialName("new_decoration")
-    val newDecoration: String
+    @SerialName("new_decoration") val newDecoration: String
 
 )
 

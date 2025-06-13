@@ -10,12 +10,13 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.java.net.cookiejar.JavaNetCookieJar
 import retrofit2.Retrofit
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import java.net.CookieManager
 import java.net.CookiePolicy
 
-private fun getRetrofitService(ctx: Context): Retrofit
+private fun getRetrofitService(ctx: Context, baseUrl: String): Retrofit
 {
     val cookieHandler = CookieManager(
         PersistentCookieStore(ctx),
@@ -23,8 +24,8 @@ private fun getRetrofitService(ctx: Context): Retrofit
     )
 
     val retrofitService = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl("https://api.nooble-angular.flopcreation.fr")
+        .baseUrl(baseUrl)
+        .addConverterFactory(Json { ignoreUnknownKeys = true } .asConverterFactory("application/json".toMediaType()))
         .client(OkHttpClient().newBuilder().cookieJar(JavaNetCookieJar(cookieHandler)).build())
         .build()
 
@@ -34,22 +35,22 @@ private fun getRetrofitService(ctx: Context): Retrofit
 
 interface NoobleApiRetrofitService {
     @POST("/accounts/add")
-    suspend fun createAccount(request: AddAccountRequestModel): AddAccountResponseModel
+    suspend fun createAccount(@Body request: AddAccountRequestModel): AddAccountResponseModel
 
     @POST("/accounts/delete")
-    suspend fun deleteAccount(request: DeleteAccountRequestModel)
+    suspend fun deleteAccount(@Body request: DeleteAccountRequestModel)
 
     @POST("/accounts/modify-mail")
-    suspend fun modifyMailAddress(request: ModifyUserMailRequestModel)
+    suspend fun modifyMailAddress(@Body request: ModifyUserMailRequestModel)
 
     @POST("/accounts/modify-role")
-    suspend fun modifyUserRole(request: ModifyUserRoleRequestModel)
+    suspend fun modifyUserRole(@Body request: ModifyUserRoleRequestModel)
 
     @GET("/activities/list")
     suspend fun listActivities(): List<String>
 
     @POST("/badges/buy")
-    suspend fun buyBadge(request: BuyBadgeRequestModel): BuyBadgeResponseModel
+    suspend fun buyBadge(@Body request: BuyBadgeRequestModel): BuyBadgeResponseModel
 
     @GET("/badges/get-infos")
     suspend fun getBadgeInformation(request: GetBadgeInfoRequestModel): GetBadgeInfoResponseModel
@@ -58,34 +59,34 @@ interface NoobleApiRetrofitService {
     suspend fun listBadges(): ListBadgesResponseModel
 
     @POST("/classes/add-account")
-    suspend fun addAccountToClass(request: AddAccountToClassRequestModel)
+    suspend fun addAccountToClass(@Body request: AddAccountToClassRequestModel)
 
     @POST("/classes/create")
-    suspend fun createClass(request: CreateClassRequestModel): CreateClassResponseModel
+    suspend fun createClass(@Body request: CreateClassRequestModel): CreateClassResponseModel
 
     @GET("/classes/data")
     suspend fun getClassData(request: GetClassDataRequestModel): GetClassDataResponseModel
 
     @POST("/classes/delete")
-    suspend fun deleteClass(request: DeleteClassRequestModel)
+    suspend fun deleteClass(@Body request: DeleteClassRequestModel)
 
     @POST("/classes/edit")
-    suspend fun editClass(request: EditClassRequestModel)
+    suspend fun editClass(@Body request: EditClassRequestModel)
 
     @GET("/classes/get-accounts")
     suspend fun getClassAccounts(request: GetClassAccountsRequestModel): List<String>
 
     @POST("/classes/remove-account")
-    suspend fun removeAccountFromClass(request: RemoveAccountFromClassRequestModel)
+    suspend fun removeAccountFromClass(@Body request: RemoveAccountFromClassRequestModel)
 
     @POST("/connection/forgot-password")
-    suspend fun launchForgotPasswordProcess(request: ForgotPasswordRequestModel): ForgotPasswordResponseModel
+    suspend fun launchForgotPasswordProcess(@Body request: ForgotPasswordRequestModel): ForgotPasswordResponseModel
 
     @GET("/connection/log-info")
     suspend fun getConnectionInformation(): LogInfoResponseModel
 
     @POST("/connection/login")
-    suspend fun logToAccount(request: LoginRequestModel): LoginResponseModel
+    suspend fun logToAccount(@Body request: LoginRequestModel): LoginResponseModel
 
     @POST("/connection/logout")
     suspend fun logOutFromAccount()
@@ -97,16 +98,16 @@ interface NoobleApiRetrofitService {
     suspend fun listDecorations(): List<NoobleApiDecorationModel>
 
     @POST("/decorations/buy")
-    suspend fun buyDecoration(request: BuyDecorationRequestModel): BuyDecorationResponseModel
+    suspend fun buyDecoration(@Body request: BuyDecorationRequestModel): BuyDecorationResponseModel
 
     @POST("/decorations/create")
-    suspend fun createDecoration(request: CreateDecorationRequestModel): CreateDecorationResponseModel
+    suspend fun createDecoration(@Body request: CreateDecorationRequestModel): CreateDecorationResponseModel
 
     @POST("/decorations/delete")
-    suspend fun deleteDecoration(request: DeleteDecorationRequestModel)
+    suspend fun deleteDecoration(@Body request: DeleteDecorationRequestModel)
 
     @POST("/decorations/modify")
-    suspend fun modifyDecoration(request: ModifyDecorationRequestModel)
+    suspend fun modifyDecoration(@Body request: ModifyDecorationRequestModel)
 
     @GET("/profile/get-info")
     suspend fun getProfileInformation(request: GetAccountProfileRequestModel): NoobleApiAccountProfileModel
@@ -118,10 +119,10 @@ interface NoobleApiRetrofitService {
     suspend fun modifyProfile(request: ModifyAccountProfileRequestModel)
 
     @POST("/profile/update")
-    suspend fun updateProfile(request: UpdateProfileRequestModel)
+    suspend fun updateProfile(@Body request: UpdateProfileRequestModel)
 
     @POST("/resources/delete")
-    suspend fun deleteResource(request: DeleteResourceRequestModel)
+    suspend fun deleteResource(@Body request: DeleteResourceRequestModel)
 
     @GET("/resources/get-self-files")
     suspend fun getSelfFiles(): List<NoobleApiResourceModel>
@@ -145,389 +146,336 @@ interface NoobleApiRetrofitService {
     suspend fun getThread(request: GetThreadRequestModel): List<NoobleApiActivityModel>
 
     @POST("/thread/mark-as-read")
-    suspend fun markThreadAsRead(request: MarkThreadAsReadRequestModel)
+    suspend fun markThreadAsRead(@Body request: MarkThreadAsReadRequestModel)
 
 }
 
-class NoobleApi(ctx: Context) {
+class AccountsApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun create(mail: String, firstName: String, lastName: String): String
+    {
+        return _service.createAccount(
+            AddAccountRequestModel(mail, firstName, lastName)
+        ).newAccountId
+    }
+
+    suspend fun delete(userId: String)
+    {
+        return _service.deleteAccount(
+            DeleteAccountRequestModel(userId)
+        )
+    }
+
+    suspend fun modifyMail(userId: String, mail: String)
+    {
+        return _service.modifyMailAddress(
+            ModifyUserMailRequestModel(userId, mail)
+        )
+    }
+
+    suspend fun modifyRole(userId: String, newRole: NoobleApiRole)
+    {
+        return _service.modifyUserRole(
+            ModifyUserRoleRequestModel(userId, newRole)
+        )
+    }
+}
+
+class ActivitiesApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun list() : List<String>
+    {
+        return _service.listActivities()
+    }
+}
+
+class BadgesApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun buy(name: String) : BuyBadgeResponseModel
+    {
+        return _service.buyBadge(
+            BuyBadgeRequestModel(name)
+        )
+    }
+
+    suspend fun getInformation(name: String, level: Int): GetBadgeInfoResponseModel
+    {
+        return _service.getBadgeInformation(
+            GetBadgeInfoRequestModel(name, level)
+        )
+    }
+
+    suspend fun getThumbnail(name: String, level: Int)
+    {
+        TODO()
+    }
+
+    suspend fun list(): ListBadgesResponseModel
+    {
+        return _service.listBadges()
+    }
+}
+
+class ClassesApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun addAccount(userId: String, classId: String) {
+        return _service.addAccountToClass(
+            AddAccountToClassRequestModel(userId, classId)
+        )
+    }
+
+    suspend fun create(name: String, description: String): String {
+        return _service.createClass(
+            CreateClassRequestModel(name, description)
+        ).newClassId
+    }
+
+    suspend fun getData(classId: String): GetClassDataResponseModel {
+        return _service.getClassData(
+            GetClassDataRequestModel(classId)
+        )
+    }
+
+    suspend fun delete(classId: String) {
+        return _service.deleteClass(
+            DeleteClassRequestModel(classId)
+        )
+    }
+
+
+    suspend fun edit(
+        classId: String,
+        title: String,
+        description: String,
+        content: NoobleApiSectionModel<NoobleApiSectionDataModel>
+    ) {
+        return _service.editClass(
+            EditClassRequestModel(classId, title, description, content)
+        )
+    }
+
+    suspend fun getAccounts(classId: String): List<String> {
+        return _service.getClassAccounts(
+            GetClassAccountsRequestModel(classId)
+        )
+    }
+
+    suspend fun removeAccount(classId: String, userId: String) {
+        return _service.removeAccountFromClass(
+            RemoveAccountFromClassRequestModel(classId, userId)
+        )
+    }
+
+}
+
+class ConnectionApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun launchForgotPasswordProcess(username: String): ForgotPasswordResponseModel
+    {
+        return _service.launchForgotPasswordProcess(
+            ForgotPasswordRequestModel(username)
+        )
+    }
+
+    suspend fun getInformation(): NoobleApiAccountModel?
+    {
+        return _service.getConnectionInformation().account
+    }
+
+    suspend fun login(username: String, password: String): LoginResponseModel
+    {
+        return _service.logToAccount(
+            LoginRequestModel(username, password)
+        )
+    }
+
+    suspend fun logout()
+    {
+        return _service.logOutFromAccount()
+    }
+
+}
+
+class DecorationsApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun buy(decorationId: String) : Int
+    {
+        return _service.buyDecoration(
+            BuyDecorationRequestModel(decorationId)
+        ).newQuota
+    }
+
+    suspend fun create(name: String, price: Int, imageId: String): String
+    {
+        return _service.createDecoration(
+            CreateDecorationRequestModel(name, price, imageId)
+        ).newDecoration
+    }
+
+    suspend fun delete(decorationId: String)
+    {
+        return _service.deleteDecoration(
+            DeleteDecorationRequestModel(decorationId)
+        )
+    }
+
+    suspend fun getInformation(decorationId: String): GetDecorationInfoResponseModel
+    {
+        return _service.getDecorationInformation(
+            GetDecorationInfoRequestModel(decorationId)
+        )
+    }
+
+    suspend fun list(): List<NoobleApiDecorationModel>
+    {
+        return _service.listDecorations()
+    }
+
+    suspend fun modify(decorationId: String, name:String, price:Int, image:String)
+    {
+        return _service.modifyDecoration(
+            ModifyDecorationRequestModel(decorationId, name, price, image)
+        )
+    }
+
+}
+
+class ProfilesApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun getInformation(accountId: String? = null): NoobleApiAccountProfileModel
+    {
+        return if (accountId == null) {
+            _service.getProfileInformation()
+        } else {
+            _service.getProfileInformation(
+                GetAccountProfileRequestModel(accountId)
+            )
+        }
+    }
+
+    suspend fun modify(accountId: String, firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
+    {
+        return _service.modifyProfile(
+            ModifyAccountProfileRequestModel(accountId, firstName, lastName, profileImage, activeDecoration, activeBadges, description)
+        )
+    }
+
+    suspend fun update(firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
+    {
+        return _service.updateProfile(
+            UpdateProfileRequestModel(firstName, lastName, profileImage, activeDecoration, activeBadges, description)
+        )
+    }
+
+}
+
+class ResourcesApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun delete(resourceId: String)
+    {
+        return _service.deleteResource(
+            DeleteResourceRequestModel(resourceId)
+        )
+    }
+
+    suspend fun download(resourceId: String, resourceType: NoobleApiResourceType)
+    {
+        TODO()
+    }
+
+    suspend fun getSelfFiles(type: NoobleApiResourceType? = null): List<NoobleApiResourceModel>
+    {
+        return if (type == null)
+            _service.getSelfFiles()
+        else
+            _service.getSelfFiles(
+                GetSelfFilesWithTypeRequestModel(type)
+            )
+    }
+
+    suspend fun upload(): UploadResourceResponseModel
+    {
+        TODO()
+    }
+
+}
+
+class SafeApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun getWholeSafe(): NoobleApiSafeModel
+    {
+        return _service.getSafe()
+    }
+
+    suspend fun getQuota(): Int
+    {
+        return _service.getSafeQuota()
+    }
+
+    suspend fun getBadges(): List<NoobleApiBadgeModel>
+    {
+        return _service.getSafeBadges()
+    }
+
+    suspend fun getDecorations(): List<String>
+    {
+        return _service.getSafeDecorations()
+    }
+
+}
+
+class ThreadApi(service: NoobleApiRetrofitService)
+{
+    private val _service = service
+
+    suspend fun getThread(count: Int, offset: Int, notReadOnly: Boolean): List<NoobleApiActivityModel>
+    {
+        return _service.getThread(
+            GetThreadRequestModel(notReadOnly, count, offset)
+        )
+    }
+
+    suspend fun markAsRead(activities: List<String>)
+    {
+        return _service.markThreadAsRead(
+            MarkThreadAsReadRequestModel(activities)
+        )
+    }
+}
+
+class NoobleApi(ctx: Context, baseUrl: String) {
     private val _service : NoobleApiRetrofitService by lazy {
-        getRetrofitService(ctx).create(NoobleApiRetrofitService::class.java)
+        getRetrofitService(ctx, baseUrl).create(NoobleApiRetrofitService::class.java)
     }
 
-    init {
-        accounts._initService(_service)
-        activities._initService(_service)
-        badges._initService(_service)
-        classes._initService(_service)
-        connection._initService(_service)
-        decorations._initService(_service)
-        profiles._initService(_service)
-        resources._initService(_service)
-        safe._initService(_service)
-        thread._initService(_service)
-    }
-
-    object accounts
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun create(mail: String, firstName: String, lastName: String): String
-        {
-            return _service.createAccount(
-                AddAccountRequestModel(mail, firstName, lastName)
-            ).newAccountId
-        }
-
-        suspend fun delete(userId: String)
-        {
-            return _service.deleteAccount(
-                DeleteAccountRequestModel(userId)
-            )
-        }
-
-        suspend fun modifyMail(userId: String, mail: String)
-        {
-            return _service.modifyMailAddress(
-                ModifyUserMailRequestModel(userId, mail)
-            )
-        }
-
-        suspend fun modifyRole(userId: String, newRole: NoobleApiRole)
-        {
-            return _service.modifyUserRole(
-                ModifyUserRoleRequestModel(userId, newRole)
-            )
-        }
-    }
-
-    object activities
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun list() : List<String>
-        {
-            return _service.listActivities()
-        }
-    }
-
-    object badges
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun buy(name: String) : BuyBadgeResponseModel
-        {
-            return _service.buyBadge(
-                BuyBadgeRequestModel(name)
-            )
-        }
-
-        suspend fun getInformation(name: String, level: Int): GetBadgeInfoResponseModel
-        {
-            return _service.getBadgeInformation(
-                GetBadgeInfoRequestModel(name, level)
-            )
-        }
-
-        suspend fun getThumbnail(name: String, level: Int)
-        {
-            TODO()
-        }
-
-        suspend fun list(): ListBadgesResponseModel
-        {
-            return _service.listBadges()
-        }
-    }
-
-    object classes
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun addAccount(userId: String, classId: String)
-        {
-            return _service.addAccountToClass(
-                AddAccountToClassRequestModel(userId, classId)
-            )
-        }
-
-        suspend fun create(name: String, description: String): String
-        {
-            return _service.createClass(
-                CreateClassRequestModel(name, description)
-            ).newClassId
-        }
-
-        suspend fun getData(classId: String): GetClassDataResponseModel
-        {
-            return _service.getClassData(
-                GetClassDataRequestModel(classId)
-            )
-        }
-
-        suspend fun delete(classId: String)
-        {
-            return _service.deleteClass(
-                DeleteClassRequestModel(classId)
-            )
-        }
-
-        suspend fun edit(classId: String, title: String, description: String, content: NoobleApiSectionModel<NoobleApiSectionDataModel>)
-        {
-            return _service.editClass(
-                EditClassRequestModel(classId, title, description, content)
-            )
-        }
-
-        suspend fun getAccounts(classId: String): List<String>
-        {
-            return _service.getClassAccounts(
-                GetClassAccountsRequestModel(classId)
-            )
-        }
-
-        suspend fun removeAccount(classId:String, userId: String)
-        {
-            return _service.removeAccountFromClass(
-                RemoveAccountFromClassRequestModel(classId, userId)
-            )
-        }
-
-    }
-
-    object connection
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun launchForgotPasswordProcess(username: String): ForgotPasswordResponseModel
-        {
-            return _service.launchForgotPasswordProcess(
-                ForgotPasswordRequestModel(username)
-            )
-        }
-
-        suspend fun getInformation(): LogInfoResponseModel
-        {
-            return _service.getConnectionInformation()
-        }
-
-        suspend fun login(username: String, password: String): LoginResponseModel
-        {
-            return _service.logToAccount(
-                LoginRequestModel(username, password)
-            )
-        }
-
-        suspend fun logout()
-        {
-            return _service.logOutFromAccount()
-        }
-
-    }
-
-    object decorations
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun buy(decorationId: String) : Int
-        {
-            return _service.buyDecoration(
-                BuyDecorationRequestModel(decorationId)
-            ).newQuota
-        }
-
-        suspend fun create(name: String, price: Int, imageId: String): String
-        {
-            return _service.createDecoration(
-                CreateDecorationRequestModel(name, price, imageId)
-            ).newDecoration
-        }
-
-        suspend fun delete(decorationId: String)
-        {
-            return _service.deleteDecoration(
-                DeleteDecorationRequestModel(decorationId)
-            )
-        }
-
-        suspend fun getInformation(decorationId: String): GetDecorationInfoResponseModel
-        {
-            return _service.getDecorationInformation(
-                GetDecorationInfoRequestModel(decorationId)
-            )
-        }
-
-        suspend fun list(): List<NoobleApiDecorationModel>
-        {
-            return _service.listDecorations()
-        }
-
-        suspend fun modify(decorationId: String, name:String, price:Int, image:String)
-        {
-            return _service.modifyDecoration(
-                ModifyDecorationRequestModel(decorationId, name, price, image)
-            )
-        }
-
-    }
-
-    object profiles
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun getInformation(accountId: String? = null): NoobleApiAccountProfileModel
-        {
-            return if (accountId == null) {
-                _service.getProfileInformation()
-            } else {
-                _service.getProfileInformation(
-                    GetAccountProfileRequestModel(accountId)
-                )
-            }
-        }
-
-        suspend fun modify(accountId: String, firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
-        {
-            return _service.modifyProfile(
-                ModifyAccountProfileRequestModel(accountId, firstName, lastName, profileImage, activeDecoration, activeBadges, description)
-            )
-        }
-
-        suspend fun update(firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
-        {
-            return _service.updateProfile(
-                UpdateProfileRequestModel(firstName, lastName, profileImage, activeDecoration, activeBadges, description)
-            )
-        }
-
-    }
-
-    object resources
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun delete(resourceId: String)
-        {
-            return _service.deleteResource(
-                DeleteResourceRequestModel(resourceId)
-            )
-        }
-
-        suspend fun download(resourceId: String, resourceType: NoobleApiResourceType)
-        {
-            TODO()
-        }
-
-        suspend fun getSelfFiles(type: NoobleApiResourceType? = null): List<NoobleApiResourceModel>
-        {
-            return if (type == null)
-                _service.getSelfFiles()
-            else
-                _service.getSelfFiles(
-                    GetSelfFilesWithTypeRequestModel(type)
-                )
-        }
-
-        suspend fun upload(): UploadResourceResponseModel
-        {
-            TODO()
-        }
-
-    }
-
-    object safe
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun getWholeSafe(): NoobleApiSafeModel
-        {
-            return _service.getSafe()
-        }
-
-        suspend fun getQuota(): Int
-        {
-            return _service.getSafeQuota()
-        }
-
-        suspend fun getBadges(): List<NoobleApiBadgeModel>
-        {
-            return _service.getSafeBadges()
-        }
-
-        suspend fun getDecorations(): List<String>
-        {
-            return _service.getSafeDecorations()
-        }
-
-    }
-
-    object thread
-    {
-        private lateinit var _service: NoobleApiRetrofitService
-
-        fun _initService(service: NoobleApiRetrofitService)
-        {
-            _service = service
-        }
-
-        suspend fun getThread(count: Int, offset: Int, notReadOnly: Boolean): List<NoobleApiActivityModel>
-        {
-            return _service.getThread(
-                GetThreadRequestModel(notReadOnly, count, offset)
-            )
-        }
-
-        suspend fun markAsRead(activities: List<String>)
-        {
-            return _service.markThreadAsRead(
-                MarkThreadAsReadRequestModel(activities)
-            )
-        }
-    }
+    val accounts = AccountsApi(_service)
+    val activities = ActivitiesApi(_service)
+    val badges = BadgesApi(_service)
+    val classes = ClassesApi(_service)
+    val connection = ConnectionApi(_service)
+    val decorations = DecorationsApi(_service)
+    val profiles = ProfilesApi(_service)
+    val resources = ResourcesApi(_service)
+    val safe = SafeApi(_service)
+    val thread = ThreadApi(_service)
 
 }
 

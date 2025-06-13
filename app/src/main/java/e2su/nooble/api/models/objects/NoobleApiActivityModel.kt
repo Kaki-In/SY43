@@ -5,8 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoobleApiActivityModel (
-    @SerialName("activity_id")
-    val activityId: String,
-    val read: Boolean,
-    val data: NoobleApiActivityData
+    @SerialName("activity_id") val activityId: String,
+    @SerialName("read") val read: Boolean,
+    @SerialName("data") val data: NoobleApiActivityData
 )

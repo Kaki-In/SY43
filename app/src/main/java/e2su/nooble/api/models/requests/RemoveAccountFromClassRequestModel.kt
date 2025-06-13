@@ -5,9 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RemoveAccountFromClassRequestModel (
-    @SerialName("class_id")
-    val classId: String,
-
-    @SerialName("user_id")
-    val userId: String
+    @SerialName("class_id") val classId: String,
+    @SerialName("user_id") val userId: String
 )

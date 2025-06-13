@@ -6,11 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoobleApiActivityData(
-    val title: String,
-    val content: String,
-    val creator: String,
-    val date: Instant,
-
-    @SerialName("iconName")
-    val iconName: String
+    @SerialName("title") val title: String,
+    @SerialName("content") val content: String,
+    @SerialName("creator") val creator: String,
+    @SerialName("date") val date: Instant,
+    @SerialName("iconName") val iconName: String
 )

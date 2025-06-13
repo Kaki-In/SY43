@@ -5,9 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class BuyBadgeResponseModel (
-    @SerialName("new_quota")
-    val newQuota: Int,
-
-    @SerialName("new_level")
-    val newLevel: Int
+    @SerialName("new_quota") val newQuota: Int,
+    @SerialName("new_level") val newLevel: Int
 )

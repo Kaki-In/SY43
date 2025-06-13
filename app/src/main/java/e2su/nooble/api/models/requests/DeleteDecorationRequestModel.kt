@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeleteDecorationRequestModel (
-    @SerialName("decoration_id")
-    val decorationId: String
+    @SerialName("decoration_id") val decorationId: String
 )

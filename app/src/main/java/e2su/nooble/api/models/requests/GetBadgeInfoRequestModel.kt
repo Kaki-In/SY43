@@ -1,9 +1,10 @@
 package e2su.nooble.api.models.requests
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetBadgeInfoRequestModel (
-    val name: String,
-    val level: Int
+    @SerialName("name") val name: String,
+    @SerialName("level") val level: Int
 )

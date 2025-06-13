@@ -6,12 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoobleApiResourceModel (
-    val id: String,
-    val name: String,
-    val filename: String,
-    @SerialName("sent_date")
-    val sentDate: Instant,
-    val sender: String,
-    val size: Int,
-    val filetype: NoobleApiResourceType
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("filename") val filename: String,
+    @SerialName("sent_date") val sentDate: Instant,
+    @SerialName("sender") val sender: String,
+    @SerialName("size") val size: Int,
+    @SerialName("file_type") val filetype: NoobleApiResourceType
 )

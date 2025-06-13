@@ -1,12 +1,13 @@
 package e2su.nooble.api.models.objects
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NoobleApiAccountModel (
-    val id: String,
-    val profile: NoobleApiAccountProfileModel,
-    val safe: NoobleApiSafeModel,
-    val role: NoobleApiRole,
-    val mail: String
+    @SerialName("id") val id: String,
+    @SerialName("profile") val profile: NoobleApiAccountProfileModel,
+    @SerialName("safe") val safe: NoobleApiSafeModel,
+    @SerialName("role") val role: NoobleApiRole,
+    @SerialName("mail") val mail: String
 )

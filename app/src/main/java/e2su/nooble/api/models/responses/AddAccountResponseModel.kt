@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AddAccountResponseModel (
-    @SerialName("new_account")
-    val newAccountId: String
+    @SerialName("new_account") val newAccountId: String
 )

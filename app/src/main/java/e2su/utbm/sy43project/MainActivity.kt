@@ -22,26 +22,37 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import e2su.nooble.api.models.objects.NoobleApiAccountModel
+import e2su.nooble.api.models.requests.LoginRequestModel
+import e2su.nooble.api.models.responses.LoginResponseModel
+import e2su.nooble.api.service.NoobleApi
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.navigation.NavRoutes
 import e2su.utbm.sy43project.navigation.NavigationManager
+import e2su.utbm.sy43project.ui.api.RequestViewModel
 import e2su.utbm.sy43project.ui.components.NoobleDrawer
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.screens.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.ClassScreen
 import e2su.utbm.sy43project.ui.screens.ClassSelectScreen
+import e2su.utbm.sy43project.ui.screens.LoginTestScreen
 import e2su.utbm.sy43project.ui.screens.LoginView
 import e2su.utbm.sy43project.ui.screens.OverviewScreen
 import e2su.utbm.sy43project.ui.screens.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.ProfileScreen
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
-import e2su.utbm.sy43project.ui.screens.ShopScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val accountViewModel = RequestViewModel<Any?, NoobleApiAccountModel?>()
+        val loginViewModel = RequestViewModel<LoginRequestModel, LoginResponseModel>()
+        val disconnectViewModel = RequestViewModel<Any?, Any?>()
+
         setContent {
+            val noobleApi = NoobleApi(LocalContext.current, "https://api.nooble-angular.flopcreation.fr")
             SY43ProjectTheme {
                 val navController = rememberNavController()
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -61,6 +72,22 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController, startDestination = NavRoutes.LOGIN.route) {
                         composable(NavRoutes.LOGIN.route) {
                             LoginView(navController)
+                        }
+                        composable(NavRoutes.CONNECTION_TEST.route) {
+                            NoobleIntegrated(
+                                navHostController = navController,
+                                drawerState = drawerState,
+                                scope = scope,
+                                content =
+                                    {
+                                        LoginTestScreen(
+                                            accountViewModel,
+                                            loginViewModel,
+                                            disconnectViewModel,
+                                            noobleApi
+                                        )
+                                    }
+                            )
                         }
                         composable(NavRoutes.PROFILE.route) {
                             NoobleIntegrated(

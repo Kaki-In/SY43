@@ -3,7 +3,11 @@ package e2su.utbm.sy43project.ui.screens
 import e2su.utbm.sy43project.R;
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -116,7 +120,7 @@ fun NoobleLoginHeader(modifier: Modifier = Modifier) {
 @Composable
 fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
     Scaffold { innerPadding ->
-        Column(modifier.padding(innerPadding)) {
+        Column(modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(innerPadding.calculateTopPadding()).background(NoobleGreen).fillMaxWidth())
             NoobleLoginHeader()
             Spacer(modifier = Modifier.size(30.dp))
@@ -145,6 +149,10 @@ fun LoginView(navController: NavHostController, modifier: Modifier = Modifier) {
             Button(onClick = { navController.navigate("profile_edit") }) {
                 Text(text = "Go to profile edit Screen")
             }
+            Button(onClick = { navController.navigate("conntest") }) {
+                Text(text = "Go to connection test Screen")
+            }
+
         }
     }
 }

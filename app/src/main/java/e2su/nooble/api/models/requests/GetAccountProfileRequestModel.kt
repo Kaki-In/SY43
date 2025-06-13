@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetAccountProfileRequestModel (
-    @SerialName("user_id")
-    val userId: String
+    @SerialName("user_id") val userId: String
 )

@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeleteAccountRequestModel (
-    @SerialName("user_id")
-    val userId: String
+    @SerialName("user_id") val userId: String
 )

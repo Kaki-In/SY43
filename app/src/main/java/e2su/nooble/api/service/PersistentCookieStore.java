@@ -83,6 +83,8 @@ public class PersistentCookieStore implements CookieStore {
     public synchronized void add(URI uri, HttpCookie cookie) {
         uri = cookieUri(uri, cookie);
 
+        Log.i(TAG, "add: " + uri + ", " + cookie.getName() + ": " + cookie.getValue());
+
         Set<HttpCookie> targetCookies = allCookies.get(uri);
         if (targetCookies == null) {
             targetCookies = new HashSet<HttpCookie>();

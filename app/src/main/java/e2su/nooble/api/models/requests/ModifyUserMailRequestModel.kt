@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ModifyUserMailRequestModel (
-    @SerialName("user_id")
-    val userId: String,
-    val mail: String
+    @SerialName("user_id") val userId: String,
+    @SerialName("mail") val mail: String
 )

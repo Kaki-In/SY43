@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetClassAccountsRequestModel (
-    @SerialName("class_id")
-    val classId: String
+    @SerialName("class_id") val classId: String
 )

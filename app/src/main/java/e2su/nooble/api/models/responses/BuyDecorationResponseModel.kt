@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class BuyDecorationResponseModel (
-    @SerialName("new_quota")
-    val newQuota: Int
+    @SerialName("new_quota") val newQuota: Int
 )
 

@@ -7,9 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EditClassRequestModel (
-    @SerialName("id")
-    val classId: String,
-    val title: String,
-    val description: String,
-    val content: NoobleApiSectionModel<NoobleApiSectionDataModel>
+    @SerialName("id") val classId: String,
+    @SerialName("title") val title: String,
+    @SerialName("description") val description: String,
+    @SerialName("content") val content: NoobleApiSectionModel<NoobleApiSectionDataModel>
 )

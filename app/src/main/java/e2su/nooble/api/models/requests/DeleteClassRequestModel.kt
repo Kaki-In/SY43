@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeleteClassRequestModel (
-    @SerialName("class_id")
-    val classId: String
+    @SerialName("class_id") val classId: String
 )

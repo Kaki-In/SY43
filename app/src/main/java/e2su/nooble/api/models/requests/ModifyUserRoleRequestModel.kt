@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ModifyUserRoleRequestModel (
-    @SerialName("user_id")
-    val userId: String,
-    val role: NoobleApiRole
+    @SerialName("user_id") val userId: String,
+    @SerialName("role") val role: NoobleApiRole
 )
