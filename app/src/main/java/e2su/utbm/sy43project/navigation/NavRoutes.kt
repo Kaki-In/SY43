@@ -2,6 +2,7 @@ package e2su.utbm.sy43project.navigation
 
 enum class NavRoutes(val route: String) {
     LOGIN("login"),
+    HOME("home"),
     CLASS("class"),
     PROFILE("profile"),
     ACTIVITY("activity"),

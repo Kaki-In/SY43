@@ -6,10 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import e2su.nooble.api.models.objects.NoobleApiAccountModel
-import e2su.nooble.api.models.requests.LoginRequestModel
-import e2su.nooble.api.models.responses.LoginResponseModel
 import e2su.nooble.api.service.NoobleApi
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
@@ -37,7 +34,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
 
                 updateConnection(false)
             } catch (exc: Exception) {
-                _selfState.value = SelfUiState.CantConnect(username, password, exc.toString())
+                _selfState.value = SelfUiState.CantConnect(username, password, exc.message.toString())
                 Log.e("SELF", "login:", exc)
             }
         }

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import e2su.utbm.sy43project.R
+import e2su.utbm.sy43project.navigation.NavRoutes
 
 @Composable
 fun HomeButton(navController: NavController) {
@@ -19,6 +20,6 @@ fun HomeButton(navController: NavController) {
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .size(24.dp) // Taille de l'icône
-            .clickable { navController.navigate("login") } // Action au clic
+            .clickable { navController.navigate(NavRoutes.HOME.route) } // Action au clic
     )
 }

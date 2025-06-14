@@ -3,10 +3,8 @@ package e2su.utbm.sy43project.data.models
 import androidx.lifecycle.ViewModel
 import e2su.nooble.api.service.NoobleApi
 
-class MainViewModel(api: NoobleApi): ViewModel()
-{
+class ThreadViewModel(noobleApi: NoobleApi): ViewModel() {
+    private val _api = noobleApi
 
-    val selfViewModel = SelfViewModel(api)
 
 }
-
