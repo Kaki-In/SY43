@@ -51,6 +51,13 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+                    is SelfUiState.Loading ->
+                    {
+                        LoadingAppSide(
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
                     is SelfUiState.Connected ->
                     {
                         val state = selfViewModel.selfState.value as SelfUiState.Connected

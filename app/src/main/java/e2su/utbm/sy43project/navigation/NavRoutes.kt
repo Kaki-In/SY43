@@ -13,11 +13,10 @@ enum class NavRoutes(val route: String) {
     SHOP("shop"),
     GRADE("grade"),
     SETTINGS("settings"),
-    DOWNLOAD("download"),
-
-    CONNECTION_TEST("conntest");
+    DOWNLOAD("download");
 
     companion object {
         fun createClassRoute(className: String) = "class/$className"
+        fun createProfileRoute(accountName: String) = "profile/$accountName"
     }
 }

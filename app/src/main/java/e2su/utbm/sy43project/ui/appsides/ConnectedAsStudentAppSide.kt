@@ -18,7 +18,6 @@ import e2su.utbm.sy43project.navigation.NavRoutes
 import e2su.utbm.sy43project.navigation.NavigationManager
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.screens.ActivityScreen
-import e2su.utbm.sy43project.ui.screens.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.ClassScreen
 import e2su.utbm.sy43project.ui.screens.ClassSelectScreen
 import e2su.utbm.sy43project.ui.screens.OverviewScreen
@@ -88,7 +87,6 @@ fun ConnectedAsStudentAppSide(
                         navArgument("className") { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
-                    val className = backStackEntry.arguments?.getString("className") ?: ""
                     ClassScreen(navController)
                 }
                 composable(NavRoutes.PROFILE_EDIT.route) {

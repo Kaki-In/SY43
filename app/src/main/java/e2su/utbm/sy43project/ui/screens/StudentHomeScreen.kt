@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.data.models.MainViewModel
 import e2su.utbm.sy43project.data.models.SelfUiState
-import kotlin.math.log
 
 @Composable
 fun StudentHomeScreen(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier)

@@ -9,8 +9,14 @@ import e2su.nooble.api.models.objects.NoobleApiAccountModel
 import e2su.nooble.api.service.NoobleApi
 import kotlinx.coroutines.launch
 
+/*
+
+    The SelfViewModel contains the data about the connection state, and the used account.
+
+*/
+
 class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
-    private var _api = noobleApi
+    private val _api = noobleApi
 
     private val _selfState = mutableStateOf<SelfUiState>(SelfUiState.Unknown)
     val selfState: State<SelfUiState> = _selfState

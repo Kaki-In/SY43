@@ -9,3 +9,4 @@ data class NoobleApiActivityModel (
     @SerialName("read") val read: Boolean,
     @SerialName("data") val data: NoobleApiActivityData
 )
+
