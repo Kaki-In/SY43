@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.ui.screens
+package e2su.utbm.sy43project.ui.screens.common
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button

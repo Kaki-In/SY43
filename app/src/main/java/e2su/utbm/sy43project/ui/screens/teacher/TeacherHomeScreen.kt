@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.ui.screens
+package e2su.utbm.sy43project.ui.screens.teacher
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -13,10 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import e2su.utbm.sy43project.data.models.MainViewModel
 import e2su.utbm.sy43project.data.models.SelfUiState
-import kotlin.math.log
 
 @Composable
-fun AdminHomeScreen(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier)
+fun TeacherHomeScreen(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier)
 {
     val account = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
 
@@ -34,7 +33,7 @@ fun AdminHomeScreen(navController: NavHostController, viewModel: MainViewModel, 
     }
 
     Column(modifier) {
-        Text("Bonjour, " + account.profile.firstName + " " + account.profile.lastName + "! Vous êtes connecté en tant qu'administrateur")
+        Text("Bonjour, " + account.profile.firstName + " " + account.profile.lastName + "! Vous êtes connecté en tant qu'enseignant")
 
         Button(
             onClick = {

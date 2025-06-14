@@ -1,4 +1,4 @@
-package e2su.utbm.sy43project.ui.screens
+package e2su.utbm.sy43project.ui.screens.common
 
 import android.util.Log
 import e2su.utbm.sy43project.R;

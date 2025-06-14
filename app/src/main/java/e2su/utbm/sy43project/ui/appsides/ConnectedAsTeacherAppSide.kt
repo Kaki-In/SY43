@@ -25,10 +25,11 @@ import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
 import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.student.StudentHomeScreen
+import e2su.utbm.sy43project.ui.screens.teacher.TeacherHomeScreen
 
 
 @Composable
-fun ConnectedAsStudentAppSide(
+fun ConnectedAsTeacherAppSide(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier
 )
@@ -52,7 +53,7 @@ fun ConnectedAsStudentAppSide(
         content = {
             NavHost(navController, startDestination = NavRoutes.HOME.route) {
                 composable(NavRoutes.HOME.route) {
-                    StudentHomeScreen(navController, viewModel)
+                    TeacherHomeScreen(navController, viewModel)
                 }
                 composable(NavRoutes.PROFILE.route) {
                     ProfileScreen(

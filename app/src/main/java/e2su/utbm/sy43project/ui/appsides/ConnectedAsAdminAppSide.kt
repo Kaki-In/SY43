@@ -17,14 +17,14 @@ import e2su.utbm.sy43project.data.models.MainViewModel
 import e2su.utbm.sy43project.navigation.NavRoutes
 import e2su.utbm.sy43project.navigation.NavigationManager
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
-import e2su.utbm.sy43project.ui.screens.ActivityScreen
-import e2su.utbm.sy43project.ui.screens.AdminHomeScreen
-import e2su.utbm.sy43project.ui.screens.ClassScreen
-import e2su.utbm.sy43project.ui.screens.ClassSelectScreen
-import e2su.utbm.sy43project.ui.screens.OverviewScreen
-import e2su.utbm.sy43project.ui.screens.ProfileEditScreen
-import e2su.utbm.sy43project.ui.screens.ProfileScreen
-import e2su.utbm.sy43project.ui.screens.ShopScreen
+import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
+import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassSelectScreen
+import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
+import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
+import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
+import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 
 
 @Composable
