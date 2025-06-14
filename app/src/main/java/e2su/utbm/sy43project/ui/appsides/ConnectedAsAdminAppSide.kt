@@ -91,17 +91,17 @@ fun ConnectedAsAdminAppSide(
                     ClassScreen(navController)
                 }
                 composable(NavRoutes.PROFILE_EDIT.route) {
-                    ProfileEditScreen(
-                        profile = SampleData.sampleProfile,
-                        onSaveClick = { updatedProfile ->
-                            // TODO: Appel API pour sauvegarder les modifications
-                        },
-                        onNavigateToProfile = {
-                            navController.navigate(NavRoutes.PROFILE.route) {
-                                popUpTo(NavRoutes.PROFILE.route) { inclusive = true }
-                            }
-                        }
-                    )
+                    /**ProfileEditScreen(
+                    profile = SampleData.sampleProfile,
+                    onSaveClick = { updatedProfile ->
+                    // TODO: Appel API pour sauvegarder les modifications
+                    },
+                    onNavigateToProfile = {
+                    navController.navigate(NavRoutes.PROFILE.route) {
+                    popUpTo(NavRoutes.PROFILE.route) { inclusive = true }
+                    }
+                    }
+                    )**/
                 }
             }
         }
