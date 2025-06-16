@@ -1,0 +1,11 @@
+package e2su.utbm.sy43project.api.models.responses
+
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class LogInfoResponseModel (
+    @SerialName("connected") val connected: Boolean,
+    @SerialName("account") val account: NoobleApiAccountModel? = null
+)

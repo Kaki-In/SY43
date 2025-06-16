@@ -11,8 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import e2su.utbm.sy43project.data.models.MainViewModel
-import e2su.utbm.sy43project.data.models.SelfUiState
+import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 
 @Composable
 fun StudentHomeScreen(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier)
