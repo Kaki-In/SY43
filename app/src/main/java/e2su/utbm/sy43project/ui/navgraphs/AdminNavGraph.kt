@@ -30,10 +30,8 @@ fun AdminNavGraph(
 {
     val navController = rememberNavController()
 
-    LaunchedEffect(Unit) {
-        AdminNavigationManager.setProfileClickAction {
-            navController.navigate(AdminNavRoutes.PROFILE.route)
-        }
+    AdminNavigationManager.setProfileClickAction {
+        navController.navigate(AdminNavRoutes.PROFILE.route)
     }
 
     NavHost(navController, startDestination = AdminNavRoutes.HOME.route, modifier = modifier) {
