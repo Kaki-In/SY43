@@ -85,6 +85,13 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
+            text = "Log In",
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+            modifier = Modifier.padding(10.dp)
+        )
+
+        Text(
             text = errorMailMessage,
             fontWeight = FontWeight.Bold,
             color = Color.Red,

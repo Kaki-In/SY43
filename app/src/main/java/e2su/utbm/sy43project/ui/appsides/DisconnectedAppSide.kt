@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.R
+import e2su.utbm.sy43project.ui.drawers.DisconnectedDrawer
 import e2su.utbm.sy43project.ui.navgraphs.DisconnectedNavGraph
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
@@ -31,23 +34,34 @@ import e2su.utbm.sy43project.ui.theme.NoobleGreen
 fun DisconnectedAppSide(mainModel: MainViewModel, modifier: Modifier = Modifier)
 {
     Scaffold { innerPadding ->
-        Column(modifier
-            .padding(innerPadding)
-            .verticalScroll(rememberScrollState())) {
-            Spacer(modifier = Modifier
-                .height(innerPadding.calculateTopPadding())
-                .background(NoobleGreen)
-                .fillMaxWidth())
-            DisconnectedHeader()
-            Spacer(modifier = Modifier.size(30.dp))
 
-            DisconnectedNavGraph(
-                viewModel = mainModel
-            )
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
 
-            Spacer(modifier = Modifier.size(70.dp))
+        DisconnectedDrawer(
+            drawerState = drawerState
+        ) {
+            Column(modifier
+                .verticalScroll(rememberScrollState())) {
+
+                Spacer(modifier = Modifier
+                    .height(innerPadding.calculateTopPadding())
+                    .background(NoobleGreen)
+                    .fillMaxWidth())
+
+                DisconnectedHeader()
+
+                Spacer(modifier = Modifier.size(30.dp))
+
+                DisconnectedNavGraph(
+                    viewModel = mainModel
+                )
+
+                Spacer(modifier = Modifier.size(70.dp))
+            }
         }
+
     }
+
 }
 
 @Composable

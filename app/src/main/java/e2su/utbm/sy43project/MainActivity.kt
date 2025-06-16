@@ -19,7 +19,7 @@ import e2su.utbm.sy43project.api.service.NoobleApi
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import e2su.utbm.sy43project.ui.appsides.ConnectedAsAdminAppSide
-import e2su.utbm.sy43project.ui.appsides.ConnectedAsStudentAppSide
+import e2su.utbm.sy43project.ui.appsides.ConnectedAsStudentOrTeacherAppSide
 import e2su.utbm.sy43project.ui.appsides.DisconnectedAppSide
 import e2su.utbm.sy43project.ui.appsides.LoadingAppSide
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
 
                             NoobleApiRole.ROLE_STUDENT ->
                             {
-                                ConnectedAsStudentAppSide(viewModel = mainViewModel)
+                                ConnectedAsStudentOrTeacherAppSide(viewModel = mainViewModel)
                             }
 
                             NoobleApiRole.ROLE_TEACHER ->

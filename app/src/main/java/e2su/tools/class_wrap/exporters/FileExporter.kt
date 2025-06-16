@@ -18,48 +18,30 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
-import e2su.tools.class_wrap.exceptions.InvalidArgumentException
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.dao.DownloadedFileEntity
 import e2su.utbm.sy43project.dao.DownloadedFileDao
 
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import e2su.utbm.sy43project.NoobleApp
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import androidx.core.net.toUri
 
-class FileExporter : Exporter<JSONObject>("file") {
+class FileExporter : Exporter<JsonObject>("file") {
 
     @Composable
-    override fun createView(data: JSONObject, map: ExportersMap, modifier: Modifier) {
-        val src: String
-        val filename: String
-        val description: String
+    override fun createView(data: JsonObject, map: ExportersMap, modifier: Modifier) {
+        val src = data["src"]?.jsonPrimitive?.content!!
+        val filename: String = data["filename"]?.jsonPrimitive?.content!!
+        val description: String = data["description"]?.jsonPrimitive?.content!!
 
-        try {
-            src = data.getString("src")
-        } catch (exc: JSONException) {
-            throw InvalidArgumentException("could not find src for file")
-        }
-
-        try {
-            filename = data.getString("filename")
-        } catch (exc: JSONException) {
-            throw InvalidArgumentException("could not find name for file")
-        }
-
-        try {
-            description = data.getString("description")
-        } catch (exc: JSONException) {
-            throw InvalidArgumentException("could not find name for file")
-        }
-
-        val context = LocalContext.current
+/*        val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
-        val downloadedFileDao = (context.applicationContext as? NoobleApp)?.database?.downloadedFileDao()
+        val downloadedFileDao = (context.applicationContext as? NoobleApp)?.database?.downloadedFileDao()*/
 
         Button(onClick = {
-            val downloadId = downloadFile(context, src, filename)
+/*            val downloadId = downloadFile(context, src, filename)
             val destinationPath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path}/$filename"
             coroutineScope.launch {
                 downloadedFileDao?.let { dao: DownloadedFileDao ->
@@ -70,7 +52,7 @@ class FileExporter : Exporter<JSONObject>("file") {
                     )
                     dao.insert(downloadedFile)
                 }
-            }
+            }*/
         }, modifier = modifier.height(80.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(
@@ -98,7 +80,7 @@ class FileExporter : Exporter<JSONObject>("file") {
     }
 
     private fun downloadFile(context: Context, url: String, filename: String): Long {
-        val request = DownloadManager.Request(Uri.parse(url))
+        val request = DownloadManager.Request(url.toUri())
             .setTitle(filename)
             .setDescription("Téléchargement en cours...")
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)

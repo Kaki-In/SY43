@@ -1,15 +1,10 @@
 package e2su.tools.class_wrap.exporters
 
-import android.R.attr.visibility
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -21,8 +16,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
-import org.json.JSONObject
-import androidx.core.graphics.createBitmap
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonPrimitive
+import kotlin.math.log
 
 /*
 
@@ -40,9 +38,9 @@ private class CustomWebViewClient(val base_url: String, val context: Context): W
 
         val url = request.url.toString()
 
-        val url_is_primary = url == base_url || request.isRedirect || url.startsWith("data:text/HTML")
+        val urlIsPrimary = url == base_url || request.isRedirect || url.startsWith("data:text/HTML")
 
-        if (request.isForMainFrame && !url_is_primary)
+        if (request.isForMainFrame && !urlIsPrimary)
         {
             Log.i("CustomWebViewClient", "shouldOverrideUrlLoading: " + url)
 
@@ -94,30 +92,32 @@ private class CustomWebChromeClient(val activity: Activity, val webView: WebView
     }
 }
 
-class IntegrationExporter: Exporter<JSONObject>("integration") {
+class IntegrationExporter: Exporter<JsonObject>("integration") {
     @Composable
     override fun createView(
-        data: JSONObject,
+        data: JsonObject,
         map: ExportersMap,
         modifier: Modifier
     ) {
-        val width = data.get("width")
-        val height = data.get("height")
-        val src = data.getString("src").replace("\"", "\\\"")
-        val permissions = data.getJSONArray("permissions")
+        Log.i("TAG", "createView: " + data.toString())
 
-        var allowfullscreen = ""
+        val width = try {data["width"]?.jsonPrimitive?.int!!} catch (exc: Exception) {data["width"]?.jsonPrimitive?.content!!}
+        val height = try {data["height"]?.jsonPrimitive?.int!!} catch (exc: Exception) {data["height"]?.jsonPrimitive?.content!!}
+        val src = data["src"]?.jsonPrimitive?.content!!.replace("\"", "\\\"")
+        val permissions = data["permissions"]?.jsonArray!!
+
+        var allowFullScreen = ""
 
         var content = "<iframe frameborder=\"0\" width=\"$width\" height=\"$height\" src=\"$src\" loading=\"lazy\" allow=\""
 
         var added = false;
-        for (index in 0..(permissions.length()-1))
+        for (index in 0..(permissions.size-1))
         {
-            val permission = permissions.get(index)
+            val permission = permissions[index].jsonPrimitive.content
 
             if (permission === "fullscreen")
             {
-                allowfullscreen = " allowfullscreen"
+                allowFullScreen = " allowfullscreen"
             } else {
                 if (added)
                 {
@@ -130,15 +130,13 @@ class IntegrationExporter: Exporter<JSONObject>("integration") {
 
         }
 
-        Log.i("IntegrationExporter", "content: " + content+"\"$allowfullscreen>IFRAME ARE NOT WORKING ON YOUR MOBILE</iframe>")
-
         AndroidView(
             factory = { context ->
                 WebView(
                     context,
                 ).apply {
                     settings.javaScriptEnabled = true
-                    loadData(content+"\"$allowfullscreen>IFRAME ARE NOT WORKING ON YOUR MOBILE</iframe>", "text/HTML", "UTF-8")
+                    loadData("$content\"$allowFullScreen>IFRAME ARE NOT WORKING ON YOUR MOBILE</iframe>", "text/HTML", "UTF-8")
 
                     webViewClient = CustomWebViewClient(src, context)
                     webChromeClient = CustomWebChromeClient(context as Activity, this)

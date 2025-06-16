@@ -1,30 +1,30 @@
 package e2su.tools.class_wrap.exporters
 
-import android.app.Activity
-import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewStateWithHTMLData
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
-import org.json.JSONObject
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
-class ActivityExporter: Exporter<JSONObject>("activity") {
+class ActivityExporter: Exporter<JsonObject>("activity") {
     @Composable
     override fun createView(
-        data: JSONObject,
+        data: JsonObject,
         map: ExportersMap,
         modifier: Modifier
     ) {
-        val html = data.getString("html")
+        val html = data["html"]?.jsonPrimitive?.content!!
 
-        val css = data.getString("css")
-        val javascript = data.getString("javascript")
+        val css = data["css"]?.jsonPrimitive?.content!!
+        val javascript = data["javascript"]?.jsonPrimitive?.content!!
 
-        val id = data.getInt("id")
-        val arguments = data.getJSONObject("arguments").toString()
+        val id = data["id"]?.jsonPrimitive?.int!!
+        val arguments = data["arguments"]?.jsonObject!!
 
         val content = """
         <!DOCTYPE html>

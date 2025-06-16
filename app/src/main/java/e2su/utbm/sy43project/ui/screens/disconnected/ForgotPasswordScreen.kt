@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.api.models.responses.ForgotPasswordResponseModel
 import e2su.utbm.sy43project.ui.components.LoadingSpinner
 import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationManager
@@ -43,6 +44,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, viewModel: RetrieveDataV
     if (processLaunched)
         LaunchedEffect(key1=true) {
             viewModel.retrieveData {
+
                 viewModel.getNoobleApi().connection.launchForgotPasswordProcess(email)
             }
         }
@@ -55,6 +57,13 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, viewModel: RetrieveDataV
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
     ) {
+        Text(
+            text = "Forgot Password",
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+            modifier = Modifier.padding(10.dp)
+        )
+
         Text(
             text = errorMailMessage,
             fontWeight = FontWeight.Bold,
@@ -77,20 +86,20 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, viewModel: RetrieveDataV
         if (requestState.value is CurrentDataRequestUiState.Success)
         {
             val successState = requestState.value as CurrentDataRequestUiState.Success
-            Text("Hello ${successState.classData.firstName} ${successState.classData.lastName}. A new password has just been sent to your mail address.")
+            Text("Hello ${successState.responseData.firstName} ${successState.responseData.lastName}. A new password has just been sent to your mail address.")
         } else {
             Button(
                 onClick = {
                     processLaunched = true
                 },
-                enabled = requestState.value !is CurrentActionUiState.Loading,
+                enabled = requestState.value !is CurrentDataRequestUiState.Loading,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
                     .background(Color.Black),
             ) {
-                if (requestState.value is CurrentActionUiState.Loading)
+                if (requestState.value is CurrentDataRequestUiState.Loading)
                 {
                     LoadingSpinner()
                 } else {
@@ -100,12 +109,12 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, viewModel: RetrieveDataV
 
         }
 
-        if (requestState.value is CurrentActionUiState.Error)
+        if (requestState.value is CurrentDataRequestUiState.Error)
         {
-            val cantProcessState = (requestState.value as CurrentActionUiState.Error)
+            val cantProcessState = (requestState.value as CurrentDataRequestUiState.Error)
             val errorMessage = cantProcessState.reason
 
-            if (errorMessage.startsWith("HTTP 401"))
+            if (errorMessage.startsWith("HTTP 400"))
             {
                 Text("Adresse mail invalide")
             }

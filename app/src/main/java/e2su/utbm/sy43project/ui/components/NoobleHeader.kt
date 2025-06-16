@@ -21,9 +21,8 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NoobleHeader(
-    drawerState: DrawerState,
-    scope: CoroutineScope,
     modifier: Modifier = Modifier,
+    onToggleDrawerState: () -> Unit,
     onProfileClick: () -> Unit = { /* Default no-op */ }
 ) {
     Row(
@@ -36,11 +35,7 @@ fun NoobleHeader(
     ) {
         IconButton(
             onClick = {
-                scope.launch {
-                    drawerState.apply {
-                        if (isClosed) open() else close()
-                    }
-                }
+                onToggleDrawerState()
             }
         ) {
             Icon(

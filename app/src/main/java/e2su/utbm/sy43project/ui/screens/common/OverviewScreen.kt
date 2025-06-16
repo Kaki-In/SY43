@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import e2su.tools.class_wrap.DEFAULT_EXPORTERS_MAPS
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 import org.json.JSONObject
 import org.json.JSONTokener
 
@@ -238,7 +241,7 @@ fun OverviewScreen(
             .verticalScroll(rememberScrollState())
         ) {
 
-            DEFAULT_EXPORTERS_MAPS.createView(JSONObject(JSONTokener(jsonData)))
+            DEFAULT_EXPORTERS_MAPS.createView(Json.parseToJsonElement(jsonData).jsonObject)
 
         }
     }

@@ -1,5 +1,6 @@
 package e2su.utbm.sy43project.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,8 @@ import kotlinx.coroutines.launch
 
 class LaunchActionViewModel(noobleApi: NoobleApi): ViewModel()
 {
+    val TAG = "LaunchAction"
+
     private val _api = noobleApi
 
     private val _requestState = mutableStateOf<CurrentActionUiState>(CurrentActionUiState.Idle)
@@ -31,6 +34,7 @@ class LaunchActionViewModel(noobleApi: NoobleApi): ViewModel()
 
                 _requestState.value = CurrentActionUiState.Success
             } catch (exc: Exception) {
+                Log.e(TAG, "Error while launching action\n", exc)
                 _requestState.value = CurrentActionUiState.Error(exc.message.toString())
             }
         }

@@ -1,5 +1,6 @@
 package e2su.utbm.sy43project.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,8 @@ import kotlinx.coroutines.launch
 
 class RetrieveDataViewModel<WaitedResponse>(noobleApi: NoobleApi): ViewModel()
 {
+    val TAG = "RetrieveData"
+
     private val _api = noobleApi
 
     private val _requestState = mutableStateOf<CurrentDataRequestUiState<WaitedResponse>>(CurrentDataRequestUiState.Idle<WaitedResponse>())
@@ -33,6 +36,7 @@ class RetrieveDataViewModel<WaitedResponse>(noobleApi: NoobleApi): ViewModel()
 
                 _requestState.value = CurrentDataRequestUiState.Success(result)
             } catch (exc: Exception) {
+                Log.e(TAG, "Error while retrieving data\n", exc)
                 _requestState.value = CurrentDataRequestUiState.Error(exc.message.toString())
             }
         }
@@ -54,8 +58,7 @@ sealed class CurrentDataRequestUiState<WaitedResponse>
 {
     class Idle<WaitedResponse>(): CurrentDataRequestUiState<WaitedResponse>()
     class Loading<WaitedResponse>(): CurrentDataRequestUiState<WaitedResponse>()
-    class Success<WaitedResponse>(val classData: WaitedResponse): CurrentDataRequestUiState<WaitedResponse>()
+    class Success<WaitedResponse>(val responseData: WaitedResponse): CurrentDataRequestUiState<WaitedResponse>()
     class Error<WaitedResponse>(val reason: String): CurrentDataRequestUiState<WaitedResponse>()
 }
-
 

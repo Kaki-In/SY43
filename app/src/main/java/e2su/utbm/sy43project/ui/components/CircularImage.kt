@@ -1,6 +1,7 @@
 package e2su.utbm.sy43project.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ fun CircularImage(imageRes: Int, size: Int, modifier: Modifier = Modifier) {
         modifier = Modifier
             .size(size.dp) // Définit la taille de l'image
             .clip(CircleShape) // Applique une forme circulaire
+            .padding(20.dp)
     )
 }
 

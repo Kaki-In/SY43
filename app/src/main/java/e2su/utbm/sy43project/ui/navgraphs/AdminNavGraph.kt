@@ -30,7 +30,7 @@ fun AdminNavGraph(
 {
     val navController = rememberNavController()
 
-    AdminNavigationManager.setProfileClickAction {
+    AdminNavigationManager.profilePageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.PROFILE.route)
     }
 

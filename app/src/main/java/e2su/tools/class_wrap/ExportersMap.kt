@@ -1,10 +1,7 @@
 package e2su.tools.class_wrap;
 
-import android.app.Activity
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import e2su.tools.class_wrap.exceptions.InvalidArgumentException
 import e2su.tools.class_wrap.exceptions.NoSuchExporterException
 import e2su.tools.class_wrap.exporters.ActivityExporter
 import e2su.tools.class_wrap.exporters.AudioExporter
@@ -15,9 +12,9 @@ import e2su.tools.class_wrap.exporters.IntegrationExporter
 import e2su.tools.class_wrap.exporters.RawTextExporter
 import e2su.tools.class_wrap.exporters.RichTextExporter
 import e2su.tools.class_wrap.exporters.VideoExporter
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 public class ExportersMap {
     val exporters: MutableMap<String, Exporter<*>> = mutableMapOf<String, Exporter<*>>()
@@ -46,24 +43,12 @@ public class ExportersMap {
     }
 
     @Composable
-    fun createView(json_data: JSONObject, modifier: Modifier = Modifier)
+    fun createView(jsonData: JsonObject, modifier: Modifier = Modifier)
     {
-        val type: String
-        var data: Any
+        val type = jsonData["type"]?.jsonPrimitive?.content!!
+        val data = jsonData["data"]!!
 
-        try {
-            type = json_data.getString("type")
-        } catch (exc: JSONException) {
-            throw InvalidArgumentException("could not find type in json object")
-        }
-
-        try {
-            data = json_data.get("data")
-        } catch (exc: JSONException) {
-            throw InvalidArgumentException("could not find data in json object")
-        }
-
-        (this.getExporter(type) as Exporter<Any>).createView(data, this, modifier = modifier)
+        (this.getExporter(type) as Exporter<JsonElement>).createView(data, this, modifier = modifier)
 
     }
 

@@ -6,11 +6,13 @@ import e2su.utbm.sy43project.api.models.objects.*
 import e2su.utbm.sy43project.api.models.requests.*
 import e2su.utbm.sy43project.api.models.responses.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.java.net.cookiejar.JavaNetCookieJar
 import retrofit2.Retrofit
 import retrofit2.http.Body
+import retrofit2.http.Query
 import retrofit2.http.GET
 import retrofit2.http.POST
 import java.net.CookieManager
@@ -71,7 +73,7 @@ interface NoobleApiRetrofitService {
     suspend fun createClass(@Body request: CreateClassRequestModel): CreateClassResponseModel
 
     @GET("/classes/data")
-    suspend fun getClassData(request: GetClassDataRequestModel): GetClassDataResponseModel
+    suspend fun getClassData(@Query("class_id") request: String): GetClassDataResponseModel
 
     @POST("/classes/delete")
     suspend fun deleteClass(@Body request: DeleteClassRequestModel)
@@ -152,7 +154,7 @@ interface NoobleApiRetrofitService {
     suspend fun getSafeQuota(): Int
 
     @GET("/thread/get")
-    suspend fun getThread(request: GetThreadRequestModel): List<NoobleApiActivityModel>
+    suspend fun getThread(@Query("notreadonly") notreadonly: Boolean, @Query("count") count: Int, @Query("offset") offset: Int): List<NoobleApiActivityModel>
 
     @POST("/thread/mark-as-read")
     suspend fun markThreadAsRead(@Body request: MarkThreadAsReadRequestModel)
@@ -261,9 +263,17 @@ class ClassesApi(service: NoobleApiRetrofitService)
         ).newClassId
     }
 
-    suspend fun getData(classId: String): GetClassDataResponseModel {
-        return _service.getClassData(
-            GetClassDataRequestModel(classId)
+    suspend fun getData(classId: String): NoobleApiClassModel {
+        val result = _service.getClassData(
+            classId
+        )
+        return NoobleApiClassModel(
+            id = classId,
+            content = result.content,
+            description = result.description,
+            lastModification = result.lastModification,
+            lastModifier = result.lastModifier,
+            name = result.name
         )
     }
 
@@ -278,7 +288,7 @@ class ClassesApi(service: NoobleApiRetrofitService)
         classId: String,
         title: String,
         description: String,
-        content: NoobleApiSectionModel<NoobleApiSectionDataModel>
+        content: JsonObject
     ) {
         return _service.editClass(
             EditClassRequestModel(classId, title, description, content)
@@ -479,7 +489,7 @@ class ThreadApi(service: NoobleApiRetrofitService)
     suspend fun getThread(count: Int, offset: Int, notReadOnly: Boolean): List<NoobleApiActivityModel>
     {
         return _service.getThread(
-            GetThreadRequestModel(notReadOnly, count, offset)
+            notReadOnly, count, offset
         )
     }
 

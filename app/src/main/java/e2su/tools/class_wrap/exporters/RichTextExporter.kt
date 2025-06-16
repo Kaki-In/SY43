@@ -9,11 +9,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
+import kotlinx.serialization.json.JsonPrimitive
 
-class RichTextExporter: Exporter<String>("rich-text") {
+class RichTextExporter: Exporter<JsonPrimitive>("rich-text") {
     @Composable
     override fun createView(
-        data: String,
+        data: JsonPrimitive,
         map: ExportersMap,
         modifier: Modifier
     ) {
@@ -22,7 +23,7 @@ class RichTextExporter: Exporter<String>("rich-text") {
         // android.text.Spanned
         AndroidView(factory = { context ->
             TextView(context).apply {
-                setText(HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY))
+                text = HtmlCompat.fromHtml(data.content, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
         }, modifier = modifier)
     }
