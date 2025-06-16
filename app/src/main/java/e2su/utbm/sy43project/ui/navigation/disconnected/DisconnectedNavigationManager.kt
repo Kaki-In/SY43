@@ -6,5 +6,5 @@ import e2su.tools.navigate.NavigateActionManager
 object DisconnectedNavigationManager {
     var connectPageAction = NavigateActionManager()
     var forgotPasswordPageAction = NavigateActionManager()
+    var downloadsPageAction = NavigateActionManager()
 }
-

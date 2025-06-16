@@ -20,7 +20,7 @@ fun ProfileButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = { AdminNavigationManager.navigateToProfile() },
+        onClick = { AdminNavigationManager.profilePageAction.navigate() },
         contentPadding = PaddingValues(0.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(

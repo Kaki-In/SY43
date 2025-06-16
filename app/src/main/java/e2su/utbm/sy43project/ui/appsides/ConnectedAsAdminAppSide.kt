@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import e2su.utbm.sy43project.ui.components.NoobleDrawer
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.navgraphs.AdminNavGraph
@@ -20,6 +21,7 @@ fun ConnectedAsAdminAppSide(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    NoobleDrawer() { }
     NoobleIntegrated(
         drawerState = drawerState,
         scope = scope,

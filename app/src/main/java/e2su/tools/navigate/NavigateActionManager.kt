@@ -13,4 +13,6 @@ class NavigateActionManager {
         clickedAction?.invoke()
     }
 
+
+
 }

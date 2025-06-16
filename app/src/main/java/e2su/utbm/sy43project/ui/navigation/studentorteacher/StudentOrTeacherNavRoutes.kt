@@ -1,6 +1,8 @@
-package e2su.utbm.sy43project.ui.navigation.admin
+package e2su.utbm.sy43project.ui.navigation.studentorteacher
 
-enum class AdminNavRoutes(val route: String) {
+import e2su.tools.navigate.NavigateActionManager
+
+enum class NavRoutes(val route: String) {
     LOGIN("login"),
     HOME("home"),
     CLASS("class"),
@@ -19,4 +21,10 @@ enum class AdminNavRoutes(val route: String) {
         fun createClassRoute(className: String) = "class/$className"
         fun createProfileRoute(accountName: String) = "profile/$accountName"
     }
+}
+
+object DisconnectedNavigationManager {
+    var connectPageAction = NavigateActionManager()
+    var forgotPasswordPageAction = NavigateActionManager()
+    var downloadsPageAction = NavigateActionManager()
 }

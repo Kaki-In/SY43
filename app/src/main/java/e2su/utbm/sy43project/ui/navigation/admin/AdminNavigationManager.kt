@@ -1,17 +1,8 @@
 package e2su.utbm.sy43project.ui.navigation.admin
 
-import android.util.Log
+import e2su.tools.navigate.NavigateActionManager
 
 object AdminNavigationManager {
-    private var onProfileClick: (() -> Unit)? = null
-
-    fun setProfileClickAction(action: () -> Unit) {
-        onProfileClick = action
-    }
-
-    fun navigateToProfile() {
-        onProfileClick?.invoke()
-        Log.e("NavigationManager", "Navigating to profile")
-    }
+    val profilePageAction = NavigateActionManager()
 }
 
