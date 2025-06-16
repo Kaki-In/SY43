@@ -1,11 +1,9 @@
 package e2su.utbm.sy43project.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import e2su.nooble.models.ProfileModel
-import e2su.utbm.sy43project.navigation.NavigationManager
-import android.util.Log
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -22,7 +20,7 @@ fun ProfileButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = { NavigationManager.navigateToProfile() },
+        onClick = { AdminNavigationManager.navigateToProfile() },
         contentPadding = PaddingValues(0.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(

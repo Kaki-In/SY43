@@ -1,0 +1,16 @@
+package e2su.utbm.sy43project.api.models.responses
+
+import e2su.utbm.sy43project.api.models.objects.NoobleApiSectionDataModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiSectionModel
+import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class GetClassDataResponseModel (
+    @SerialName("content") val content: NoobleApiSectionModel<NoobleApiSectionDataModel>,
+    @SerialName("description") val description: String,
+    @SerialName("lastModification") val lastModification: @ParameterName("last_modification") Instant,
+    @SerialName("lastModifier") val lastModifier: @ParameterName("last_modifier") String,
+    @SerialName("name") val name: String
+)

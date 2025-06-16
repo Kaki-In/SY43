@@ -13,19 +13,18 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.data.SampleData
-import e2su.utbm.sy43project.data.models.MainViewModel
-import e2su.utbm.sy43project.navigation.NavRoutes
-import e2su.utbm.sy43project.navigation.NavigationManager
+import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
-import e2su.utbm.sy43project.ui.screens.ActivityScreen
-import e2su.utbm.sy43project.ui.screens.AdminHomeScreen
-import e2su.utbm.sy43project.ui.screens.ClassScreen
-import e2su.utbm.sy43project.ui.screens.ClassSelectScreen
-import e2su.utbm.sy43project.ui.screens.OverviewScreen
-import e2su.utbm.sy43project.ui.screens.ProfileEditScreen
-import e2su.utbm.sy43project.ui.screens.ProfileScreen
-import e2su.utbm.sy43project.ui.screens.ShopScreen
-import e2su.utbm.sy43project.ui.screens.StudentHomeScreen
+import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassSelectScreen
+import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
+import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
+import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
+import e2su.utbm.sy43project.ui.screens.common.ShopScreen
+import e2su.utbm.sy43project.ui.screens.student.StudentHomeScreen
 
 
 @Composable
@@ -39,43 +38,42 @@ fun ConnectedAsStudentAppSide(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        NavigationManager.setProfileClickAction {
-            navController.navigate(NavRoutes.PROFILE.route)
+        AdminNavigationManager.setProfileClickAction {
+            navController.navigate(AdminNavRoutes.PROFILE.route)
         }
 
     }
 
     NoobleIntegrated(
-        navHostController = navController,
         drawerState = drawerState,
         scope = scope,
         modifier = modifier,
         content = {
-            NavHost(navController, startDestination = NavRoutes.HOME.route) {
-                composable(NavRoutes.HOME.route) {
+            NavHost(navController, startDestination = AdminNavRoutes.HOME.route) {
+                composable(AdminNavRoutes.HOME.route) {
                     StudentHomeScreen(navController, viewModel)
                 }
-                composable(NavRoutes.PROFILE.route) {
+                composable(AdminNavRoutes.PROFILE.route) {
                     ProfileScreen(
                         ProfileModel(1, "bonjour", "bonjour", 34, "salut", "aslaut", true, mutableListOf()),
                         onClassClick = { className ->
-                            navController.navigate(NavRoutes.createClassRoute(className))
+                            navController.navigate(AdminNavRoutes.createClassRoute(className))
                         }
                     )
                 }
-                composable(NavRoutes.CLASS.route) {
+                composable(AdminNavRoutes.CLASS.route) {
                     ClassScreen(navController)
                 }
-                composable(NavRoutes.ACTIVITY.route) {
+                composable(AdminNavRoutes.ACTIVITY.route) {
                     ActivityScreen()
                 }
-                composable(NavRoutes.CLASS_SELECT.route) {
+                composable(AdminNavRoutes.CLASS_SELECT.route) {
                     ClassSelectScreen(navController = navController, courses = listOf())
                 }
-                composable(NavRoutes.CLASS_OVERVIEW.route) {
+                composable(AdminNavRoutes.CLASS_OVERVIEW.route) {
                     OverviewScreen()
                 }
-                composable(NavRoutes.SHOP.route) {
+                composable(AdminNavRoutes.SHOP.route) {
                     ShopScreen(
                         userCoins = 500,
                         shopItems = SampleData.shopItems,
@@ -83,23 +81,22 @@ fun ConnectedAsStudentAppSide(
                     )
                 }
                 composable(
-                    route = NavRoutes.CLASS_DETAIL.route,
+                    route = AdminNavRoutes.CLASS_DETAIL.route,
                     arguments = listOf(
                         navArgument("className") { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
-                    val className = backStackEntry.arguments?.getString("className") ?: ""
                     ClassScreen(navController)
                 }
-                composable(NavRoutes.PROFILE_EDIT.route) {
+                composable(AdminNavRoutes.PROFILE_EDIT.route) {
                     ProfileEditScreen(
                         profile = SampleData.sampleProfile,
                         onSaveClick = { updatedProfile ->
                             // TODO: Appel API pour sauvegarder les modifications
                         },
                         onNavigateToProfile = {
-                            navController.navigate(NavRoutes.PROFILE.route) {
-                                popUpTo(NavRoutes.PROFILE.route) { inclusive = true }
+                            navController.navigate(AdminNavRoutes.PROFILE.route) {
+                                popUpTo(AdminNavRoutes.PROFILE.route) { inclusive = true }
                             }
                         }
                     )

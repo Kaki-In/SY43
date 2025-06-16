@@ -12,14 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import e2su.nooble.api.models.objects.NoobleApiRole
-import e2su.nooble.api.service.NoobleApi
-import e2su.utbm.sy43project.data.models.MainViewModel
-import e2su.utbm.sy43project.data.models.SelfUiState
+import e2su.utbm.sy43project.api.models.objects.NoobleApiRole
+import e2su.utbm.sy43project.api.service.NoobleApi
+import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 import e2su.utbm.sy43project.ui.appsides.ConnectedAsAdminAppSide
 import e2su.utbm.sy43project.ui.appsides.ConnectedAsStudentAppSide
 import e2su.utbm.sy43project.ui.appsides.DisconnectedAppSide
@@ -46,6 +44,13 @@ class MainActivity : ComponentActivity() {
                             selfViewModel.updateConnection()
                         }
 
+                        LoadingAppSide(
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    is SelfUiState.Loading ->
+                    {
                         LoadingAppSide(
                             modifier = Modifier.fillMaxSize()
                         )
@@ -90,7 +95,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainPage() {
-    val context = LocalContext.current
     Text("Bienvenue sur Nooble !")
     Spacer(modifier = Modifier.size(16.dp))
     Button(onClick = {

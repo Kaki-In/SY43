@@ -7,23 +7,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
-import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import e2su.utbm.sy43project.R
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.compose.foundation.clickable
-import e2su.utbm.sy43project.navigation.NavRoutes
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 
 @Composable
 fun NoobleFooter(
-    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -50,7 +46,7 @@ fun NoobleFooter(
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
-                    .clickable { navController.navigate(NavRoutes.CLASS_SELECT.route) }
+                    .clickable { }//navController.navigate(AdminNavRoutes.CLASS_SELECT.route) }
             )
             Image(
                 painter = painterResource(R.drawable.bell),
@@ -58,7 +54,7 @@ fun NoobleFooter(
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
-                    .clickable { navController.navigate(NavRoutes.ACTIVITY.route) }
+                    .clickable { }//navController.navigate(AdminNavRoutes.ACTIVITY.route) }
             )
             Image(
                 painter = painterResource(R.drawable.cart),
@@ -66,9 +62,9 @@ fun NoobleFooter(
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
-                    .clickable { navController.navigate("shop") }
+                    .clickable { }//navController.navigate("shop") }
             )
         }
-        HomeButton(navController)
+        HomeButton()//navController)
     }
 }

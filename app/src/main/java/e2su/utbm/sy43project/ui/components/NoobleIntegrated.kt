@@ -22,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NoobleIntegrated(
-    navHostController: NavHostController,
     drawerState: DrawerState,
     scope: CoroutineScope,
     content: @Composable (modifier: Modifier) -> Unit,
@@ -35,11 +34,10 @@ fun NoobleIntegrated(
                 .fillMaxSize()
         ) {
             NoobleHeader(
-                navController = navHostController,
                 drawerState = drawerState,
                 scope = scope,
                 modifier = Modifier.height(IntrinsicSize.Min),
-                onProfileClick = { navHostController.navigate("profile") }
+                onProfileClick = { }//navHostController.navigate("profile") }
             )
 
             Box(
@@ -51,7 +49,6 @@ fun NoobleIntegrated(
             }
 
             NoobleFooter(
-                navController = navHostController,
                 modifier = Modifier.height(IntrinsicSize.Min)
             )
         }

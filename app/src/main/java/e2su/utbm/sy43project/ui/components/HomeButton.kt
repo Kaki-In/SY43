@@ -10,16 +10,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import e2su.utbm.sy43project.R
-import e2su.utbm.sy43project.navigation.NavRoutes
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 
 @Composable
-fun HomeButton(navController: NavController) {
+fun HomeButton() {
     Icon(
         painter = painterResource(id = R.drawable.home), // Assurez-vous d'avoir une icône "ic_home" dans vos ressources
         contentDescription = "Retour à la page de login",
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .size(24.dp) // Taille de l'icône
-            .clickable { navController.navigate(NavRoutes.HOME.route) } // Action au clic
+            .clickable { }//navController.navigate(AdminNavRoutes.HOME.route) } // Action au clic
     )
 }
