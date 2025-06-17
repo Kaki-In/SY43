@@ -16,55 +16,83 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.navigation.NavHostController
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 
 @Composable
 fun NoobleFooter(
+    onOpenHome: () -> Unit,
+    onOpenClasses: () -> Unit,
+    onOpenThread: () -> Unit,
+    onOpenShop: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
+            .fillMaxWidth()
+            .background(Color.LightGray, shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
+    )
+    {
         Row(
             modifier = modifier
-                .fillMaxWidth()
-                .border(
-                    BorderStroke(3.dp, Color.Black),
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                )
-                .padding(16.dp),
+                .fillMaxSize()
+                .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Image(
-                painter = painterResource(R.drawable.book),
-                contentDescription = "Classes Icon",
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(8.dp)
-                    .clickable { }//navController.navigate(AdminNavRoutes.CLASS_SELECT.route) }
-            )
-            Image(
-                painter = painterResource(R.drawable.bell),
-                contentDescription = "Activites Icon",
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(8.dp)
-                    .clickable { }//navController.navigate(AdminNavRoutes.ACTIVITY.route) }
-            )
-            Image(
-                painter = painterResource(R.drawable.cart),
-                contentDescription = "Shop Icon",
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(8.dp)
-                    .clickable { }//navController.navigate("shop") }
-            )
+            IconButton (
+                onOpenHome,
+                modifier = Modifier.padding(3.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = "Home Icon",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(8.dp)
+                )
+            }
+            IconButton (
+                onOpenClasses,
+                modifier = Modifier.padding(3.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.book),
+                    contentDescription = "Classes Icon",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(8.dp)
+                )
+
+            }
+            IconButton (
+                onOpenThread,
+                modifier = Modifier.padding(3.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.bell),
+                    contentDescription = "Thread Icon",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(8.dp)
+                )
+
+            }
+            IconButton (
+                onOpenShop,
+                modifier = Modifier.padding(3.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.cart),
+                    contentDescription = "Shop Icon",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(8.dp)
+                )
+
+            }
         }
-        HomeButton()//navController)
     }
 }

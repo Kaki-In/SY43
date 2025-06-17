@@ -9,6 +9,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
 import e2su.utbm.sy43project.R
 
@@ -16,6 +17,18 @@ import e2su.utbm.sy43project.R
 fun CircularImage(imageRes: Int, size: Int, modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = imageRes),
+        contentDescription = "Circular Image",
+        modifier = Modifier
+            .size(size.dp) // Définit la taille de l'image
+            .clip(CircleShape) // Applique une forme circulaire
+            .padding(20.dp)
+    )
+}
+
+@Composable
+fun CircularImage(bitmap: ImageBitmap, size: Int, modifier: Modifier = Modifier) {
+    Image(
+        bitmap = bitmap,
         contentDescription = "Circular Image",
         modifier = Modifier
             .size(size.dp) // Définit la taille de l'image

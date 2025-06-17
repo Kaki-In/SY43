@@ -101,14 +101,13 @@ class IntegrationExporter: Exporter<JsonObject>("integration") {
     ) {
         Log.i("TAG", "createView: " + data.toString())
 
-        val width = try {data["width"]?.jsonPrimitive?.int!!} catch (exc: Exception) {data["width"]?.jsonPrimitive?.content!!}
         val height = try {data["height"]?.jsonPrimitive?.int!!} catch (exc: Exception) {data["height"]?.jsonPrimitive?.content!!}
         val src = data["src"]?.jsonPrimitive?.content!!.replace("\"", "\\\"")
         val permissions = data["permissions"]?.jsonArray!!
 
         var allowFullScreen = ""
 
-        var content = "<iframe frameborder=\"0\" width=\"$width\" height=\"$height\" src=\"$src\" loading=\"lazy\" allow=\""
+        var content = "<iframe frameborder=\"0\" height=\"$height\" src=\"$src\" loading=\"lazy\" allow=\""
 
         var added = false;
         for (index in 0..(permissions.size-1))

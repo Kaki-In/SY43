@@ -21,12 +21,19 @@ import androidx.navigation.NavHostController
 import androidx.compose.material3.DrawerState
 import androidx.compose.ui.unit.dp
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
+import e2su.utbm.sy43project.viewmodels.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NoobleIntegrated(
+    viewModel: MainViewModel,
     onToggleDrawerState: () -> Unit,
     content: @Composable (modifier: Modifier) -> Unit,
+    onProfileClicked: () -> Unit,
+    onOpenHome: () -> Unit,
+    onOpenClasses: () -> Unit,
+    onOpenThread: () -> Unit,
+    onOpenShop: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
@@ -44,9 +51,10 @@ fun NoobleIntegrated(
             )
 
             NoobleHeader(
+                viewModel,
                 modifier = Modifier.height(IntrinsicSize.Min),
                 onToggleDrawerState = onToggleDrawerState,
-                onProfileClick = { }//navHostController.navigate("profile") }
+                onProfileClick = onProfileClicked
             )
 
             Box(
@@ -59,11 +67,15 @@ fun NoobleIntegrated(
             }
 
             NoobleFooter(
+                onOpenHome,
+                onOpenClasses,
+                onOpenThread,
+                onOpenShop,
                 modifier = Modifier.height(IntrinsicSize.Min)
             )
 
             Spacer(
-                modifier = Modifier.height(innerPadding.calculateBottomPadding())
+                modifier = Modifier.height(innerPadding.calculateBottomPadding()).fillMaxWidth().background(Color.LightGray)
             )
         }
     }

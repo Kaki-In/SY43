@@ -1,8 +1,11 @@
 package e2su.utbm.sy43project.ui.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -22,15 +25,16 @@ fun ClassPreview(
     onClassClicked: () -> Unit,
     modifier: Modifier = Modifier)
 {
-    TextButton (
-        onClick = onClassClicked
-    ) {
+    Box(modifier = modifier.clickable(true, onClick = onClassClicked))
+    {
         Row (
-            modifier = modifier
+            modifier = Modifier
                 .background(Color.LightGray,
                     shape = RoundedCornerShape(6.dp)
                 )
                 .padding(20.dp)
+                .fillMaxSize()
+
         )
         {
             Column (
@@ -49,4 +53,5 @@ fun ClassPreview(
             }
         }
     }
+
 }

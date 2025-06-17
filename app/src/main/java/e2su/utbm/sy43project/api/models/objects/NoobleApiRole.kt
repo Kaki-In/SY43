@@ -4,17 +4,19 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class NoobleApiRole() {
+enum class NoobleApiRole(val serialName: String, val description: String) {
     @SerialName("admin")
-    ROLE_ADMIN,
+    ROLE_ADMIN("admin", "Administrator"),
 
     @SerialName("teacher")
-    ROLE_TEACHER,
+    ROLE_TEACHER("teacher", "Teacher"),
 
     @SerialName("teacher_admin")
-    ROLE_TEACHER_ADMIN,
+    ROLE_TEACHER_ADMIN("teacher_admin", "Teacher Administrator"),
 
     @SerialName("student")
-    ROLE_STUDENT
+    ROLE_STUDENT("student", "Student");
+
+    override fun toString(): String = serialName
 }
 

@@ -1,6 +1,8 @@
 package e2su.utbm.sy43project.api.service
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import e2su.utbm.sy43project.api.models.objects.*
 import e2su.utbm.sy43project.api.models.requests.*
@@ -8,15 +10,27 @@ import e2su.utbm.sy43project.api.models.responses.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import okhttp3.java.net.cookiejar.JavaNetCookieJar
 import retrofit2.Retrofit
 import retrofit2.http.Body
-import retrofit2.http.Query
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Query
+import java.io.File
+import java.io.InputStream
 import java.net.CookieManager
 import java.net.CookiePolicy
+
 
 private fun getRetrofitService(ctx: Context, baseUrl: String): Retrofit
 {
@@ -54,6 +68,9 @@ interface NoobleApiRetrofitService {
     @POST("/accounts/update-password")
     suspend fun updateAccountPassword(request: UpdatePasswordRequestModel)
 
+    @POST("/activities/init")
+    suspend fun initActivity(@Body activityName: String): InitializeActivityResponseModel
+
     @GET("/activities/list")
     suspend fun listActivities(): List<String>
 
@@ -62,6 +79,9 @@ interface NoobleApiRetrofitService {
 
     @GET("/badges/get-infos")
     suspend fun getBadgeInformation(request: GetBadgeInfoRequestModel): GetBadgeInfoResponseModel
+
+    @GET("/badges/get-thumbnail")
+    suspend fun getBadgeThumbnail(@Body request: GetBadgeThumbnailRequestModel): ResponseBody
 
     @GET("/badges/list")
     suspend fun listBadges(): ListBadgesResponseModel
@@ -121,7 +141,7 @@ interface NoobleApiRetrofitService {
     suspend fun modifyDecoration(@Body request: ModifyDecorationRequestModel)
 
     @GET("/profile/get-info")
-    suspend fun getProfileInformation(request: GetAccountProfileRequestModel): NoobleApiAccountProfileModel
+    suspend fun getProfileInformation(@Query("user_id") userId: String): NoobleApiAccountProfileModel
 
     @GET("/profile/get-info")
     suspend fun getProfileInformation(): NoobleApiAccountProfileModel
@@ -135,11 +155,18 @@ interface NoobleApiRetrofitService {
     @POST("/resources/delete")
     suspend fun deleteResource(@Body request: DeleteResourceRequestModel)
 
+    @GET("/resources/download")
+    suspend fun downloadFile(@Query("id") fileId: String, @Query("type") fileType: NoobleApiResourceType): ResponseBody
+
     @GET("/resources/get-self-files")
     suspend fun getSelfFiles(): List<NoobleApiResourceModel>
 
     @GET("/resources/get-self-files")
     suspend fun getSelfFiles(request: GetSelfFilesWithTypeRequestModel): List<NoobleApiResourceModel>
+
+    @Multipart
+    @POST("/resources/upload")
+    suspend fun uploadFile(@Part("name") name: RequestBody, @Part("type") type: RequestBody, @Part file: RequestBody): UploadResourceResponseModel
 
     @GET("/safe")
     suspend fun getSafe(): NoobleApiSafeModel
@@ -216,6 +243,11 @@ class ActivitiesApi(service: NoobleApiRetrofitService)
     {
         return _service.listActivities()
     }
+
+    suspend fun initActivity(activityName: String): String
+    {
+        return _service.initActivity(activityName).newFileId
+    }
 }
 
 class BadgesApi(service: NoobleApiRetrofitService)
@@ -236,9 +268,13 @@ class BadgesApi(service: NoobleApiRetrofitService)
         )
     }
 
-    suspend fun getThumbnail(name: String, level: Int)
+    suspend fun getThumbnail(name: String, level: Int): InputStream
     {
-        TODO()
+        return _service.getBadgeThumbnail(
+            GetBadgeThumbnailRequestModel(
+                name, level
+            )
+        ).byteStream()
     }
 
     suspend fun list(): ListBadgesResponseModel
@@ -329,7 +365,19 @@ class ConnectionApi(service: NoobleApiRetrofitService)
 
     suspend fun getInformation(): NoobleApiAccountModel?
     {
-        return _service.getConnectionInformation().account
+        val result = _service.getConnectionInformation().account
+
+        if (result != null && result.profile.profileImage != null)
+        {
+            result.profile.loadedProfileImage = BitmapFactory.decodeStream(
+                _service.downloadFile(
+                    result.profile.profileImage,
+                    NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+                ).byteStream()
+            ).asImageBitmap()
+        }
+
+        return  result
     }
 
     suspend fun login(username: String, password: String): LoginResponseModel
@@ -396,15 +444,27 @@ class ProfilesApi(service: NoobleApiRetrofitService)
 {
     private val _service = service
 
-    suspend fun getInformation(accountId: String? = null): NoobleApiAccountProfileModel
+    suspend fun getInformation(accountId: String? = null, loadImage: Boolean = true): NoobleApiAccountProfileModel
     {
-        return if (accountId == null) {
+        val profileInformation = if (accountId == null) {
             _service.getProfileInformation()
         } else {
             _service.getProfileInformation(
-                GetAccountProfileRequestModel(accountId)
+                accountId
             )
         }
+
+        if (profileInformation.profileImage != null && loadImage)
+        {
+            profileInformation.loadedProfileImage = BitmapFactory.decodeStream(
+                _service.downloadFile(
+                    profileInformation.profileImage,
+                    NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+                ).byteStream()
+            ).asImageBitmap()
+        }
+
+        return profileInformation
     }
 
     suspend fun modify(accountId: String, firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
@@ -434,9 +494,9 @@ class ResourcesApi(service: NoobleApiRetrofitService)
         )
     }
 
-    suspend fun download(resourceId: String, resourceType: NoobleApiResourceType)
+    suspend fun download(resourceId: String, resourceType: NoobleApiResourceType): InputStream
     {
-        TODO()
+        return _service.downloadFile(resourceId, resourceType).byteStream()
     }
 
     suspend fun getSelfFiles(type: NoobleApiResourceType? = null): List<NoobleApiResourceModel>
@@ -449,9 +509,14 @@ class ResourcesApi(service: NoobleApiRetrofitService)
             )
     }
 
-    suspend fun upload(): UploadResourceResponseModel
+    suspend fun upload(fileName: String, fileType: NoobleApiResourceType, file: File): UploadResourceResponseModel
     {
-        TODO()
+        val file = file.asRequestBody("*/*".toMediaTypeOrNull())
+
+        val fileNameArgument = fileName.toRequestBody("text/plain".toMediaTypeOrNull())
+        val fileTypeArgument = fileType.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        return _service.uploadFile(fileNameArgument, fileTypeArgument, file)
     }
 
 }

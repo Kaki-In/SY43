@@ -1,5 +1,6 @@
 package e2su.utbm.sy43project.api.models.objects
 
+import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,5 +12,7 @@ data class NoobleApiAccountProfileModel(
     @SerialName("active_badges") val activeBadges: List<Pair<String, Int>>,
     @SerialName("description") val description: String,
     @SerialName("role") val role: NoobleApiRole? = null,
-    @SerialName("classes") val classes: List<String>? = null
+    @SerialName("classes") val classes: List<String>? = null,
+    @SerialName("profile_image") val profileImage: String?,
+    var loadedProfileImage: ImageBitmap? = null
 )
