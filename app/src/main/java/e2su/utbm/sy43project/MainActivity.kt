@@ -75,6 +75,7 @@ class MainActivity : ComponentActivity() {
 
                             NoobleApiRole.ROLE_TEACHER ->
                             {
+                                ConnectedAsStudentOrTeacherAppSide(viewModel = mainViewModel)
                             }
 
                             NoobleApiRole.ROLE_TEACHER_ADMIN ->
