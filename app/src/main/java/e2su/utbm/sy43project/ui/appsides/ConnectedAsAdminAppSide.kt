@@ -9,10 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import e2su.utbm.sy43project.ui.components.NoobleDrawer
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
-import e2su.utbm.sy43project.ui.drawers.AdminDrawer
 import e2su.utbm.sy43project.ui.navgraphs.AdminNavGraph
+import e2su.utbm.sy43project.ui.drawers.AdminDrawer
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun ConnectedAsAdminAppSide(

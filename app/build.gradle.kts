@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "1.9.22"
+    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
 }
 
 android {
@@ -75,4 +76,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.accompanist.webview)
     implementation("androidx.room:room-runtime:2.7.1")
+    ksp("androidx.room:room-compiler:2.7.1")
+    implementation("androidx.room:room-ktx:2.7.1")
 }

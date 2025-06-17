@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
 import e2su.utbm.sy43project.R
-import e2su.utbm.sy43project.dao.DownloadedFileEntity
-import e2su.utbm.sy43project.dao.DownloadedFileDao
+import e2su.utbm.sy43project.local.DownloadedFileEntity
 
 import kotlinx.coroutines.launch
 import e2su.utbm.sy43project.NoobleApp
@@ -36,23 +35,24 @@ class FileExporter : Exporter<JsonObject>("file") {
         val filename: String = data["filename"]?.jsonPrimitive?.content!!
         val description: String = data["description"]?.jsonPrimitive?.content!!
 
-/*        val context = LocalContext.current
+        val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
-        val downloadedFileDao = (context.applicationContext as? NoobleApp)?.database?.downloadedFileDao()*/
+        val downloadedFileDao = (context.applicationContext as? NoobleApp)?.database?.downloadedFileDao()
 
         Button(onClick = {
-/*            val downloadId = downloadFile(context, src, filename)
+            val downloadId = downloadFile(context, src, filename)
             val destinationPath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path}/$filename"
             coroutineScope.launch {
-                downloadedFileDao?.let { dao: DownloadedFileDao ->
+                downloadedFileDao?.let { dao: e2su.utbm.sy43project.local.DownloadedFileEntityDAO ->
                     val downloadedFile = DownloadedFileEntity(
-                        path = destinationPath,
-                        name = filename,
-                        size = 0L
+                        id = downloadId,
+                        fileName = filename,
+                        filePath = destinationPath,
+                        fileSize = 0L
                     )
                     dao.insert(downloadedFile)
                 }
-            }*/
+            }
         }, modifier = modifier.height(80.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(
