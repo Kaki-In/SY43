@@ -1,6 +1,5 @@
 package e2su.utbm.sy43project.ui.navgraphs
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
@@ -9,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import e2su.nooble.models.ProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
@@ -29,9 +29,10 @@ fun StudentOrTeacherNavGraph(
 )
 {
     val navController = rememberNavController()
+    val overviewClassRequest = viewModel.createRetrieveDataViewModel<NoobleApiClassModel>()
 
     StudentOrTeacherNavigationManager.classOverviewPageAction.setClickedAction { classId ->
-        Log.i("TAG", "Launching classSelectPage")
+        overviewClassRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.createClassOverviewRoute(classId))
     }
 
@@ -102,8 +103,13 @@ fun StudentOrTeacherNavGraph(
             ClassSelectScreen(navController = navController, courses = listOf())
         }
 
-        composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {
-            OverviewScreen()
+        composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
+            val className = entry.arguments?.getString("className")!!
+
+            OverviewScreen(
+                classId = className,
+                requestViewModel = overviewClassRequest
+            )
         }
 
         composable(StudentOrTeacherNavRoutes.SHOP.route) {

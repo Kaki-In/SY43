@@ -8,15 +8,27 @@ import e2su.utbm.sy43project.api.models.responses.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import okhttp3.java.net.cookiejar.JavaNetCookieJar
 import retrofit2.Retrofit
 import retrofit2.http.Body
-import retrofit2.http.Query
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Query
+import java.io.File
+import java.io.InputStream
 import java.net.CookieManager
 import java.net.CookiePolicy
+
 
 private fun getRetrofitService(ctx: Context, baseUrl: String): Retrofit
 {
@@ -54,6 +66,9 @@ interface NoobleApiRetrofitService {
     @POST("/accounts/update-password")
     suspend fun updateAccountPassword(request: UpdatePasswordRequestModel)
 
+    @POST("/activities/init")
+    suspend fun initActivity(@Body activityName: String): InitializeActivityResponseModel
+
     @GET("/activities/list")
     suspend fun listActivities(): List<String>
 
@@ -62,6 +77,9 @@ interface NoobleApiRetrofitService {
 
     @GET("/badges/get-infos")
     suspend fun getBadgeInformation(request: GetBadgeInfoRequestModel): GetBadgeInfoResponseModel
+
+    @GET("/badges/get-thumbnail")
+    suspend fun getBadgeThumbnail(@Body request: GetBadgeThumbnailRequestModel): ResponseBody
 
     @GET("/badges/list")
     suspend fun listBadges(): ListBadgesResponseModel
@@ -135,11 +153,18 @@ interface NoobleApiRetrofitService {
     @POST("/resources/delete")
     suspend fun deleteResource(@Body request: DeleteResourceRequestModel)
 
+    @GET("/resources/download")
+    suspend fun downloadFile(@Query("id") fileId: String, @Query("type") fileType: NoobleApiResourceType): Response
+
     @GET("/resources/get-self-files")
     suspend fun getSelfFiles(): List<NoobleApiResourceModel>
 
     @GET("/resources/get-self-files")
     suspend fun getSelfFiles(request: GetSelfFilesWithTypeRequestModel): List<NoobleApiResourceModel>
+
+    @Multipart
+    @POST("/resources/upload")
+    suspend fun uploadFile(@Part("name") name: RequestBody, @Part("type") type: RequestBody, @Part file: RequestBody): UploadResourceResponseModel
 
     @GET("/safe")
     suspend fun getSafe(): NoobleApiSafeModel
@@ -216,6 +241,11 @@ class ActivitiesApi(service: NoobleApiRetrofitService)
     {
         return _service.listActivities()
     }
+
+    suspend fun initActivity(activityName: String): String
+    {
+        return _service.initActivity(activityName).newFileId
+    }
 }
 
 class BadgesApi(service: NoobleApiRetrofitService)
@@ -236,9 +266,13 @@ class BadgesApi(service: NoobleApiRetrofitService)
         )
     }
 
-    suspend fun getThumbnail(name: String, level: Int)
+    suspend fun getThumbnail(name: String, level: Int): InputStream
     {
-        TODO()
+        return _service.getBadgeThumbnail(
+            GetBadgeThumbnailRequestModel(
+                name, level
+            )
+        ).byteStream()
     }
 
     suspend fun list(): ListBadgesResponseModel
@@ -434,9 +468,9 @@ class ResourcesApi(service: NoobleApiRetrofitService)
         )
     }
 
-    suspend fun download(resourceId: String, resourceType: NoobleApiResourceType)
+    suspend fun download(resourceId: String, resourceType: NoobleApiResourceType): InputStream
     {
-        TODO()
+        return _service.downloadFile(resourceId, resourceType).body.byteStream()
     }
 
     suspend fun getSelfFiles(type: NoobleApiResourceType? = null): List<NoobleApiResourceModel>
@@ -449,9 +483,14 @@ class ResourcesApi(service: NoobleApiRetrofitService)
             )
     }
 
-    suspend fun upload(): UploadResourceResponseModel
+    suspend fun upload(fileName: String, fileType: NoobleApiResourceType, file: File): UploadResourceResponseModel
     {
-        TODO()
+        val file = file.asRequestBody("*/*".toMediaTypeOrNull())
+
+        val fileNameArgument = fileName.toRequestBody("text/plain".toMediaTypeOrNull())
+        val fileTypeArgument = fileType.typename.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        return _service.uploadFile(fileNameArgument, fileTypeArgument, file)
     }
 
 }

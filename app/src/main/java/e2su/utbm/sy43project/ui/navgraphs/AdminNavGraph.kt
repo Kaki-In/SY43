@@ -9,9 +9,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import e2su.nooble.models.ProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
+import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassScreen
@@ -60,8 +62,14 @@ fun AdminNavGraph(
             ClassSelectScreen(navController = navController, courses = listOf())
         }
 
-        composable(AdminNavRoutes.CLASS_OVERVIEW.route) {
-            OverviewScreen()
+        composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
+            val className = entry.arguments?.getString("className")!!
+            val request = viewModel.createRetrieveDataViewModel<NoobleApiClassModel>()
+
+            OverviewScreen(
+                classId = className,
+                requestViewModel = request
+            )
         }
 
         composable(AdminNavRoutes.SHOP.route) {
