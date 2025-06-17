@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
 import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationManager
+import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import kotlinx.coroutines.launch
 
 data class StudentOrTeacherDrawerItem(
@@ -28,7 +30,8 @@ fun StudentOrTeacherDrawer(
 ) {
     val scope = rememberCoroutineScope()
     val items: List<StudentOrTeacherDrawerItem> = listOf(
-        StudentOrTeacherDrawerItem("Documents", Icons.Default.Download) { DisconnectedNavigationManager.downloadsPageAction.navigate() },
+        StudentOrTeacherDrawerItem("Downloads", Icons.Default.Download) { StudentOrTeacherNavigationManager.downloadsPageAction.navigate() },
+        StudentOrTeacherDrawerItem("Settings", Icons.Default.Settings) { StudentOrTeacherNavigationManager.settingsPageAction.navigate() },
     )
 
     ModalNavigationDrawer(

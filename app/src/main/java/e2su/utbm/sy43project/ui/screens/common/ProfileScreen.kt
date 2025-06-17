@@ -13,6 +13,7 @@ import e2su.nooble.models.ProfileModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
@@ -85,16 +86,18 @@ fun ProfileScreen(
                         Text(
                             text = "${profileData.firstName} ${profileData.lastName}",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 17.sp
+                            fontSize = 20.sp
                         )
                         Text(
                             text = profileData.role!!.description,
+                            fontStyle = FontStyle.Italic
                         )
                         Spacer(
-                            modifier = Modifier.height(20.dp)
+                            modifier = Modifier.height(10.dp)
                         )
                         Text(
-                            text = profileData.description
+                            text = profileData.description,
+                            fontSize = 17.sp
                         )
                     }
                 }
@@ -102,7 +105,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Cours suivis :",
+                    text = "Followed classes :",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -128,7 +131,7 @@ fun ProfileScreen(
 
             is CurrentDataRequestUiState.Error -> {
                 val errorMessage = (requestViewModel.requestState.value as CurrentDataRequestUiState.Error).reason
-                Text("An error occured : $errorMessage")
+                Text("An error occurred : $errorMessage")
             }
         }
     }

@@ -29,6 +29,18 @@ fun ConnectedAsStudentOrTeacherAppSide(
         drawerState = drawerState
     ) {
         NoobleIntegrated(
+            onOpenHome = {
+                StudentOrTeacherNavigationManager.homePageAction.navigate()
+            },
+            onOpenShop = {
+                StudentOrTeacherNavigationManager.shopPageAction.navigate()
+            },
+            onOpenThread = {
+                StudentOrTeacherNavigationManager.threadPageAction.navigate()
+            },
+            onOpenClasses = {
+                StudentOrTeacherNavigationManager.classSelectPageAction.navigate()
+            },
             viewModel = viewModel,
             onToggleDrawerState = {
                 scope.launch {

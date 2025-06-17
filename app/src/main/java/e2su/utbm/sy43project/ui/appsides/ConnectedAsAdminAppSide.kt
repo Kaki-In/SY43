@@ -11,6 +11,7 @@ import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.drawers.AdminDrawer
 import e2su.utbm.sy43project.ui.navgraphs.AdminNavGraph
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import kotlinx.coroutines.launch
@@ -32,6 +33,14 @@ fun ConnectedAsAdminAppSide(
     )
     {
         NoobleIntegrated(
+            onOpenHome = {
+            },
+            onOpenClasses = {
+            },
+            onOpenThread = {
+            },
+            onOpenShop = {
+            },
             viewModel = viewModel,
             onToggleDrawerState = {
                 scope.launch {
@@ -45,7 +54,7 @@ fun ConnectedAsAdminAppSide(
                 )
             },
             onProfileClicked = {
-                StudentOrTeacherNavigationManager.profilePageAction.navigate(selfAccount.id)
+                AdminNavigationManager.profilePageAction.navigate(selfAccount.id)
             }
         )
 

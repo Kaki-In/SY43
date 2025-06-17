@@ -23,6 +23,10 @@ import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 
 @Composable
 fun NoobleFooter(
+    onOpenHome: () -> Unit,
+    onOpenClasses: () -> Unit,
+    onOpenThread: () -> Unit,
+    onOpenShop: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -39,7 +43,7 @@ fun NoobleFooter(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             IconButton (
-                {},
+                onOpenHome,
                 modifier = Modifier.padding(3.dp)
             ) {
                 Image(
@@ -51,12 +55,12 @@ fun NoobleFooter(
                 )
             }
             IconButton (
-                {},
+                onOpenClasses,
                 modifier = Modifier.padding(3.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.book),
-                    contentDescription = "Book Icon Icon",
+                    contentDescription = "Classes Icon",
                     modifier = Modifier
                         .size(40.dp)
                         .padding(8.dp)
@@ -64,12 +68,12 @@ fun NoobleFooter(
 
             }
             IconButton (
-                {},
+                onOpenThread,
                 modifier = Modifier.padding(3.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.bell),
-                    contentDescription = "Bell Icon Icon",
+                    contentDescription = "Thread Icon",
                     modifier = Modifier
                         .size(40.dp)
                         .padding(8.dp)
@@ -77,12 +81,12 @@ fun NoobleFooter(
 
             }
             IconButton (
-                {},
+                onOpenShop,
                 modifier = Modifier.padding(3.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.cart),
-                    contentDescription = "Cart Icon",
+                    contentDescription = "Shop Icon",
                     modifier = Modifier
                         .size(40.dp)
                         .padding(8.dp)

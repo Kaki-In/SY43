@@ -30,6 +30,10 @@ fun NoobleIntegrated(
     onToggleDrawerState: () -> Unit,
     content: @Composable (modifier: Modifier) -> Unit,
     onProfileClicked: () -> Unit,
+    onOpenHome: () -> Unit,
+    onOpenClasses: () -> Unit,
+    onOpenThread: () -> Unit,
+    onOpenShop: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
@@ -63,6 +67,10 @@ fun NoobleIntegrated(
             }
 
             NoobleFooter(
+                onOpenHome,
+                onOpenClasses,
+                onOpenThread,
+                onOpenShop,
                 modifier = Modifier.height(IntrinsicSize.Min)
             )
 

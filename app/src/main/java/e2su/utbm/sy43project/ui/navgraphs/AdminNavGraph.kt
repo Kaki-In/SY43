@@ -70,7 +70,7 @@ fun AdminNavGraph(
         }
 
         composable(AdminNavRoutes.CLASS_SELECT.route) {
-            ClassSelectScreen(navController = navController, courses = listOf())
+//            ClassSelectScreen(viewModel, classesRequestViewModel)
         }
 
         composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
