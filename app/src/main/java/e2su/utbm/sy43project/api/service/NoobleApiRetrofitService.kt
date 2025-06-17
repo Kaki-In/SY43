@@ -1,6 +1,8 @@
 package e2su.utbm.sy43project.api.service
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import e2su.utbm.sy43project.api.models.objects.*
 import e2su.utbm.sy43project.api.models.requests.*
@@ -139,7 +141,7 @@ interface NoobleApiRetrofitService {
     suspend fun modifyDecoration(@Body request: ModifyDecorationRequestModel)
 
     @GET("/profile/get-info")
-    suspend fun getProfileInformation(request: GetAccountProfileRequestModel): NoobleApiAccountProfileModel
+    suspend fun getProfileInformation(@Query("user_id") userId: String): NoobleApiAccountProfileModel
 
     @GET("/profile/get-info")
     suspend fun getProfileInformation(): NoobleApiAccountProfileModel
@@ -154,7 +156,7 @@ interface NoobleApiRetrofitService {
     suspend fun deleteResource(@Body request: DeleteResourceRequestModel)
 
     @GET("/resources/download")
-    suspend fun downloadFile(@Query("id") fileId: String, @Query("type") fileType: NoobleApiResourceType): Response
+    suspend fun downloadFile(@Query("id") fileId: String, @Query("type") fileType: NoobleApiResourceType): ResponseBody
 
     @GET("/resources/get-self-files")
     suspend fun getSelfFiles(): List<NoobleApiResourceModel>
@@ -363,7 +365,19 @@ class ConnectionApi(service: NoobleApiRetrofitService)
 
     suspend fun getInformation(): NoobleApiAccountModel?
     {
-        return _service.getConnectionInformation().account
+        val result = _service.getConnectionInformation().account
+
+        if (result != null && result.profile.profileImage != null)
+        {
+            result.profile.loadedProfileImage = BitmapFactory.decodeStream(
+                _service.downloadFile(
+                    result.profile.profileImage,
+                    NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+                ).byteStream()
+            ).asImageBitmap()
+        }
+
+        return  result
     }
 
     suspend fun login(username: String, password: String): LoginResponseModel
@@ -430,15 +444,27 @@ class ProfilesApi(service: NoobleApiRetrofitService)
 {
     private val _service = service
 
-    suspend fun getInformation(accountId: String? = null): NoobleApiAccountProfileModel
+    suspend fun getInformation(accountId: String? = null, loadImage: Boolean = true): NoobleApiAccountProfileModel
     {
-        return if (accountId == null) {
+        val profileInformation = if (accountId == null) {
             _service.getProfileInformation()
         } else {
             _service.getProfileInformation(
-                GetAccountProfileRequestModel(accountId)
+                accountId
             )
         }
+
+        if (profileInformation.profileImage != null && loadImage)
+        {
+            profileInformation.loadedProfileImage = BitmapFactory.decodeStream(
+                _service.downloadFile(
+                    profileInformation.profileImage,
+                    NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+                ).byteStream()
+            ).asImageBitmap()
+        }
+
+        return profileInformation
     }
 
     suspend fun modify(accountId: String, firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
@@ -470,7 +496,7 @@ class ResourcesApi(service: NoobleApiRetrofitService)
 
     suspend fun download(resourceId: String, resourceType: NoobleApiResourceType): InputStream
     {
-        return _service.downloadFile(resourceId, resourceType).body.byteStream()
+        return _service.downloadFile(resourceId, resourceType).byteStream()
     }
 
     suspend fun getSelfFiles(type: NoobleApiResourceType? = null): List<NoobleApiResourceModel>
@@ -488,7 +514,7 @@ class ResourcesApi(service: NoobleApiRetrofitService)
         val file = file.asRequestBody("*/*".toMediaTypeOrNull())
 
         val fileNameArgument = fileName.toRequestBody("text/plain".toMediaTypeOrNull())
-        val fileTypeArgument = fileType.typename.toRequestBody("text/plain".toMediaTypeOrNull())
+        val fileTypeArgument = fileType.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         return _service.uploadFile(fileNameArgument, fileTypeArgument, file)
     }

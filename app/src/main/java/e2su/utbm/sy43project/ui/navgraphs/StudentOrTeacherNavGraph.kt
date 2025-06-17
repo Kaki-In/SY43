@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import e2su.nooble.models.ProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
@@ -21,6 +22,7 @@ import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
 import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherHomeScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 
 @Composable
 fun StudentOrTeacherNavGraph(
@@ -29,7 +31,11 @@ fun StudentOrTeacherNavGraph(
 )
 {
     val navController = rememberNavController()
+
+    val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
+
     val overviewClassRequest = viewModel.createRetrieveDataViewModel<NoobleApiClassModel>()
+    val retrieveProfileRequest = viewModel.createRetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>()
 
     StudentOrTeacherNavigationManager.classOverviewPageAction.setClickedAction { classId ->
         overviewClassRequest.forget()
@@ -40,7 +46,8 @@ fun StudentOrTeacherNavGraph(
         navController.navigate(StudentOrTeacherNavRoutes.DOWNLOADS.route)
     }
 
-    StudentOrTeacherNavigationManager.profilePageAction .setClickedAction { profileId ->
+    StudentOrTeacherNavigationManager.profilePageAction.setClickedAction { profileId ->
+        retrieveProfileRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.createProfileRoute(profileId))
     }
 
@@ -82,11 +89,16 @@ fun StudentOrTeacherNavGraph(
             StudentOrTeacherHomeScreen(viewModel)
         }
 
-        composable(StudentOrTeacherNavRoutes.PROFILE.route) {
+        composable(StudentOrTeacherNavRoutes.PROFILE.route) {  entry ->
+            val accountName = entry.arguments?.getString("accountName")!!
+
             ProfileScreen(
-                ProfileModel(1, "bonjour", "bonjour", 34, "salut", "aslaut", true, mutableListOf()),
+                retrieveProfileRequest,
+                viewModel,
+                accountName,
                 onClassClick = { className ->
-                    navController.navigate(StudentOrTeacherNavRoutes.createClassDetailsRoute(className))
+                    if (connectedSelfState.account.profile.classes!!.contains(className))
+                    navController.navigate(StudentOrTeacherNavRoutes.createClassOverviewRoute(className))
                 }
             )
         }

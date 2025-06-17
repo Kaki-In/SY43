@@ -1,13 +1,20 @@
 package e2su.utbm.sy43project.viewmodels
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Picture
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
 import e2su.utbm.sy43project.api.service.NoobleApi
 import kotlinx.coroutines.launch
+import org.jetbrains.kotlin.konan.file.File
 
 /*
 
@@ -59,6 +66,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
                 _selfState.value = SelfUiState.Disconnected
             } else {
                 _selfState.value = SelfUiState.Connected(accountInformation)
+
             }
         }
     }

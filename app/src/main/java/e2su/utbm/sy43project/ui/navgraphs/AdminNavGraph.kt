@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import e2su.nooble.models.ProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
@@ -32,6 +33,8 @@ fun AdminNavGraph(
 {
     val navController = rememberNavController()
 
+    val retrieveProfileRequest = viewModel.createRetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>()
+
     AdminNavigationManager.profilePageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.PROFILE.route)
     }
@@ -41,11 +44,19 @@ fun AdminNavGraph(
             AdminHomeScreen(navController, viewModel)
         }
 
-        composable(AdminNavRoutes.PROFILE.route) {
+        composable(StudentOrTeacherNavRoutes.PROFILE.route) { entry ->
+            val accountName = entry.arguments?.getString("accountName")!!
+
             ProfileScreen(
-                ProfileModel(1, "bonjour", "bonjour", 34, "salut", "aslaut", true, mutableListOf()),
+                retrieveProfileRequest,
+                viewModel,
+                accountName,
                 onClassClick = { className ->
-                    navController.navigate(AdminNavRoutes.createClassRoute(className))
+                    navController.navigate(
+                        StudentOrTeacherNavRoutes.createClassDetailsRoute(
+                            className
+                        )
+                    )
                 }
             )
         }

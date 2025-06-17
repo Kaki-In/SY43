@@ -16,15 +16,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
+import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NoobleHeader(
+    viewModel: MainViewModel,
     modifier: Modifier = Modifier,
     onToggleDrawerState: () -> Unit,
     onProfileClick: () -> Unit = { /* Default no-op */ }
 ) {
+    val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -53,12 +58,23 @@ fun NoobleHeader(
             modifier = Modifier.padding(8.dp)
         )
 
-        Image(
-            painter = painterResource(R.drawable.profile),
-            contentDescription = "Profile Icon",
-            modifier = Modifier
-                .size(40.dp)
-                .clickable { onProfileClick() }
-        )
+        IconButton(
+            onClick = onProfileClick
+        ) {
+            val profileImage = connectedSelfState.account.profile.loadedProfileImage
+
+            if (profileImage == null)
+            {
+                Image(
+                    painter = painterResource(R.drawable.profile),
+                    contentDescription = "Profile Icon",
+                )
+            } else {
+                Image(
+                    bitmap = profileImage,
+                    contentDescription = "Profile Icon",
+                )
+            }
+        }
     }
 }

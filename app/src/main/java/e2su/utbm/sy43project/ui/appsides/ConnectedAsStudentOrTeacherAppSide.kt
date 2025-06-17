@@ -9,6 +9,8 @@ import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.drawers.StudentOrTeacherDrawer
 import e2su.utbm.sy43project.ui.navgraphs.StudentOrTeacherNavGraph
+import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 import kotlinx.coroutines.launch
 
 
@@ -21,10 +23,13 @@ fun ConnectedAsStudentOrTeacherAppSide(
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
+    val selfAccount = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
+
     StudentOrTeacherDrawer(
         drawerState = drawerState
     ) {
         NoobleIntegrated(
+            viewModel = viewModel,
             onToggleDrawerState = {
                 scope.launch {
                     if (drawerState.isClosed) drawerState.open() else drawerState.close()
@@ -33,6 +38,9 @@ fun ConnectedAsStudentOrTeacherAppSide(
             modifier = modifier,
             content = {
                 StudentOrTeacherNavGraph(viewModel)
+            },
+            onProfileClicked = {
+                StudentOrTeacherNavigationManager.profilePageAction.navigate(selfAccount.id)
             }
         )
     }

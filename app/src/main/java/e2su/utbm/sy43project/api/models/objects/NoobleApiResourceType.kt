@@ -12,6 +12,8 @@ enum class NoobleApiResourceType(val typename: String) {
     RESOURCE_TYPE_SECTION_FILE("section file"),
 
     @SerialName("decoration banner")
-    RESOURCE_TYPE_DECORATION_BANNER("decoration banner"),
+    RESOURCE_TYPE_DECORATION_BANNER("decoration banner");
+
+    override fun toString(): String = typename
 
 }
