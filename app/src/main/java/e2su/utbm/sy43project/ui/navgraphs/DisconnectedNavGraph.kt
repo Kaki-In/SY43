@@ -51,9 +51,11 @@ fun DisconnectedNavGraph(
             )
         }
 
-        composable(DisconnectedNavRoutes.DOWNLOADS.route) {
-            DownloadsScreen()
-        }
+        /*composable(DisconnectedNavRoutes.DOWNLOADS.route) {
+            DownloadsScreen(
+                downloadedFiles = viewModel.downloadedFilesViewModel.downloadedFiles,
+            )
+        }*/
     }
 }
 

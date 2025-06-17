@@ -53,7 +53,7 @@ class FileExporter : Exporter<JsonObject>("file") {
                     dao.insert(downloadedFile)
                 }
             }
-        }, modifier = modifier.height(80.dp)) {
+        },  modifier = modifier.height(80.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(
                     description,
