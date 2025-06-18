@@ -26,7 +26,7 @@ class RetrieveDataViewModel<WaitedResponse>(noobleApi: NoobleApi): ViewModel()
     private val _requestState = mutableStateOf<CurrentDataRequestUiState<WaitedResponse>>(CurrentDataRequestUiState.Idle<WaitedResponse>())
     val requestState: State<CurrentDataRequestUiState<WaitedResponse>> = _requestState
 
-    suspend fun retrieveData(action: suspend () -> WaitedResponse)
+    fun retrieveData(action: suspend () -> WaitedResponse)
     {
         viewModelScope.launch {
             _requestState.value = CurrentDataRequestUiState.Loading()
@@ -51,7 +51,6 @@ class RetrieveDataViewModel<WaitedResponse>(noobleApi: NoobleApi): ViewModel()
     {
         _requestState.value = CurrentDataRequestUiState.Idle()
     }
-
 }
 
 sealed class CurrentDataRequestUiState<WaitedResponse>

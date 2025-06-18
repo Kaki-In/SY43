@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -16,6 +17,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
+import androidx.compose.runtime.LaunchedEffect
+import e2su.utbm.sy43project.viewmodels.SelfViewModel
 
 data class StudentOrTeacherDrawerItem(
     val title: String,
@@ -25,6 +30,7 @@ data class StudentOrTeacherDrawerItem(
 
 @Composable
 fun StudentOrTeacherDrawer(
+    selfViewModel: SelfViewModel,
     drawerState: DrawerState,
     content: @Composable () -> Unit
 ) {
@@ -32,6 +38,13 @@ fun StudentOrTeacherDrawer(
     val items: List<StudentOrTeacherDrawerItem> = listOf(
         StudentOrTeacherDrawerItem("Downloads", Icons.Default.Download) { StudentOrTeacherNavigationManager.downloadsPageAction.navigate() },
         StudentOrTeacherDrawerItem("Settings", Icons.Default.Settings) { StudentOrTeacherNavigationManager.settingsPageAction.navigate() },
+        StudentOrTeacherDrawerItem("Logout", Icons.Default.Logout) {
+            scope.launch{
+                selfViewModel.logout()
+                StudentOrTeacherNavigationManager.logoutPageAction.navigate()
+            }
+
+        }
     )
 
     ModalNavigationDrawer(

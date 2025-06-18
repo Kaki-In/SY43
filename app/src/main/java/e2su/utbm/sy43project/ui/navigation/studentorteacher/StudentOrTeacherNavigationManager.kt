@@ -15,4 +15,5 @@ object StudentOrTeacherNavigationManager{
     val shopPageAction = NavigateActionManager()
     val settingsPageAction = NavigateActionManager()
     val downloadsPageAction = NavigateActionManager()
+    val logoutPageAction = NavigateActionManager()
 }

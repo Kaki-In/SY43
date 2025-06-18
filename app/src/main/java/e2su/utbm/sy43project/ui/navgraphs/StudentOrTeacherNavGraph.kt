@@ -28,6 +28,7 @@ import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherHomeScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
+import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavRoutes
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
@@ -91,6 +92,15 @@ fun StudentOrTeacherNavGraph(
 
     StudentOrTeacherNavigationManager.settingsPageAction .setClickedAction {
         navController.navigate(StudentOrTeacherNavRoutes.SETTINGS.route)
+    }
+
+    // Pas testé
+    StudentOrTeacherNavigationManager.downloadsPageAction .setClickedAction {
+        navController.navigate(StudentOrTeacherNavRoutes.DOWNLOADS.route)
+    }
+
+    StudentOrTeacherNavigationManager.logoutPageAction.setClickedAction {
+        navController.navigate(DisconnectedNavRoutes.CONNECT.route)
     }
 
 
@@ -167,7 +177,7 @@ fun StudentOrTeacherNavGraph(
         }
 
         composable (StudentOrTeacherNavRoutes.DOWNLOADS.route) {
-            DownloadsScreen()
+            //DownloadsScreen()
         }
 
         composable (StudentOrTeacherNavRoutes.SETTINGS.route) {

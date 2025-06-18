@@ -26,6 +26,7 @@ fun ConnectedAsStudentOrTeacherAppSide(
     val selfAccount = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
 
     StudentOrTeacherDrawer(
+        selfViewModel = viewModel.selfViewModel,
         drawerState = drawerState
     ) {
         NoobleIntegrated(

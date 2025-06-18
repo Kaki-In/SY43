@@ -35,6 +35,7 @@ fun AdminNavGraph(
 
     val retrieveProfileRequest = viewModel.createRetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>()
 
+
     AdminNavigationManager.profilePageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.PROFILE.route)
     }
