@@ -2,6 +2,7 @@ package e2su.utbm.sy43project.ui.navgraphs
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,17 +11,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
-import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
-import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassSelectScreen
-import e2su.utbm.sy43project.ui.screens.common.DownloadsScreen
+import e2su.utbm.sy43project.ui.screens.studentorteacher.ClassSelectScreen
 import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
@@ -28,7 +25,6 @@ import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherHomeScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
-import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavRoutes
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
@@ -41,13 +37,8 @@ fun StudentOrTeacherNavGraph(
 
     val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
 
-    val overviewClassRequest = viewModel.createRetrieveDataViewModel<NoobleApiClassModel>()
-    val retrieveProfileRequest = viewModel.createRetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>()
-    val retrieveThreadRequest = viewModel.createRetrieveDataViewModel<List<NoobleApiActivityModel>>()
-    val retrieveClassesListRequest = viewModel.createRetrieveDataViewModel<List<NoobleApiClassModel>>()
-
     StudentOrTeacherNavigationManager.classOverviewPageAction.setClickedAction { classId ->
-        overviewClassRequest.forget()
+        viewModel.overviewClassRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.createClassOverviewRoute(classId))
     }
 
@@ -56,7 +47,7 @@ fun StudentOrTeacherNavGraph(
     }
 
     StudentOrTeacherNavigationManager.profilePageAction.setClickedAction { profileId ->
-        retrieveProfileRequest.forget()
+        viewModel.retrieveProfileRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.createProfileRoute(profileId))
     }
 
@@ -69,7 +60,7 @@ fun StudentOrTeacherNavGraph(
     }
 
     StudentOrTeacherNavigationManager.classDetailsPageAction.setClickedAction { classId ->
-        retrieveClassesListRequest.forget()
+        viewModel.retrieveClassesListRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.createClassDetailsRoute(classId))
     }
 
@@ -86,7 +77,7 @@ fun StudentOrTeacherNavGraph(
     }
 
     StudentOrTeacherNavigationManager.threadPageAction .setClickedAction {
-        retrieveThreadRequest.forget()
+        viewModel.retrieveThreadRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.ACTIVITY_THREAD.route)
     }
 
@@ -94,26 +85,17 @@ fun StudentOrTeacherNavGraph(
         navController.navigate(StudentOrTeacherNavRoutes.SETTINGS.route)
     }
 
-    // Pas testé
-    StudentOrTeacherNavigationManager.downloadsPageAction .setClickedAction {
-        navController.navigate(StudentOrTeacherNavRoutes.DOWNLOADS.route)
-    }
-
-    StudentOrTeacherNavigationManager.logoutPageAction.setClickedAction {
-        navController.navigate(DisconnectedNavRoutes.CONNECT.route)
-    }
-
-
-    NavHost(navController, startDestination = StudentOrTeacherNavRoutes.HOME.route, modifier = modifier) {
+    NavHost(navController, startDestination = StudentOrTeacherNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
         composable(StudentOrTeacherNavRoutes.HOME.route) {
-            StudentOrTeacherHomeScreen(viewModel)
+            StudentOrTeacherHomeScreen(
+                viewModel
+            )
         }
 
         composable(StudentOrTeacherNavRoutes.PROFILE.route) {  entry ->
             val accountName = entry.arguments?.getString("accountName")!!
 
             ProfileScreen(
-                retrieveProfileRequest,
                 viewModel,
                 accountName,
                 onClassClick = { className ->
@@ -132,7 +114,13 @@ fun StudentOrTeacherNavGraph(
         }
 
         composable(StudentOrTeacherNavRoutes.CLASS_SELECT.route) {
-            ClassSelectScreen(viewModel, classesRequestViewModel = retrieveClassesListRequest)
+            ClassSelectScreen(
+                viewModel,
+                onClassClicked = {
+                    StudentOrTeacherNavigationManager.classOverviewPageAction.navigate(it)
+                },
+                classesRequestViewModel = viewModel.retrieveClassesListRequest
+            )
         }
 
         composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
@@ -140,15 +128,13 @@ fun StudentOrTeacherNavGraph(
 
             OverviewScreen(
                 classId = className,
-                requestViewModel = overviewClassRequest
+                requestViewModel = viewModel.overviewClassRequest
             )
         }
 
         composable(StudentOrTeacherNavRoutes.SHOP.route) {
             ShopScreen(
-                userCoins = 500,
-                shopItems = SampleData.shopItems,
-                onBuyItem = {}
+                viewModel = viewModel
             )
         }
 
@@ -186,7 +172,7 @@ fun StudentOrTeacherNavGraph(
 
         composable (StudentOrTeacherNavRoutes.ACTIVITY_THREAD.route) {
             ActivitiesThreadScreen(
-                requestModel = retrieveThreadRequest,
+                requestModel = viewModel.retrieveThreadRequest,
             )
         }
     }

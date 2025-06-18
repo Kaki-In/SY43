@@ -9,5 +9,5 @@ data class NoobleApiBadgeModel (
     @SerialName("level") val level: Int,
     @SerialName("price") val price: Int,
     @SerialName("title") val title: String,
-    @SerialName("description") val description: String
+    @SerialName("description") val description: String,
 )

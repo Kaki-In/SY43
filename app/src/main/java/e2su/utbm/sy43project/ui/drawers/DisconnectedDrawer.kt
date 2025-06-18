@@ -1,6 +1,7 @@
 package e2su.utbm.sy43project.ui.drawers
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -20,12 +21,13 @@ import kotlinx.coroutines.launch
 data class DisconnectedDrawerItem(
     val title: String,
     val icon: ImageVector,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
 )
 
 @Composable
 fun DisconnectedDrawer(
     drawerState: DrawerState,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -62,7 +64,8 @@ fun DisconnectedDrawer(
                     )
                 }
             }
-        }
+        },
+        modifier = modifier.fillMaxSize()
     ) {
         content()
     }

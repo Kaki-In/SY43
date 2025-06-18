@@ -1,6 +1,9 @@
 package e2su.utbm.sy43project.viewmodels
 
 import androidx.lifecycle.ViewModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.api.service.NoobleApi
 
 /*
@@ -13,20 +16,17 @@ import e2su.utbm.sy43project.api.service.NoobleApi
 
  */
 
-class MainViewModel(api: NoobleApi): ViewModel()
+class MainViewModel(val noobleApi: NoobleApi): ViewModel()
 {
-    private var _api = api
-    val selfViewModel = SelfViewModel(api)
+    val selfViewModel = SelfViewModel(noobleApi)
 
-    fun createLaunchRequestViewModel(): LaunchActionViewModel
-    {
-        return LaunchActionViewModel(_api)
-    }
+    val classesRequest = RetrieveDataViewModel<List<NoobleApiClassModel>>(noobleApi)
+    val threadRequest = RetrieveDataViewModel<List<NoobleApiActivityModel>>(noobleApi)
 
-    fun<ResponseType> createRetrieveDataViewModel(): RetrieveDataViewModel<ResponseType>
-    {
-        return RetrieveDataViewModel<ResponseType>(_api)
-    }
+    val overviewClassRequest = RetrieveDataViewModel<NoobleApiClassModel>(noobleApi)
+    val retrieveProfileRequest = RetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>(noobleApi)
+    val retrieveThreadRequest = RetrieveDataViewModel<List<NoobleApiActivityModel>>(noobleApi)
+    val retrieveClassesListRequest = RetrieveDataViewModel<List<NoobleApiClassModel>>(noobleApi)
 
 }
 

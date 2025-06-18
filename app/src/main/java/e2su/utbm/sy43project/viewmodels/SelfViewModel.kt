@@ -11,7 +11,11 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
+import e2su.utbm.sy43project.api.models.objects.NoobleApiSafeModel
+import e2su.utbm.sy43project.api.models.responses.ForgotPasswordResponseModel
 import e2su.utbm.sy43project.api.service.NoobleApi
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlin.konan.file.File
@@ -28,12 +32,15 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
     private val _selfState = mutableStateOf<SelfUiState>(SelfUiState.Unknown)
     val selfState: State<SelfUiState> = _selfState
 
+    val retrieveSafeRequest = RetrieveDataViewModel<NoobleApiSafeModel>(noobleApi)
+    val retrieveProfileRequest = RetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>(noobleApi)
+
     suspend fun logout()
     {
         viewModelScope.launch {
             _api.connection.logout()
 
-            _selfState.value = SelfUiState.Disconnected
+            _selfState.value = SelfUiState.Disconnected(_api)
         }
     }
 
@@ -63,7 +70,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
             val accountInformation = _api.connection.getInformation()
 
             if (accountInformation == null) {
-                _selfState.value = SelfUiState.Disconnected
+                _selfState.value = SelfUiState.Disconnected(_api)
             } else {
                 _selfState.value = SelfUiState.Connected(accountInformation)
 
@@ -76,7 +83,10 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
 sealed class SelfUiState()
 {
     object Unknown: SelfUiState()
-    object Disconnected: SelfUiState()
+    class Disconnected(api: NoobleApi): SelfUiState()
+    {
+        val launchForgotPasswordRequest = RetrieveDataViewModel<ForgotPasswordResponseModel>(api)
+    }
     object Loading: SelfUiState()
     class Connecting(val username: String, val password: String): SelfUiState()
     class Connected(val account: NoobleApiAccountModel): SelfUiState()

@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.R
@@ -34,7 +35,7 @@ fun ActivityPost(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
-            .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ fun ClassPreview(
     {
         Row (
             modifier = Modifier
-                .background(Color.LightGray,
+                .background(MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(6.dp)
                 )
                 .padding(20.dp)

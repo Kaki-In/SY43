@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -25,6 +28,7 @@ import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentOrTeacherHomeScreen(
     viewModel: MainViewModel,
@@ -33,44 +37,53 @@ fun StudentOrTeacherHomeScreen(
 {
     val account = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
 
-    Column(
-        modifier.verticalScroll(rememberScrollState())
+    PullToRefreshBox(
+        isRefreshing = (
+            viewModel.classesRequest.requestState.value is CurrentDataRequestUiState.Loading
+                ||
+            viewModel.threadRequest.requestState.value is CurrentDataRequestUiState.Loading
+        ),
+        onRefresh = {
+            viewModel.classesRequest.forget()
+            viewModel.threadRequest.forget()
+        },
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            "Hello, ${account.profile.firstName} ${account.profile.lastName}",
-            fontSize = 30.sp
-        )
+        Column(
+            modifier.fillMaxSize().verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                "Hello, ${account.profile.firstName} ${account.profile.lastName}",
+                fontSize = 30.sp
+            )
 
-        Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.LightGray)
-            .height(2.dp))
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .height(2.dp))
 
-        Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-        val classesRequest = viewModel.createRetrieveDataViewModel<List<NoobleApiClassModel>>()
+            StudentOrTeacherClassesOverview(
+                viewModel.classesRequest
+            )
 
-        StudentOrTeacherClassesOverview(
-            classesRequest
-        )
+            Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .height(2.dp))
 
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.LightGray)
-            .height(2.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(10.dp))
+            StudentOrTeacherHomeThreadOverview(
+                viewModel.threadRequest
+            )
 
-        val threadRequest = viewModel.createRetrieveDataViewModel<List<NoobleApiActivityModel>>()
-
-        StudentOrTeacherHomeThreadOverview(
-            threadRequest
-        )
-
+        }
     }
 }
 
