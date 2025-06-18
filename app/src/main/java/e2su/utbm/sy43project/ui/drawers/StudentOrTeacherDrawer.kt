@@ -45,7 +45,6 @@ fun StudentOrTeacherDrawer(
         StudentOrTeacherDrawerItem("Logout", Icons.Default.Logout) {
             scope.launch{
                 selfViewModel.logout()
-                StudentOrTeacherNavigationManager.logoutPageAction.navigate()
             }
 
         }
