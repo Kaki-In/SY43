@@ -81,7 +81,7 @@ interface NoobleApiRetrofitService {
     suspend fun getBadgeInformation(request: GetBadgeInfoRequestModel): GetBadgeInfoResponseModel
 
     @GET("/badges/get-thumbnail")
-    suspend fun getBadgeThumbnail(@Body request: GetBadgeThumbnailRequestModel): ResponseBody
+    suspend fun getBadgeThumbnail(@Query("name") badgeName: String, @Query("level") level: Int): ResponseBody
 
     @GET("/badges/list")
     suspend fun listBadges(): ListBadgesResponseModel
@@ -271,9 +271,7 @@ class BadgesApi(service: NoobleApiRetrofitService)
     suspend fun getThumbnail(name: String, level: Int): InputStream
     {
         return _service.getBadgeThumbnail(
-            GetBadgeThumbnailRequestModel(
-                name, level
-            )
+            name, level
         ).byteStream()
     }
 

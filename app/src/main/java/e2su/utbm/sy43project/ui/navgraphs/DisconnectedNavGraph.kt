@@ -6,10 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import e2su.utbm.sy43project.api.models.responses.ForgotPasswordResponseModel
-import e2su.utbm.sy43project.ui.drawers.DisconnectedDrawer
 import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavRoutes
 import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationManager
-import e2su.utbm.sy43project.ui.screens.common.DownloadsScreen
 import e2su.utbm.sy43project.ui.screens.disconnected.ForgotPasswordScreen
 import e2su.utbm.sy43project.ui.screens.disconnected.LoginScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel

@@ -1,14 +1,12 @@
 package e2su.utbm.sy43project.ui.navgraphs
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import e2su.nooble.models.ProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
@@ -18,7 +16,6 @@ import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavR
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassSelectScreen
 import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
@@ -85,11 +82,6 @@ fun AdminNavGraph(
         }
 
         composable(AdminNavRoutes.SHOP.route) {
-            ShopScreen(
-                userCoins = 500,
-                shopItems = SampleData.shopItems,
-                onBuyItem = {}
-            )
         }
 
         composable(

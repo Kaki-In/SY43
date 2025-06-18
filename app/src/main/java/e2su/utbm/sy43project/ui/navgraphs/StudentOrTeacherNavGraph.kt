@@ -19,7 +19,7 @@ import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavi
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassSelectScreen
+import e2su.utbm.sy43project.ui.screens.studentorteacher.ClassSelectScreen
 import e2su.utbm.sy43project.ui.screens.common.DownloadsScreen
 import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
@@ -94,16 +94,6 @@ fun StudentOrTeacherNavGraph(
         navController.navigate(StudentOrTeacherNavRoutes.SETTINGS.route)
     }
 
-    // Pas testé
-    StudentOrTeacherNavigationManager.downloadsPageAction .setClickedAction {
-        navController.navigate(StudentOrTeacherNavRoutes.DOWNLOADS.route)
-    }
-
-    StudentOrTeacherNavigationManager.logoutPageAction.setClickedAction {
-        navController.navigate(DisconnectedNavRoutes.CONNECT.route)
-    }
-
-
     NavHost(navController, startDestination = StudentOrTeacherNavRoutes.HOME.route, modifier = modifier) {
         composable(StudentOrTeacherNavRoutes.HOME.route) {
             StudentOrTeacherHomeScreen(viewModel)
@@ -132,7 +122,13 @@ fun StudentOrTeacherNavGraph(
         }
 
         composable(StudentOrTeacherNavRoutes.CLASS_SELECT.route) {
-            ClassSelectScreen(viewModel, classesRequestViewModel = retrieveClassesListRequest)
+            ClassSelectScreen(
+                viewModel,
+                onClassClicked = {
+                    StudentOrTeacherNavigationManager.classOverviewPageAction.navigate(it)
+                },
+                classesRequestViewModel = retrieveClassesListRequest
+            )
         }
 
         composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->

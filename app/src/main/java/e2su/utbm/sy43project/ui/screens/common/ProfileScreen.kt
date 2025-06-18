@@ -72,7 +72,7 @@ fun ProfileScreen(
                     if (profileImage == null)
                     {
                         CircularImage(
-                            imageRes = R.drawable.woof,
+                            imageRes = R.drawable.profile,
                             size = 100
                         )
                     } else {

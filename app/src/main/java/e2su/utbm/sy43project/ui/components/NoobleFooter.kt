@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 
@@ -32,7 +33,7 @@ fun NoobleFooter(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.LightGray, shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
+            .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
     )
     {
         Row(
@@ -47,7 +48,7 @@ fun NoobleFooter(
                 modifier = Modifier.padding(3.dp)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.home),
+                    painter = painterResource(R.drawable.home, ),
                     contentDescription = "Home Icon",
                     modifier = Modifier
                         .size(40.dp)
@@ -91,7 +92,6 @@ fun NoobleFooter(
                         .size(40.dp)
                         .padding(8.dp)
                 )
-
             }
         }
     }

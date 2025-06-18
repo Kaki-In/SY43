@@ -4,7 +4,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
 import e2su.utbm.sy43project.ui.components.LoadingSpinner
 import e2su.utbm.sy43project.ui.views.ActivityPost
@@ -55,34 +59,44 @@ fun ActivitiesThreadScreen(
 
         is CurrentDataRequestUiState.Error ->
         {
-            Text("Could not get thread")
+            Text("Could not retrieve thread. ")
         }
 
         is CurrentDataRequestUiState.Success ->
         {
             val activities = (requestModel.requestState.value as CurrentDataRequestUiState.Success).responseData
 
-            if (activities.isEmpty()) {
-                Text("No activity for the moment")
-            } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(activities.size) { activityIndex ->
-                        val activity = activities[activityIndex].data
+            Column {
+                Text(
+                    "Recent activities",
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 20.sp,
+                )
 
-                        ActivityPost(
-                            activity.title,
-                            activity.date,
-                            activity.iconName
-                        )
+                Spacer(
+                    Modifier.height(12.dp)
+                )
+
+                if (activities.isEmpty()) {
+                    Text("No activity for the moment")
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(activities.size) { activityIndex ->
+                            val activity = activities[activityIndex].data
+
+                            ActivityPost(
+                                activity.title,
+                                activity.date,
+                                activity.iconName
+                            )
+                        }
                     }
                 }
             }
         }
-
     }
-
 }
 
