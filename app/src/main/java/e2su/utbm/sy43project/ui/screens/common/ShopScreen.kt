@@ -147,7 +147,7 @@ fun ShopScreen(
                     0 ->
                     {
                         ShopBadgesListScreen(
-                            viewModel
+                            viewModel,
                         )
                     }
                 }

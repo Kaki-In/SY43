@@ -50,11 +50,9 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    is SelfUiState.Loading ->
+                    is SelfUiState.Disconnected ->
                     {
-                        LoadingAppSide(
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        DisconnectedAppSide(mainViewModel)
                     }
 
                     is SelfUiState.Connected ->
@@ -87,7 +85,9 @@ class MainActivity : ComponentActivity() {
 
                     else ->
                     {
-                        DisconnectedAppSide(mainViewModel)
+                        LoadingAppSide(
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
                 }
             }

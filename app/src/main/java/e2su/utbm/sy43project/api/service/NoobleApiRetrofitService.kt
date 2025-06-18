@@ -77,8 +77,8 @@ interface NoobleApiRetrofitService {
     @POST("/badges/buy")
     suspend fun buyBadge(@Body request: BuyBadgeRequestModel): BuyBadgeResponseModel
 
-    @GET("/badges/get-infos")
-    suspend fun getBadgeInformation(request: GetBadgeInfoRequestModel): GetBadgeInfoResponseModel
+    @GET("/badges/get-info")
+    suspend fun getBadgeInformation(@Query("name") badgeName: String, @Query("level") level: Int): GetBadgeInfoResponseModel
 
     @GET("/badges/get-thumbnail")
     suspend fun getBadgeThumbnail(@Query("name") badgeName: String, @Query("level") level: Int): ResponseBody
@@ -263,9 +263,7 @@ class BadgesApi(service: NoobleApiRetrofitService)
 
     suspend fun getInformation(name: String, level: Int): GetBadgeInfoResponseModel
     {
-        return _service.getBadgeInformation(
-            GetBadgeInfoRequestModel(name, level)
-        )
+        return _service.getBadgeInformation(name, level)
     }
 
     suspend fun getThumbnail(name: String, level: Int): InputStream

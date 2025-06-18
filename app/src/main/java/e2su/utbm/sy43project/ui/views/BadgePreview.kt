@@ -2,8 +2,11 @@ package e2su.utbm.sy43project.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,57 +20,97 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 
 @Composable
 fun BadgePreview(
     reachable: Boolean,
     badgeModel: NoobleApiBadgeModel,
-    maxBadgeLevel: Int,
-    bitmap: ImageBitmap,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClicked: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(5.dp))
-            .padding(17.dp)
-            .width(50.dp)
+            .clickable(
+                true,
+            ) {
+                onItemClicked
+            }
+            .padding(14.dp)
+            .width(80.dp)
+            .height(140.dp)
     ) {
         if (reachable)
         {
-            Image(
-                bitmap = bitmap,
-                contentDescription = "badge icon",
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(30.dp)
+            val badgeThumbnail = badgeModel.loadedThumbnail
+
+            if (badgeThumbnail == null)
+                Image(
+                    painter = painterResource(R.drawable.nooblard),
+                    contentDescription = "badge icon",
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
             )
+            else
+                Image(
+                    bitmap = badgeThumbnail,
+                    contentDescription = "badge icon",
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
+                )
         } else {
             val colorMatrix = ColorMatrix()
             colorMatrix.setToSaturation(0f)
 
-            Image(
-                bitmap = bitmap,
-                contentDescription = "badge icon",
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(30.dp)
-                ,
-                colorFilter = ColorFilter.colorMatrix(colorMatrix)
-            )
+            val badgeThumbnail = badgeModel.loadedThumbnail
+
+            if (badgeThumbnail == null)
+                Image(
+                    painter = painterResource(R.drawable.nooblard),
+                    contentDescription = "badge icon",
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    colorFilter = ColorFilter.colorMatrix(colorMatrix)
+                )
+            else
+                Image(
+                    bitmap = badgeThumbnail,
+                    contentDescription = "badge icon",
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    colorFilter = ColorFilter.colorMatrix(colorMatrix)
+                )
         }
 
-        Text(
-            badgeModel.name,
-            fontSize = 14.sp,
+        Spacer(
+            modifier = Modifier.weight(1f)
         )
 
         Text(
-            "${badgeModel.level} of $maxBadgeLevel",
+            badgeModel.title,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                lineHeight = 15.sp
+            )
+
+        )
+
+        Text(
+            "${badgeModel.level} of ${badgeModel.maxLevel?:"..."}",
             fontSize = 10.sp,
             fontStyle = FontStyle.Italic
         )
