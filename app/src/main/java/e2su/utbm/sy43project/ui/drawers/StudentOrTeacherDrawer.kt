@@ -1,6 +1,8 @@
 package e2su.utbm.sy43project.ui.drawers
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -20,6 +22,7 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
 import e2su.utbm.sy43project.viewmodels.SelfViewModel
 
 data class StudentOrTeacherDrawerItem(
@@ -32,6 +35,7 @@ data class StudentOrTeacherDrawerItem(
 fun StudentOrTeacherDrawer(
     selfViewModel: SelfViewModel,
     drawerState: DrawerState,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -49,6 +53,7 @@ fun StudentOrTeacherDrawer(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        modifier = modifier,
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.height(16.dp))

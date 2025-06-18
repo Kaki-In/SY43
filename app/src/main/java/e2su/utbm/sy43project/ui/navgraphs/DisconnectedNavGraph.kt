@@ -11,6 +11,7 @@ import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationMa
 import e2su.utbm.sy43project.ui.screens.disconnected.ForgotPasswordScreen
 import e2su.utbm.sy43project.ui.screens.disconnected.LoginScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 
 @Composable
 fun DisconnectedNavGraph(
@@ -20,7 +21,7 @@ fun DisconnectedNavGraph(
 {
     val navController = rememberNavController()
 
-    var forgotPasswordViewModel = viewModel.createRetrieveDataViewModel<ForgotPasswordResponseModel>()
+    var forgotPasswordViewModel = (viewModel.selfViewModel.selfState.value as SelfUiState.Disconnected).launchForgotPasswordRequest
 
     DisconnectedNavigationManager.connectPageAction.setClickedAction {
         navController.navigate(DisconnectedNavRoutes.CONNECT.route)

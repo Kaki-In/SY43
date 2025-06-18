@@ -30,8 +30,6 @@ fun AdminNavGraph(
 {
     val navController = rememberNavController()
 
-    val retrieveProfileRequest = viewModel.createRetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>()
-
 
     AdminNavigationManager.profilePageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.PROFILE.route)
@@ -46,7 +44,6 @@ fun AdminNavGraph(
             val accountName = entry.arguments?.getString("accountName")!!
 
             ProfileScreen(
-                retrieveProfileRequest,
                 viewModel,
                 accountName,
                 onClassClick = { className ->
@@ -73,11 +70,10 @@ fun AdminNavGraph(
 
         composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
             val className = entry.arguments?.getString("className")!!
-            val request = viewModel.createRetrieveDataViewModel<NoobleApiClassModel>()
 
             OverviewScreen(
                 classId = className,
-                requestViewModel = request
+                requestViewModel = viewModel.overviewClassRequest
             )
         }
 

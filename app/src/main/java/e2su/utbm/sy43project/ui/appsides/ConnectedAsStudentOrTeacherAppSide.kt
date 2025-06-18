@@ -1,10 +1,15 @@
 package e2su.utbm.sy43project.ui.appsides
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.drawers.StudentOrTeacherDrawer
@@ -14,6 +19,7 @@ import e2su.utbm.sy43project.viewmodels.SelfUiState
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun ConnectedAsStudentOrTeacherAppSide(
     viewModel: MainViewModel,
@@ -27,7 +33,8 @@ fun ConnectedAsStudentOrTeacherAppSide(
 
     StudentOrTeacherDrawer(
         selfViewModel = viewModel.selfViewModel,
-        drawerState = drawerState
+        drawerState = drawerState,
+        modifier = modifier
     ) {
         NoobleIntegrated(
             onOpenHome = {
@@ -50,7 +57,10 @@ fun ConnectedAsStudentOrTeacherAppSide(
             },
             modifier = modifier,
             content = {
-                StudentOrTeacherNavGraph(viewModel)
+                StudentOrTeacherNavGraph(
+                    viewModel,
+                    modifier = Modifier.fillMaxSize()
+                )
             },
             onProfileClicked = {
                 StudentOrTeacherNavigationManager.profilePageAction.navigate(selfAccount.id)

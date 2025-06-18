@@ -11,6 +11,10 @@ import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.ui.components.CircularImage
 import e2su.nooble.models.ProfileModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontStyle
@@ -25,14 +29,16 @@ import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
 import org.jetbrains.kotlin.util.profile
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    requestViewModel: RetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>,
     mainViewModel: MainViewModel,
     accountId: String?,
     onClassClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val requestViewModel = mainViewModel.selfViewModel.retrieveProfileRequest
+
     if (requestViewModel.requestState.value is CurrentDataRequestUiState.Idle)
     {
         LaunchedEffect(true) {
@@ -51,87 +57,95 @@ fun ProfileScreen(
         }
     }
 
-    Column(
-        modifier = modifier
-            .padding(16.dp),
+    PullToRefreshBox(
+        isRefreshing = requestViewModel.requestState.value is CurrentDataRequestUiState.Loading,
+        onRefresh = {
+            requestViewModel.forget()
+        },
+        modifier = Modifier.fillMaxSize()
     ) {
-        when (requestViewModel.requestState.value) {
-            is CurrentDataRequestUiState.Idle, is CurrentDataRequestUiState.Loading -> {
-                Text("Loading...")
-            }
 
-            is CurrentDataRequestUiState.Success -> {
-                val (profileData, classesData) = (requestViewModel.requestState.value as CurrentDataRequestUiState.Success).responseData
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            when (requestViewModel.requestState.value) {
+                is CurrentDataRequestUiState.Idle, is CurrentDataRequestUiState.Loading -> {
+                    Text("Loading...")
+                }
 
-                Row (
-                    verticalAlignment = Alignment.CenterVertically
-                )
-                {
-                    val profileImage = profileData.loadedProfileImage
+                is CurrentDataRequestUiState.Success -> {
+                    val (profileData, classesData) = (requestViewModel.requestState.value as CurrentDataRequestUiState.Success).responseData
 
-                    if (profileImage == null)
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically
+                    )
                     {
-                        CircularImage(
-                            imageRes = R.drawable.profile,
-                            size = 100
-                        )
-                    } else {
-                        CircularImage(
-                            bitmap = profileImage,
-                            size = 100
-                        )
+                        val profileImage = profileData.loadedProfileImage
+
+                        if (profileImage == null)
+                        {
+                            CircularImage(
+                                imageRes = R.drawable.profile,
+                                size = 100
+                            )
+                        } else {
+                            CircularImage(
+                                bitmap = profileImage,
+                                size = 100
+                            )
+                        }
+
+                        Column {
+                            Text(
+                                text = "${profileData.firstName} ${profileData.lastName}",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = profileData.role!!.description,
+                                fontStyle = FontStyle.Italic
+                            )
+                            Spacer(
+                                modifier = Modifier.height(10.dp)
+                            )
+                            Text(
+                                text = profileData.description,
+                                fontSize = 17.sp
+                            )
+                        }
                     }
 
-                    Column {
-                        Text(
-                            text = "${profileData.firstName} ${profileData.lastName}",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
-                        )
-                        Text(
-                            text = profileData.role!!.description,
-                            fontStyle = FontStyle.Italic
-                        )
-                        Spacer(
-                            modifier = Modifier.height(10.dp)
-                        )
-                        Text(
-                            text = profileData.description,
-                            fontSize = 17.sp
-                        )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Followed classes :",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        for (noobleClass in classesData) {
+                            ClassPreview(
+                                noobleClass,
+                                onClassClicked = {
+                                    onClassClick(noobleClass.id)
+                                }
+                            )
+                        }
                     }
+
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Followed classes :",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(classesData.size) { courseIndex ->
-                        val course = classesData[courseIndex]
-
-                        ClassPreview(
-                            course,
-                            onClassClicked = {
-                                onClassClick(course.id)
-                            }
-                        )
-                    }
+                is CurrentDataRequestUiState.Error -> {
+                    val errorMessage = (requestViewModel.requestState.value as CurrentDataRequestUiState.Error).reason
+                    Text("An error occurred : $errorMessage")
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-
-            }
-
-            is CurrentDataRequestUiState.Error -> {
-                val errorMessage = (requestViewModel.requestState.value as CurrentDataRequestUiState.Error).reason
-                Text("An error occurred : $errorMessage")
             }
         }
     }
