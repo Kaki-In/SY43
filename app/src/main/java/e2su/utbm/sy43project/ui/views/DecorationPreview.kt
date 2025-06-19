@@ -1,6 +1,7 @@
 package e2su.utbm.sy43project.ui.views
 
 import android.graphics.Paint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,17 +45,22 @@ import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import e2su.utbm.sy43project.viewmodels.SelfViewModel
+import kotlin.math.log
 
 @Composable
 fun DecorationPreview(
     mainViewModel: MainViewModel,
     decorationModel: NoobleApiDecorationModel,
+    badges: List<NoobleApiBadgeModel>,
     modifier: Modifier = Modifier,
     onItemClicked: () -> Unit,
 ) {
-
     Column(
-        modifier = modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp)).clickable(true, onClick = onItemClicked).padding(10.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+            .clickable(true, onClick = onItemClicked)
+            .padding(10.dp)
     ) {
 
         Box(
@@ -87,13 +93,13 @@ fun DecorationPreview(
                 {
                     Image(
                         painter = painterResource(R.drawable.profile),
-                        contentDescription = decorationModel.name + " banner image",
+                        contentDescription = "User profile image",
                         modifier = modifier.clip(RoundedCornerShape(4.dp))
                     )
                 } else {
                     Image(
                         bitmap = profileImage,
-                        contentDescription = decorationModel.name + " banner image",
+                        contentDescription = "User profile image",
                         modifier = modifier.clip(RoundedCornerShape(4.dp))
                     )
                 }
@@ -116,7 +122,12 @@ fun DecorationPreview(
                         style = TextStyle(lineHeight = 10.sp),
                         color = Color.White
                     )
-                    Spacer(Modifier.height(10.dp))
+
+                    ProfileBadgesListView(
+                        badges
+                    ) {
+                        mainViewModel.openBadge(it)
+                    }
 
                     Text(
                         profile.description,

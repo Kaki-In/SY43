@@ -1,5 +1,6 @@
 package e2su.utbm.sy43project.ui.screens.common
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.Toast
@@ -32,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,17 +41,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
+import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
 import e2su.utbm.sy43project.ui.views.DecorationPreview
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -68,11 +74,46 @@ fun ShopDecorationsListScreen(
     }
     val scope = rememberCoroutineScope()
 
+    val badges = remember {
+        mutableStateListOf<NoobleApiBadgeModel>()
+    }
+
+    if (badges.isEmpty() && viewModel.selfViewModel.retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Success)
+    {
+        LaunchedEffect(1) {
+            for ((name, level) in (viewModel.selfViewModel.retrieveSafeRequest.requestState.value as CurrentDataRequestUiState.Success).responseData.badges)
+            {
+                val badgeData = viewModel.noobleApi.badges.getInformation(name, level)
+                var badgeThumbnail: ImageBitmap? = null
+
+                try {
+                    val thumbnailInput = viewModel.noobleApi.badges.getThumbnail(name, level)
+                    badgeThumbnail = BitmapFactory.decodeStream(thumbnailInput).asImageBitmap()
+                } catch (exc: Exception)
+                {
+                    Log.e("ShopDecorationsListScreen", "could not load badge bitmap", exc)
+                }
+
+                badges.add(
+                    NoobleApiBadgeModel(
+                        name,
+                        level,
+                        badgeData.price,
+                        badgeData.title,
+                        badgeData.description,
+                        badgeData.maxLevel,
+                        badgeThumbnail
+                    )
+                )
+            }
+        }
+    }
+
     val context = LocalContext.current
 
     if (buyingDecoration)
     {
-        LaunchedEffect(true) {
+        LaunchedEffect(2) {
             scope.launch {
                 try {
                     viewModel.noobleApi.decorations.buy(openedDecoration!!.id)
@@ -91,7 +132,7 @@ fun ShopDecorationsListScreen(
 
     if (viewModel.getDecorationsViewModel.requestState.value is CurrentDataRequestUiState.Idle)
     {
-        LaunchedEffect(true) {
+        LaunchedEffect(3) {
             viewModel.getDecorationsViewModel.retrieveData {
                 val decorationsList = viewModel.noobleApi.decorations.list()
 
@@ -139,6 +180,7 @@ fun ShopDecorationsListScreen(
                         {
                             DecorationPreview (
                                 mainViewModel = viewModel,
+                                badges = badges,
                                 decorationModel = decoration
                             ) {
                                 openedDecoration = decoration
@@ -199,7 +241,8 @@ fun ShopDecorationsListScreen(
 
                         DecorationPreview(
                             mainViewModel = viewModel,
-                            decoration
+                            decorationModel =  decoration,
+                            badges = badges,
                         ) {}
 
                         Row (

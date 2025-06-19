@@ -1,10 +1,11 @@
 package e2su.utbm.sy43project.ui.screens.common
 
 import android.graphics.BitmapFactory
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,18 +32,24 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.ui.views.BadgePreview
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -51,6 +59,36 @@ fun ShopBadgesListScreen(
 ) {
     var openedBadge by remember {
         mutableStateOf<Pair<NoobleApiBadgeModel, Boolean>?>(null)
+    }
+
+    var buyingBadge by remember {
+        mutableStateOf(false)
+    }
+    val scope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    if (buyingBadge)
+    {
+        LaunchedEffect(true) {
+            scope.launch {
+                try {
+                    val currentlyOpenedBadge = openedBadge!!
+
+                    viewModel.noobleApi.badges.buy(currentlyOpenedBadge.first.name)
+                    viewModel.selfViewModel.retrieveSafeRequest.forget()
+                    viewModel.getBadgesViewModel.forget()
+
+                    viewModel.openBadge(currentlyOpenedBadge.first)
+
+                    openedBadge = null
+
+                    buyingBadge = false
+                } catch (exc: Exception) {
+                    Toast.makeText(context, "Error when buying the badge: " + exc.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     if (viewModel.getBadgesViewModel.requestState.value is CurrentDataRequestUiState.Idle)
@@ -110,6 +148,7 @@ fun ShopBadgesListScreen(
                         {
 
                             BadgePreview(
+                                mainViewModel = viewModel,
                                 reachable = true,
                                 badgeModel = badge,
                             )  {
@@ -122,6 +161,7 @@ fun ShopBadgesListScreen(
                         {
 
                             BadgePreview(
+                                mainViewModel = viewModel,
                                 reachable = false,
                                 badgeModel = badge,
                             ) {
@@ -171,11 +211,12 @@ fun ShopBadgesListScreen(
                     )
                     {
                         Text(
-                            text = "Buy this badge?",
+                            text = if (reachable) "Buy this badge?" else "You are not eligible to this badge yet",
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Light,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            color = if (reachable) MaterialTheme.colorScheme.onBackground else Color.Red
                         )
 
                         Text(
@@ -187,7 +228,8 @@ fun ShopBadgesListScreen(
                         )
 
                         BadgePreview (
-                            reachable = viewModel.selfViewModel.retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Success && (viewModel.selfViewModel.retrieveSafeRequest.requestState.value as CurrentDataRequestUiState.Success).responseData.quota >= badge.price && reachable,
+                            mainViewModel = viewModel,
+                            reachable = reachable,
                             badgeModel = badge
                         ) {}
 
@@ -199,7 +241,7 @@ fun ShopBadgesListScreen(
                             Button(
                                 enabled = viewModel.selfViewModel.retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Success && (viewModel.selfViewModel.retrieveSafeRequest.requestState.value as CurrentDataRequestUiState.Success).responseData.quota >= badge.price && reachable,
                                 onClick = {
-
+                                    buyingBadge = true
                                 }
                             ) {
                                 Text("Buy this badge")

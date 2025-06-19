@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiFullProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
 import e2su.utbm.sy43project.api.models.objects.NoobleApiSafeModel
 import e2su.utbm.sy43project.api.models.responses.ForgotPasswordResponseModel
@@ -33,7 +35,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
     val selfState: State<SelfUiState> = _selfState
 
     val retrieveSafeRequest = RetrieveDataViewModel<NoobleApiSafeModel>(noobleApi)
-    val retrieveProfileRequest = RetrieveDataViewModel<Pair<NoobleApiAccountProfileModel, List<NoobleApiClassModel>>>(noobleApi)
+    val retrieveProfileRequest = RetrieveDataViewModel<NoobleApiFullProfileModel>(noobleApi)
 
     suspend fun logout()
     {
@@ -55,7 +57,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
                 updateConnection(false)
             } catch (exc: Exception) {
                 _selfState.value = SelfUiState.CantConnect(username, password, exc.message.toString(), _api)
-                Log.e("SELF", "login:", exc)
+                Log.e("SelfViewModel", "login:", exc)
             }
         }
 
@@ -81,6 +83,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
                     _selfState.value = SelfUiState.Connected(accountInformation)
                 }
             } catch (exc: Exception) {
+                Log.e("SelfViewModel", "updateConnection: ", exc)
                 _selfState.value = SelfUiState.NoInternet
             }
         }

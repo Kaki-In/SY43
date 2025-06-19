@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetDecorationInfoResponseModel (
     @SerialName("name") val name: String,
-    @SerialName("price") val price: String,
+    @SerialName("price") val price: Int,
     @SerialName("image") val image: String
 )

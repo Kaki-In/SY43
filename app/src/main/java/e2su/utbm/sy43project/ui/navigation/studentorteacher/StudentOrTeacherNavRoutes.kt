@@ -4,7 +4,6 @@ import e2su.tools.navigate.NavigateActionManager
 
 enum class StudentOrTeacherNavRoutes(val route: String) {
     HOME("home"),
-    CLASS("class"),
     PROFILE("profile/{accountName}"),
     ACTIVITY_THREAD("thread"),
     NOTIFICATION_DETAILS("notification"),

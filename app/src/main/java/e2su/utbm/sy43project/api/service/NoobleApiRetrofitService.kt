@@ -9,6 +9,7 @@ import e2su.utbm.sy43project.api.models.requests.*
 import e2su.utbm.sy43project.api.models.responses.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -95,6 +96,9 @@ interface NoobleApiRetrofitService {
     @GET("/classes/data")
     suspend fun getClassData(@Query("class_id") request: String): GetClassDataResponseModel
 
+    @GET("/classes/get-content")
+    suspend fun getClassContent(@Query("class_id") request: String): JsonObject
+
     @POST("/classes/delete")
     suspend fun deleteClass(@Body request: DeleteClassRequestModel)
 
@@ -102,7 +106,7 @@ interface NoobleApiRetrofitService {
     suspend fun editClass(@Body request: EditClassRequestModel)
 
     @GET("/classes/get-accounts")
-    suspend fun getClassAccounts(request: GetClassAccountsRequestModel): List<String>
+    suspend fun getClassAccounts(@Query("class_id") request: String): List<String>
 
     @GET("/classes/search")
     suspend fun searchClass(request: SearchClassRequestModel): List<NoobleApiClassModel>
@@ -123,7 +127,7 @@ interface NoobleApiRetrofitService {
     suspend fun logOutFromAccount()
 
     @GET("/decorations/get-info")
-    suspend fun getDecorationInformation(request: GetDecorationInfoRequestModel): GetDecorationInfoResponseModel
+    suspend fun getDecorationInformation(@Query("decoration") decoration: String): GetDecorationInfoResponseModel
 
     @GET("/decorations/list")
     suspend fun listDecorations(): List<NoobleApiDecorationModel>
@@ -301,12 +305,17 @@ class ClassesApi(service: NoobleApiRetrofitService)
         )
         return NoobleApiClassModel(
             id = classId,
-            content = result.content,
             description = result.description,
             lastModification = result.lastModification,
             lastModifier = result.lastModifier,
             name = result.name
         )
+    }
+
+    suspend fun getContent(classId: String): JsonObject {
+        return _service.getClassContent(
+            classId
+        ).jsonObject["content"]!!.jsonObject
     }
 
     suspend fun delete(classId: String) {
@@ -329,7 +338,7 @@ class ClassesApi(service: NoobleApiRetrofitService)
 
     suspend fun getAccounts(classId: String): List<String> {
         return _service.getClassAccounts(
-            GetClassAccountsRequestModel(classId)
+            classId
         )
     }
 
@@ -418,7 +427,7 @@ class DecorationsApi(service: NoobleApiRetrofitService)
     suspend fun getInformation(decorationId: String): GetDecorationInfoResponseModel
     {
         return _service.getDecorationInformation(
-            GetDecorationInfoRequestModel(decorationId)
+            decorationId
         )
     }
 

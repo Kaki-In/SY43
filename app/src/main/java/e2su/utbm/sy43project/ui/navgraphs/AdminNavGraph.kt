@@ -7,19 +7,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
-import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassScreen
-import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
-import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 
 @Composable
@@ -56,8 +53,13 @@ fun AdminNavGraph(
             )
         }
 
-        composable(AdminNavRoutes.CLASS.route) {
-            ClassScreen(navController)
+        composable(AdminNavRoutes.CLASS.route) { backStackEntry ->
+            val classId = backStackEntry.arguments?.getString("className") ?: ""
+
+            ClassDetailsScreen(
+                mainViewModel = viewModel,
+                classId
+            )
         }
 
         composable(AdminNavRoutes.ACTIVITY.route) {
@@ -71,7 +73,7 @@ fun AdminNavGraph(
         composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
             val className = entry.arguments?.getString("className")!!
 
-            OverviewScreen(
+            ClassOverviewScreen(
                 classId = className,
                 requestViewModel = viewModel.overviewClassRequest
             )
@@ -86,8 +88,11 @@ fun AdminNavGraph(
                 navArgument("className") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val className = backStackEntry.arguments?.getString("className") ?: ""
-            ClassScreen(navController)
+            val classId = backStackEntry.arguments?.getString("className") ?: ""
+            ClassDetailsScreen(
+                viewModel,
+                classId
+            )
         }
 
         composable(AdminNavRoutes.PROFILE_EDIT.route) {

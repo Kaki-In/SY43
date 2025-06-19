@@ -1,5 +1,6 @@
 package e2su.tools.class_wrap;
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import e2su.tools.class_wrap.exceptions.NoSuchExporterException
@@ -45,6 +46,8 @@ public class ExportersMap {
     @Composable
     fun createView(jsonData: JsonObject, modifier: Modifier = Modifier)
     {
+        Log.i("TAG", "createView: " + jsonData)
+
         val type = jsonData["type"]?.jsonPrimitive?.content!!
         val data = jsonData["data"]!!
 
