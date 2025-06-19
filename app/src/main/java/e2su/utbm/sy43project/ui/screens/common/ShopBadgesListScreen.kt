@@ -1,18 +1,29 @@
 package e2su.utbm.sy43project.ui.screens.common
 
 import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,10 +31,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.ui.views.BadgePreview
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
@@ -36,7 +50,7 @@ fun ShopBadgesListScreen(
     modifier: Modifier = Modifier
 ) {
     var openedBadge by remember {
-        mutableStateOf<NoobleApiBadgeModel?>(null)
+        mutableStateOf<Pair<NoobleApiBadgeModel, Boolean>?>(null)
     }
 
     if (viewModel.getBadgesViewModel.requestState.value is CurrentDataRequestUiState.Idle)
@@ -92,26 +106,26 @@ fun ShopBadgesListScreen(
                     )
                     {
 
-                        for (badge in response.reached)
+                        for (badge in response.reached.sortedBy { badge -> badge.price })
                         {
 
                             BadgePreview(
                                 reachable = true,
                                 badgeModel = badge,
                             )  {
-                                openedBadge = badge
+                                openedBadge = Pair(badge, true)
                             }
 
                         }
 
-                        for (badge in response.unreached)
+                        for (badge in response.unreached.sortedBy { badge -> badge.price })
                         {
 
                             BadgePreview(
                                 reachable = false,
                                 badgeModel = badge,
                             ) {
-                                openedBadge = badge
+                                openedBadge = Pair(badge, false)
                             }
 
                         }
@@ -132,19 +146,86 @@ fun ShopBadgesListScreen(
             }
         }
 
-        if (openedBadge != null)
-        {
-            Column(
-                modifier = Modifier.fillMaxSize().background(Color(0x80808080)).padding(20.dp),
-                verticalArrangement = Arrangement.Center
+        AnimatedVisibility(
+            openedBadge != null,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(true)
+                    {
+                        openedBadge = null
+                    }
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(20.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier.height(140.dp).width(20.dp)
-                ){
+                if (openedBadge != null)
+                {
+                    val (badge, reachable) = openedBadge!!
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    )
+                    {
+                        Text(
+                            text = "Buy this badge?",
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Light,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
+                        Text(
+                            text = badge.description
+                        )
+
+                        Spacer(
+                            Modifier.height(20.dp)
+                        )
+
+                        BadgePreview (
+                            reachable = viewModel.selfViewModel.retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Success && (viewModel.selfViewModel.retrieveSafeRequest.requestState.value as CurrentDataRequestUiState.Success).responseData.quota >= badge.price && reachable,
+                            badgeModel = badge
+                        ) {}
+
+                        Row (
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        {
+                            Button(
+                                enabled = viewModel.selfViewModel.retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Success && (viewModel.selfViewModel.retrieveSafeRequest.requestState.value as CurrentDataRequestUiState.Success).responseData.quota >= badge.price && reachable,
+                                onClick = {
+
+                                }
+                            ) {
+                                Text("Buy this badge")
+                            }
+
+                            Spacer(
+                                Modifier.width(4.dp)
+                            )
+
+                            Button(
+                                onClick = {
+                                    openedBadge = null
+                                },
+                                colors = ButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.surface,
+                                    contentColor = MaterialTheme.colorScheme.onSurface,
+                                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                                    disabledContentColor = MaterialTheme.colorScheme.onPrimary,
+                                )
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    }
                 }
             }
         }
-
     }
 }

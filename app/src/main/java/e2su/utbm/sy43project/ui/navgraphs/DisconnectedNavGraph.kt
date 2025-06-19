@@ -35,10 +35,10 @@ fun DisconnectedNavGraph(
     }
 
     if (forgotPasswordViewModel != null)
-    DisconnectedNavigationManager.forgotPasswordPageAction.setClickedAction {
-        forgotPasswordViewModel.forget()
-        navController.navigate(DisconnectedNavRoutes.FORGOT_PASSWORD.route)
-    }
+        DisconnectedNavigationManager.forgotPasswordPageAction.setClickedAction {
+            forgotPasswordViewModel.forget()
+            navController.navigate(DisconnectedNavRoutes.FORGOT_PASSWORD.route)
+        }
 
     DisconnectedNavigationManager.downloadsPageAction.setClickedAction {
         navController.navigate(DisconnectedNavRoutes.DOWNLOADS.route)

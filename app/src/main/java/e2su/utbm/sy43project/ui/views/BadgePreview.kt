@@ -42,9 +42,8 @@ fun BadgePreview(
             .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(5.dp))
             .clickable(
                 true,
-            ) {
-                onItemClicked
-            }
+                onClick = onItemClicked
+            )
             .padding(14.dp)
             .width(80.dp)
             .height(140.dp)
