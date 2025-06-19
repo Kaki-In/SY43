@@ -53,6 +53,13 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+                    is SelfUiState.Loading ->
+                    {
+                        LoadingAppSide(
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
                     is SelfUiState.NoInternet ->
                     {
                         Scaffold () { innerPadding ->
@@ -72,7 +79,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    is SelfUiState.Disconnected, is SelfUiState.CantConnect ->
+                    is SelfUiState.Disconnected, is SelfUiState.CantConnect, is SelfUiState.Connecting ->
                     {
                         DisconnectedAppSide(mainViewModel)
                     }
@@ -105,12 +112,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    else ->
-                    {
-                        LoadingAppSide(
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
                 }
             }
         }

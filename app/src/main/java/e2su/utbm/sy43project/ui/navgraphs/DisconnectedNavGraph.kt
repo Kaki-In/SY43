@@ -11,6 +11,7 @@ import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationMa
 import e2su.utbm.sy43project.ui.screens.disconnected.ForgotPasswordScreen
 import e2su.utbm.sy43project.ui.screens.disconnected.LoginScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 
 @Composable
@@ -21,12 +22,19 @@ fun DisconnectedNavGraph(
 {
     val navController = rememberNavController()
 
-    var forgotPasswordViewModel = (viewModel.selfViewModel.selfState.value as SelfUiState.Disconnected).launchForgotPasswordRequest
+    var forgotPasswordViewModel: RetrieveDataViewModel<ForgotPasswordResponseModel>? = null
+    if (viewModel.selfViewModel.selfState.value is SelfUiState.Disconnected)
+    {
+        forgotPasswordViewModel = (viewModel.selfViewModel.selfState.value as SelfUiState.Disconnected).launchForgotPasswordRequest
+    } else if (viewModel.selfViewModel.selfState.value is SelfUiState.CantConnect) {
+        forgotPasswordViewModel = (viewModel.selfViewModel.selfState.value as SelfUiState.CantConnect).launchForgotPasswordRequest
+    }
 
     DisconnectedNavigationManager.connectPageAction.setClickedAction {
         navController.navigate(DisconnectedNavRoutes.CONNECT.route)
     }
 
+    if (forgotPasswordViewModel != null)
     DisconnectedNavigationManager.forgotPasswordPageAction.setClickedAction {
         forgotPasswordViewModel.forget()
         navController.navigate(DisconnectedNavRoutes.FORGOT_PASSWORD.route)
@@ -45,6 +53,7 @@ fun DisconnectedNavGraph(
         }
 
         composable(DisconnectedNavRoutes.FORGOT_PASSWORD.route) {
+            if (forgotPasswordViewModel != null)
             ForgotPasswordScreen(
                 viewModel = forgotPasswordViewModel
             )

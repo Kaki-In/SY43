@@ -54,7 +54,7 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
 
                 updateConnection(false)
             } catch (exc: Exception) {
-                _selfState.value = SelfUiState.CantConnect(username, password, exc.message.toString())
+                _selfState.value = SelfUiState.CantConnect(username, password, exc.message.toString(), _api)
                 Log.e("SELF", "login:", exc)
             }
         }
@@ -98,7 +98,10 @@ sealed class SelfUiState()
     object Loading: SelfUiState()
     class Connecting(val username: String, val password: String): SelfUiState()
     class Connected(val account: NoobleApiAccountModel): SelfUiState()
-    class CantConnect(val username: String, val password: String, val message: String): SelfUiState()
+    class CantConnect(val username: String, val password: String, val message: String, api: NoobleApi): SelfUiState()    {
+        val launchForgotPasswordRequest = RetrieveDataViewModel<ForgotPasswordResponseModel>(api)
+    }
+
     object NoInternet: SelfUiState()
 }
 
