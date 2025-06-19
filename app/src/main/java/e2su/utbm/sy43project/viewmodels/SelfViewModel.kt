@@ -61,6 +61,11 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
 
     }
 
+    fun forgetConnection()
+    {
+        _selfState.value = SelfUiState.Unknown
+    }
+
     suspend fun updateConnection(markLoads: Boolean = true)
     {
         viewModelScope.launch {

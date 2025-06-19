@@ -32,6 +32,7 @@ class MainViewModel(val noobleApi: NoobleApi): ViewModel()
     val retrieveClassesListRequest = RetrieveDataViewModel<List<NoobleApiClassModel>>(noobleApi)
 
     val getBadgesViewModel = RetrieveDataViewModel<ListBadgesResponseModel>(noobleApi)
+    val getDecorationsViewModel = RetrieveDataViewModel<ListBadgesResponseModel>(noobleApi)
 
 }
 

@@ -5,10 +5,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,12 +53,26 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    is SelfUiState.CantConnect ->
+                    is SelfUiState.NoInternet ->
                     {
-                        Text("Please connect to Internet")
+                        Scaffold () { innerPadding ->
+                            Column(
+                                modifier = Modifier.padding(innerPadding)
+                            ) {
+                                Text("Could not connect to the API. Please ensure your internet connection and retry.")
+                                Button(
+                                    onClick = {
+                                        mainViewModel.selfViewModel.forgetConnection()
+                                    }
+                                ) {
+                                    Text("Rafraichir")
+                                }
+                            }
+
+                        }
                     }
 
-                    is SelfUiState.Disconnected ->
+                    is SelfUiState.Disconnected, is SelfUiState.CantConnect ->
                     {
                         DisconnectedAppSide(mainViewModel)
                     }
@@ -97,30 +114,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun MainPage() {
-    Text("Bienvenue sur Nooble !")
-    Spacer(modifier = Modifier.size(16.dp))
-    Button(onClick = {
-
-    }) { Text(
-        text = "Page de login"
-    ) }
-    Spacer(modifier = Modifier.size(16.dp))
-    Button(onClick = {
-
-    }) { Text(
-        text = "Page de profil"
-    ) }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SY43ProjectTheme {
-        MainPage()
     }
 }
