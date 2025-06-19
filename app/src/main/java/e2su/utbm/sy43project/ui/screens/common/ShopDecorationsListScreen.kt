@@ -1,15 +1,32 @@
 package e2su.utbm.sy43project.ui.screens.common
 
 import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,13 +34,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import e2su.utbm.sy43project.ui.views.BadgePreview
+import androidx.compose.ui.unit.sp
+import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
+import e2su.utbm.sy43project.ui.views.DecorationPreview
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
-import e2su.utbm.sy43project.viewmodels.OpenPurchasableItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -31,89 +54,69 @@ fun ShopDecorationsListScreen(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
-    var openedItem by remember {
-        mutableStateOf<OpenPurchasableItem>(OpenPurchasableItem.Closed)
+    var openedDecoration by remember {
+        mutableStateOf<NoobleApiDecorationModel?>(null)
     }
 
-    if (viewModel.getBadgesViewModel.requestState.value is CurrentDataRequestUiState.Idle)
+    if (viewModel.getDecorationsViewModel.requestState.value is CurrentDataRequestUiState.Idle)
     {
         LaunchedEffect(true) {
-            viewModel.getBadgesViewModel.retrieveData {
-                val badgesList = viewModel.noobleApi.badges.list()
+            viewModel.getDecorationsViewModel.retrieveData {
+                val decorationsList = viewModel.noobleApi.decorations.list()
 
-                for (badge in badgesList.reached)
+                for (decoration in decorationsList)
                 {
-                    val badgeInfo = viewModel.noobleApi.badges.getInformation(badge.name, badge.level)
-                    val badgeThumbnail = viewModel.noobleApi.badges.getThumbnail(badge.name, badge.level)
 
-                    badge.maxLevel = badgeInfo.maxLevel
-                    badge.loadedThumbnail = BitmapFactory.decodeStream(badgeThumbnail).asImageBitmap()
+                    try {
+                        Log.i("TAG", "ShopDecorationsListScreen: Getting resource ${decoration.id}")
+                        val decorationThumbnail = viewModel.noobleApi.resources.download(decoration.imageId,
+                            NoobleApiResourceType.RESOURCE_TYPE_DECORATION_BANNER)
+
+                        decoration.loadedThumbnail = BitmapFactory.decodeStream(decorationThumbnail).asImageBitmap()
+                    } catch (exc: Exception) {
+
+                    }
 
                 }
 
-                for (badge in badgesList.unreached)
-                {
-                    val badgeInfo = viewModel.noobleApi.badges.getInformation(badge.name, badge.level)
-                    val badgeThumbnail = viewModel.noobleApi.badges.getThumbnail(badge.name, badge.level)
-
-                    badge.maxLevel = badgeInfo.maxLevel
-                    badge.loadedThumbnail = BitmapFactory.decodeStream(badgeThumbnail).asImageBitmap()
-
-                }
-
-                return@retrieveData badgesList
+                return@retrieveData decorationsList
             }
         }
     }
 
     Box(
         modifier = modifier.fillMaxSize()
-    ) {
-
+    )
+    {
         Column (
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)
                 .verticalScroll(rememberScrollState())
         )
         {
-            when (viewModel.getBadgesViewModel.requestState.value)
+            when (viewModel.getDecorationsViewModel.requestState.value)
             {
                 is CurrentDataRequestUiState.Success ->
                 {
-                    val response = (viewModel.getBadgesViewModel.requestState.value as CurrentDataRequestUiState.Success).responseData
+                    val decorationsList = (viewModel.getDecorationsViewModel.requestState.value as CurrentDataRequestUiState.Success).responseData
 
                     FlowRow (
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     )
                     {
-
-                        for (badge in response.reached)
+                        for (decoration in decorationsList)
                         {
-
-                            BadgePreview(
-                                reachable = true,
-                                badgeModel = badge,
-                            )  {
-                                openedItem = OpenPurchasableItem.Badge(badge)
-                            }
-
-                        }
-
-                        for (badge in response.unreached)
-                        {
-
-                            BadgePreview(
-                                reachable = false,
-                                badgeModel = badge,
+                            DecorationPreview (
+                                mainViewModel = viewModel,
+                                decorationModel = decoration
                             ) {
-                                openedItem = OpenPurchasableItem.Badge(badge)
+                                openedDecoration = decoration
                             }
 
+                            Spacer(Modifier.height(5.dp))
                         }
-
                     }
-
                 }
 
                 is CurrentDataRequestUiState.Error ->
@@ -126,25 +129,81 @@ fun ShopDecorationsListScreen(
                     Text("Loading...")
                 }
             }
+
         }
 
-        when (openedItem)
-        {
-            is OpenPurchasableItem.Badge ->
-            {
-                Text("Opened badge")
-            }
+        AnimatedVisibility(
+            openedDecoration != null,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .clickable(true)
+                    {
+                        openedDecoration = null
+                    }
+                    .background(MaterialTheme.colorScheme.background).padding(20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (openedDecoration != null)
+                {
+                    val decoration = openedDecoration!!
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    {
+                        Text(
+                            text = "Buy this decoration?",
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Light,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-            is OpenPurchasableItem.Decoration ->
-            {
-                Text("Opened decoration")
-            }
+                        Spacer(
+                            Modifier.height(20.dp)
+                        )
 
-            else ->
-            {
+                        DecorationPreview(
+                            mainViewModel = viewModel,
+                            decoration
+                        ) {}
 
+                        Row (
+                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        {
+                            Button(
+                                onClick = {
+
+                                }
+                            ) {
+                                Text("Buy this decoration")
+                            }
+
+                            Spacer(
+                                Modifier.width(4.dp)
+                            )
+
+                            Button(
+                                onClick = {
+                                    openedDecoration = null
+                                },
+                                colors = ButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.surface,
+                                    contentColor = MaterialTheme.colorScheme.onSurface,
+                                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                                    disabledContentColor = MaterialTheme.colorScheme.onPrimary,
+                                )
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    }
+                }
             }
         }
-
     }
 }
