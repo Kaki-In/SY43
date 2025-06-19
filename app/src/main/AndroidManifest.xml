@@ -1,27 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="e2su.utbm.sy43project"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="24"
+        android:targetSdkVersion="35" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Remplacer QUERY_ALL_PACKAGES par une section queries -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+
+    <permission
+        android:name="e2su.utbm.sy43project.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="e2su.utbm.sy43project.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
     <application
-        android:name=".NoobleApp"
+        android:name="e2su.utbm.sy43project.NoobleApp"
         android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        tools:targetApi="28"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:extractNativeLibs="false"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SY43Project"
-        tools:targetApi="31">
+        android:testOnly="true"
+        android:theme="@style/Theme.SY43Project" >
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="e2su.utbm.sy43project.provider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
-            android:name=".MainActivity"
+            android:name="e2su.utbm.sy43project.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.SY43Project">
+            android:theme="@style/Theme.SY43Project" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
