@@ -105,13 +105,17 @@ fun ClassDetailsScreen(
                             Image(
                                 painter = painterResource(R.drawable.profile),
                                 contentDescription = "Last modifier image",
-                                modifier = Modifier.size(30.dp).padding(50.dp)
+                                modifier = Modifier.size(30.dp).padding(5.dp).clickable(true){
+                                    StudentOrTeacherNavigationManager.profilePageAction.navigate(classData.lastModifier)
+                                }
                             )
                         } else {
                             Image(
                                 bitmap = modifierImage,
                                 contentDescription = "Last modifier image",
-                                modifier = Modifier.size(30.dp).padding(50.dp)
+                                modifier = Modifier.size(30.dp).padding(5.dp).clickable(true){
+                                    StudentOrTeacherNavigationManager.profilePageAction.navigate(classData.lastModifier)
+                                }
                             )
                         }
 

@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -199,14 +200,14 @@ fun ProfileScreen(
                                     fontSize = 26.sp,
                                     fontWeight = FontWeight.Bold,
                                     style = TextStyle(lineHeight = 26.sp),
-                                    color = Color.White
+                                    color = if (decorationModel == null) MaterialTheme.colorScheme.onBackground else Color.White
                                 )
                                 Text(
                                     profileData.role!!.description,
                                     fontSize = 10.sp,
                                     fontStyle = FontStyle.Italic,
                                     style = TextStyle(lineHeight = 10.sp),
-                                    color = Color.White
+                                    color = if (decorationModel == null) MaterialTheme.colorScheme.onBackground else Color.White
                                 )
 
                                 ProfileBadgesListView(
@@ -218,7 +219,7 @@ fun ProfileScreen(
                                 Text(
                                     profile.description,
                                     fontSize = 15.sp,
-                                    color = Color.White
+                                    color = if (decorationModel == null) MaterialTheme.colorScheme.onBackground else Color.White
                                 )
                             }
 

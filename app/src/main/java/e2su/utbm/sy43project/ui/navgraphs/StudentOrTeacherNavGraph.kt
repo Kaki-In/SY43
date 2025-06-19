@@ -1,30 +1,38 @@
 package e2su.utbm.sy43project.ui.navgraphs
 
+import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import e2su.utbm.sy43project.data.SampleData
+import e2su.utbm.sy43project.local.DownloadedFileEntity
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
+import e2su.utbm.sy43project.ui.screens.common.DownloadsScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.ClassSelectScreen
-import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
 import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherHomeScreen
+import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherSettingsScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
+import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
