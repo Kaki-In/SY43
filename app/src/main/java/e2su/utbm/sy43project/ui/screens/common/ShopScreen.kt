@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -81,6 +80,7 @@ fun ShopScreen(
         onRefresh = {
             viewModel.selfViewModel.retrieveSafeRequest.forget()
             viewModel.getBadgesViewModel.forget()
+            viewModel.getDecorationsViewModel.forget()
         },
         modifier = modifier.fillMaxSize()
     )
@@ -151,6 +151,10 @@ fun ShopScreen(
                             viewModel,
                         )
                     }
+
+                    1 -> ShopDecorationsListScreen(
+                        viewModel
+                    )
                 }
             }
 

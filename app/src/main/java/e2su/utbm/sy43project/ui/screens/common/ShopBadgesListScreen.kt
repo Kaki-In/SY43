@@ -1,13 +1,16 @@
 package e2su.utbm.sy43project.ui.screens.common
 
 import android.graphics.BitmapFactory
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -18,12 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
+import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.ui.views.BadgePreview
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
-import e2su.utbm.sy43project.viewmodels.OpenPurchasableItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -31,8 +35,8 @@ fun ShopBadgesListScreen(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
-    var openedItem by remember {
-        mutableStateOf<OpenPurchasableItem>(OpenPurchasableItem.Closed)
+    var openedBadge by remember {
+        mutableStateOf<NoobleApiBadgeModel?>(null)
     }
 
     if (viewModel.getBadgesViewModel.requestState.value is CurrentDataRequestUiState.Idle)
@@ -95,7 +99,7 @@ fun ShopBadgesListScreen(
                                 reachable = true,
                                 badgeModel = badge,
                             )  {
-                                openedItem = OpenPurchasableItem.Badge(badge)
+                                openedBadge = badge
                             }
 
                         }
@@ -107,7 +111,7 @@ fun ShopBadgesListScreen(
                                 reachable = false,
                                 badgeModel = badge,
                             ) {
-                                openedItem = OpenPurchasableItem.Badge(badge)
+                                openedBadge = badge
                             }
 
                         }
@@ -128,21 +132,17 @@ fun ShopBadgesListScreen(
             }
         }
 
-        when (openedItem)
+        if (openedBadge != null)
         {
-            is OpenPurchasableItem.Badge ->
-            {
-                Text("Opened badge")
-            }
+            Column(
+                modifier = Modifier.fillMaxSize().background(Color(0x80808080)).padding(20.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Box(
+                    modifier = Modifier.height(140.dp).width(20.dp)
+                ){
 
-            is OpenPurchasableItem.Decoration ->
-            {
-                Text("Opened decoration")
-            }
-
-            else ->
-            {
-
+                }
             }
         }
 

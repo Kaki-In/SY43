@@ -5,6 +5,7 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
 import e2su.utbm.sy43project.api.models.responses.GetBadgeInfoResponseModel
 import e2su.utbm.sy43project.api.models.responses.ListBadgesResponseModel
 import e2su.utbm.sy43project.api.service.NoobleApi
@@ -32,7 +33,7 @@ class MainViewModel(val noobleApi: NoobleApi): ViewModel()
     val retrieveClassesListRequest = RetrieveDataViewModel<List<NoobleApiClassModel>>(noobleApi)
 
     val getBadgesViewModel = RetrieveDataViewModel<ListBadgesResponseModel>(noobleApi)
-    val getDecorationsViewModel = RetrieveDataViewModel<ListBadgesResponseModel>(noobleApi)
+    val getDecorationsViewModel = RetrieveDataViewModel<List<NoobleApiDecorationModel>>(noobleApi)
 
 }
 
