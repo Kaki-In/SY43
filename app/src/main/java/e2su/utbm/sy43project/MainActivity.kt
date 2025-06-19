@@ -50,6 +50,11 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
+                    is SelfUiState.CantConnect ->
+                    {
+                        Text("Please connect to Internet")
+                    }
+
                     is SelfUiState.Disconnected ->
                     {
                         DisconnectedAppSide(mainViewModel)

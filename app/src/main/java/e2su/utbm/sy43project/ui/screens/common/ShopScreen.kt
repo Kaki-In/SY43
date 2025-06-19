@@ -80,6 +80,7 @@ fun ShopScreen(
         isRefreshing = viewModel.selfViewModel.retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Loading,
         onRefresh = {
             viewModel.selfViewModel.retrieveSafeRequest.forget()
+            viewModel.getBadgesViewModel.forget()
         },
         modifier = modifier.fillMaxSize()
     )

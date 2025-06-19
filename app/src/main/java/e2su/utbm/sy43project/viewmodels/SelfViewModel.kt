@@ -64,16 +64,19 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
     suspend fun updateConnection(markLoads: Boolean = true)
     {
         viewModelScope.launch {
-            if (markLoads)
-                _selfState.value = SelfUiState.Loading
+            try {
+                if (markLoads)
+                    _selfState.value = SelfUiState.Loading
 
-            val accountInformation = _api.connection.getInformation()
+                val accountInformation = _api.connection.getInformation()
 
-            if (accountInformation == null) {
-                _selfState.value = SelfUiState.Disconnected(_api)
-            } else {
-                _selfState.value = SelfUiState.Connected(accountInformation)
-
+                if (accountInformation == null) {
+                    _selfState.value = SelfUiState.Disconnected(_api)
+                } else {
+                    _selfState.value = SelfUiState.Connected(accountInformation)
+                }
+            } catch (exc: Exception) {
+                _selfState.value = SelfUiState.NoInternet
             }
         }
     }
@@ -91,5 +94,6 @@ sealed class SelfUiState()
     class Connecting(val username: String, val password: String): SelfUiState()
     class Connected(val account: NoobleApiAccountModel): SelfUiState()
     class CantConnect(val username: String, val password: String, val message: String): SelfUiState()
+    object NoInternet: SelfUiState()
 }
 
