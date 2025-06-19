@@ -30,6 +30,28 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
 import e2su.utbm.sy43project.ui.views.ActivityPost
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.window.Dialog
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import androidx.compose.foundation.layout.Row
+import e2su.utbm.sy43project.ui.components.CircularImage
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
+import androidx.compose.foundation.Image
+import e2su.utbm.sy43project.R
+import coil3.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -38,15 +60,13 @@ fun ActivitiesThreadScreen(
     requestModel: RetrieveDataViewModel<List<NoobleApiActivityModel>>,
     modifier: Modifier = Modifier
 ) {
-    var loadNext by remember {
-        mutableStateOf(true)
-    }
+    var loadNext by remember { mutableStateOf(true) }
 
-    var currentLoadedNotifications = remember {
-        mutableStateListOf<NoobleApiActivityModel?>()
-    }
+    var currentLoadedNotifications = remember { mutableStateListOf<NoobleApiActivityModel?>() }
 
     var ptrState = rememberPullToRefreshState()
+
+    var selectedActivity by remember { mutableStateOf<NoobleApiActivityModel?>(null) }
 
     if (loadNext)
     {
@@ -121,7 +141,10 @@ fun ActivitiesThreadScreen(
                                     ActivityPost(
                                         activity.data.title,
                                         activity.data.date,
-                                        activity.data.iconName
+                                        activity.data.iconName,
+                                        onClick = {
+                                            selectedActivity = activity
+                                        }
                                     )
                                 }
                             }
@@ -137,6 +160,143 @@ fun ActivitiesThreadScreen(
             }
         }
     }
-
+    selectedActivity?.let { activity ->
+        ActivityDetailsDialog(
+            requestModel = requestModel,
+            activity = activity,
+            onDismiss = { selectedActivity = null }
+        )
+    }
 }
 
+@Composable
+fun ActivityDetailsDialog(
+    requestModel: RetrieveDataViewModel<List<NoobleApiActivityModel>>,
+    activity: NoobleApiActivityModel,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    var creatorProfile by remember { mutableStateOf<NoobleApiAccountProfileModel?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(activity.data.creator) {
+        try {
+            isLoading = true
+            val profileInfo = requestModel.getNoobleApi().profiles.getInformation(activity.data.creator)
+            creatorProfile = profileInfo
+            isLoading = false
+        } catch (e: Exception) {
+            error = "Impossible de charger les informations du profil"
+            isLoading = false
+        }
+    }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // En-tête avec informations du créateur
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Avatar du créateur
+                    if (isLoading) {
+                        CircularProgressIndicator(modifier = Modifier.size(48.dp))
+                    } else if (creatorProfile != null) {
+                        AsyncImage(
+                            model = creatorProfile?.profileImage,
+                            contentDescription = "Photo de profil",
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        CircularImage(
+                            imageRes = R.drawable.profile,
+                            size = 48
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    // Nom et prénom du créateur
+                    Column {
+                        if (isLoading) {
+                            Text("Chargement...")
+                        } else if (creatorProfile != null) {
+                            Text(
+                                "${creatorProfile?.firstName} ${creatorProfile?.lastName}",
+                                fontWeight = FontWeight.Bold
+                            )
+                        } else if (error != null) {
+                            Text(error!!)
+                        }
+
+                        // Date formatée
+                        val datetime = activity.data.date
+                        Text(
+                            "${datetime}",
+                            color = Color.Gray,
+                            fontSize = 12.sp
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Icône du post
+                    CircularImage(
+                        imageRes = when(activity.data.iconName) {
+                            "account" -> R.drawable.profile
+                            "class" -> R.drawable.book
+                            "role" -> R.drawable.profile
+                            else -> R.drawable.bell
+                        },
+                        size = 40
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Titre
+                Text(
+                    activity.data.title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Contenu
+                Text(
+                    activity.data.content ?: "Pas de contenu disponible",
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Bouton pour fermer
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Fermer")
+                }
+            }
+        }
+    }
+}

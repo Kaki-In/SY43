@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "e2su.utbm.sy43project"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -78,4 +78,5 @@ dependencies {
     implementation("androidx.room:room-runtime:2.7.1")
     ksp("androidx.room:room-compiler:2.7.1")
     implementation("androidx.room:room-ktx:2.7.1")
+    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
 }

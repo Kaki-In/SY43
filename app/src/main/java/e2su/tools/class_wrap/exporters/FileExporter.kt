@@ -26,6 +26,7 @@ import e2su.utbm.sy43project.NoobleApp
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import androidx.core.net.toUri
+import kotlinx.coroutines.Dispatchers
 
 class FileExporter : Exporter<JsonObject>("file") {
 
@@ -42,7 +43,7 @@ class FileExporter : Exporter<JsonObject>("file") {
         Button(onClick = {
             val downloadId = downloadFile(context, src, filename)
             val destinationPath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path}/$filename"
-            coroutineScope.launch {
+            coroutineScope.launch(Dispatchers.IO) {
                 downloadedFileDao?.let { dao: e2su.utbm.sy43project.local.DownloadedFileEntityDAO ->
                     val downloadedFile = DownloadedFileEntity(
                         id = downloadId,

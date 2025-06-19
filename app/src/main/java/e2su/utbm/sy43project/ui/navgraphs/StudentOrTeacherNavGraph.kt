@@ -6,22 +6,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
+import e2su.utbm.sy43project.ui.screens.common.ClassScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.ClassSelectScreen
-import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
+import e2su.utbm.sy43project.ui.screens.common.OverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
 import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherHomeScreen
-import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherSettingsScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 
@@ -63,35 +64,33 @@ fun StudentOrTeacherNavGraph(
         navController.navigate(StudentOrTeacherNavRoutes.createClassDetailsRoute(classId))
     }
 
-    StudentOrTeacherNavigationManager.classSelectPageAction .setClickedAction {
+    StudentOrTeacherNavigationManager.classSelectPageAction.setClickedAction {
         navController.navigate(StudentOrTeacherNavRoutes.CLASS_SELECT.route)
     }
 
-    StudentOrTeacherNavigationManager.notificationDetailsPageAction .setClickedAction { notificationId ->
+    StudentOrTeacherNavigationManager.notificationDetailsPageAction.setClickedAction { notificationId ->
         navController.navigate(StudentOrTeacherNavRoutes.createNotificationDetailsRoute(notificationId))
     }
 
-    StudentOrTeacherNavigationManager.profileEditPageAction .setClickedAction {
+    StudentOrTeacherNavigationManager.profileEditPageAction.setClickedAction {
         navController.navigate(StudentOrTeacherNavRoutes.PROFILE_EDIT.route)
     }
 
-    StudentOrTeacherNavigationManager.threadPageAction .setClickedAction {
+    StudentOrTeacherNavigationManager.threadPageAction.setClickedAction {
         viewModel.retrieveThreadRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.ACTIVITY_THREAD.route)
     }
 
-    StudentOrTeacherNavigationManager.settingsPageAction .setClickedAction {
+    StudentOrTeacherNavigationManager.settingsPageAction.setClickedAction {
         navController.navigate(StudentOrTeacherNavRoutes.SETTINGS.route)
     }
 
     NavHost(navController, startDestination = StudentOrTeacherNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
         composable(StudentOrTeacherNavRoutes.HOME.route) {
-            StudentOrTeacherHomeScreen(
-                viewModel
-            )
+            StudentOrTeacherHomeScreen(viewModel)
         }
 
-        composable(StudentOrTeacherNavRoutes.PROFILE.route) {  entry ->
+        composable(StudentOrTeacherNavRoutes.PROFILE.route) { entry ->
             val accountName = entry.arguments?.getString("accountName")!!
 
             ProfileScreen(
@@ -99,7 +98,7 @@ fun StudentOrTeacherNavGraph(
                 accountName,
                 onClassClick = { className ->
                     if (connectedSelfState.account.profile.classes!!.contains(className))
-                    navController.navigate(StudentOrTeacherNavRoutes.createClassOverviewRoute(className))
+                        navController.navigate(StudentOrTeacherNavRoutes.createClassOverviewRoute(className))
                 }
             )
         }
@@ -118,7 +117,7 @@ fun StudentOrTeacherNavGraph(
             )
         }
 
-        composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) {  entry ->
+        composable(StudentOrTeacherNavRoutes.CLASS_OVERVIEW.route) { entry ->
             val className = entry.arguments?.getString("className")!!
 
             ClassOverviewScreen(
@@ -128,9 +127,7 @@ fun StudentOrTeacherNavGraph(
         }
 
         composable(StudentOrTeacherNavRoutes.SHOP.route) {
-            ShopScreen(
-                viewModel = viewModel
-            )
+            ShopScreen(viewModel = viewModel)
         }
 
         composable(
@@ -158,8 +155,35 @@ fun StudentOrTeacherNavGraph(
             )
         }
 
-        composable (StudentOrTeacherNavRoutes.DOWNLOADS.route) {
-            //DownloadsScreen()
+        composable(StudentOrTeacherNavRoutes.DOWNLOADS.route) {
+            val downloads = viewModel.downloadViewModel.downloads.collectAsState().value
+            viewModel.downloadViewModel.getAllDownloads()
+
+            val context = LocalContext.current
+            val openFile: (DownloadedFileEntity) -> Unit = { file ->
+                try {
+                    val fileUri = FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.provider",
+                        File(file.filePath)
+                    )
+
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(fileUri, "application/octet-stream")
+                        // ou setDataAndType(fileUri, file.mimeType ?: "application/octet-stream")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+
+                    context.startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Impossible d'ouvrir le fichier", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            DownloadsScreen(
+                downloadedFiles = downloads,
+                onFileClick = openFile
+            )
         }
 
         composable (StudentOrTeacherNavRoutes.SETTINGS.route) {
@@ -168,7 +192,7 @@ fun StudentOrTeacherNavGraph(
             )
         }
 
-        composable (StudentOrTeacherNavRoutes.ACTIVITY_THREAD.route) {
+        composable(StudentOrTeacherNavRoutes.ACTIVITY_THREAD.route) {
             ActivitiesThreadScreen(
                 requestModel = viewModel.retrieveThreadRequest,
             )
