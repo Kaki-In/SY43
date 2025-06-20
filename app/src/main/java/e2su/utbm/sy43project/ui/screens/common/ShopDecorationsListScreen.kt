@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
+import e2su.tools.class_wrap.extensions.toImageBitmapDefinedInSY43Context
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
@@ -88,7 +89,7 @@ fun ShopDecorationsListScreen(
 
                 try {
                     val thumbnailInput = viewModel.noobleApi.badges.getThumbnail(name, level)
-                    badgeThumbnail = BitmapFactory.decodeStream(thumbnailInput).asImageBitmap()
+                    badgeThumbnail = thumbnailInput.toImageBitmapDefinedInSY43Context()
                 } catch (exc: Exception)
                 {
                     Log.e("ShopDecorationsListScreen", "could not load badge bitmap", exc)
@@ -143,7 +144,7 @@ fun ShopDecorationsListScreen(
                         val decorationThumbnail = viewModel.noobleApi.resources.download(decoration.imageId,
                             NoobleApiResourceType.RESOURCE_TYPE_DECORATION_BANNER)
 
-                        decoration.loadedThumbnail = BitmapFactory.decodeStream(decorationThumbnail).asImageBitmap()
+                        decoration.loadedThumbnail = decorationThumbnail.toImageBitmapDefinedInSY43Context()
                     } catch (exc: Exception) {
 
                     }

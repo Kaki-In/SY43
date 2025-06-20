@@ -24,7 +24,7 @@ class LaunchActionViewModel(noobleApi: NoobleApi): ViewModel()
     private val _requestState = mutableStateOf<CurrentActionUiState>(CurrentActionUiState.Idle)
     val requestState: State<CurrentActionUiState> = _requestState
 
-    suspend fun retrieveData(action: suspend () -> Unit)
+    suspend fun execute(action: suspend () -> Unit)
     {
         viewModelScope.launch {
             _requestState.value = CurrentActionUiState.Loading

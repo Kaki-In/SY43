@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
+import e2su.tools.class_wrap.extensions.toImageBitmapDefinedInSY43Context
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
@@ -70,7 +71,7 @@ fun ProfileScreen(
                     var thumbnail: ImageBitmap?
                     try {
                         val thumbnailInput = requestViewModel.getNoobleApi().badges.getThumbnail(badge.first, badge.second)
-                        thumbnail = BitmapFactory.decodeStream(thumbnailInput).asImageBitmap()
+                        thumbnail = thumbnailInput.toImageBitmapDefinedInSY43Context()
                     } catch ( exc: Exception)
                     {
                         Log.e("ProfileScreen", "could not load badge", exc)
@@ -107,7 +108,7 @@ fun ProfileScreen(
                             price = decorationData.price,
                             name = decorationData.name,
                             imageId = decorationData.image,
-                            loadedThumbnail = BitmapFactory.decodeStream(thumbnail).asImageBitmap()
+                            loadedThumbnail = thumbnail.toImageBitmapDefinedInSY43Context()
                         )
                     } catch (exc: Exception) {
                         Log.e("ProfileScreen", "could not load decoration", exc)

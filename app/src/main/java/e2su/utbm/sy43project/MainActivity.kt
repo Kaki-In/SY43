@@ -8,24 +8,17 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import e2su.utbm.sy43project.api.models.objects.NoobleApiRole
 import e2su.utbm.sy43project.api.service.NoobleApi
 import e2su.utbm.sy43project.viewmodels.MainViewModel
@@ -35,6 +28,7 @@ import e2su.utbm.sy43project.ui.appsides.ConnectedAsStudentOrTeacherAppSide
 import e2su.utbm.sy43project.ui.appsides.DisconnectedAppSide
 import e2su.utbm.sy43project.ui.appsides.LoadingAppSide
 import e2su.utbm.sy43project.ui.popups.BadgePopup
+import e2su.utbm.sy43project.ui.popups.UploadFilePopup
 import e2su.utbm.sy43project.ui.theme.SY43ProjectTheme
 
 class MainActivity : ComponentActivity() {
@@ -53,11 +47,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 )
                 {
-                    when (selfViewModel.selfState.value)
-                    {
-                        is SelfUiState.Unknown ->
-                        {
-                            LaunchedEffect(key1=true) {
+                    when (selfViewModel.selfState.value) {
+                        is SelfUiState.Unknown -> {
+                            LaunchedEffect(key1 = true) {
                                 selfViewModel.updateConnection()
                             }
 
@@ -66,16 +58,14 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        is SelfUiState.Loading ->
-                        {
+                        is SelfUiState.Loading -> {
                             LoadingAppSide(
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
 
-                        is SelfUiState.NoInternet ->
-                        {
-                            Scaffold () { innerPadding ->
+                        is SelfUiState.NoInternet -> {
+                            Scaffold() { innerPadding ->
                                 Column(
                                     modifier = Modifier.padding(innerPadding)
                                 ) {
@@ -92,35 +82,28 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        is SelfUiState.Disconnected, is SelfUiState.CantConnect, is SelfUiState.Connecting ->
-                        {
+                        is SelfUiState.Disconnected, is SelfUiState.CantConnect, is SelfUiState.Connecting -> {
                             DisconnectedAppSide(mainViewModel)
                         }
 
-                        is SelfUiState.Connected ->
-                        {
+                        is SelfUiState.Connected -> {
                             val state = selfViewModel.selfState.value as SelfUiState.Connected
                             val account = state.account
 
-                            when (account.role)
-                            {
-                                NoobleApiRole.ROLE_ADMIN ->
-                                {
+                            when (account.role) {
+                                NoobleApiRole.ROLE_ADMIN -> {
                                     ConnectedAsAdminAppSide(viewModel = mainViewModel)
                                 }
 
-                                NoobleApiRole.ROLE_STUDENT ->
-                                {
+                                NoobleApiRole.ROLE_STUDENT -> {
                                     ConnectedAsStudentOrTeacherAppSide(viewModel = mainViewModel)
                                 }
 
-                                NoobleApiRole.ROLE_TEACHER ->
-                                {
+                                NoobleApiRole.ROLE_TEACHER -> {
                                     ConnectedAsStudentOrTeacherAppSide(viewModel = mainViewModel)
                                 }
 
-                                NoobleApiRole.ROLE_TEACHER_ADMIN ->
-                                {
+                                NoobleApiRole.ROLE_TEACHER_ADMIN -> {
                                 }
                             }
                         }
@@ -140,8 +123,26 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
-                }
 
+                    AnimatedVisibility(
+                        mainViewModel.upLoadingProfileIcon.value != null,
+                        enter = fadeIn() + slideInVertically(),
+                        exit = fadeOut() + slideOutVertically()
+                    ) {
+                        UploadFilePopup(
+                            mainViewModel = mainViewModel,
+                            profileIcon = mainViewModel.upLoadingProfileIcon.value,
+                            onClose = { success ->
+                                mainViewModel.closeUploadFileDialog()
+
+                                if (success)
+                                {
+                                    mainViewModel.selfViewModel.retrieveSentProfileIcons.forget()
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
     }

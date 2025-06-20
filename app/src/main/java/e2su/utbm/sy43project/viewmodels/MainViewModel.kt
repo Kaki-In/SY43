@@ -1,9 +1,14 @@
 package e2su.utbm.sy43project.viewmodels
 
+import android.content.Context
+import android.media.Image
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import e2su.tools.class_wrap.extensions.uriToCroppedImageFile
 import e2su.utbm.sy43project.api.service.NoobleApi
 import e2su.utbm.sy43project.local.DownloadedFileEntity
 import e2su.utbm.sy43project.local.DownloadedFileEntityDAO
@@ -20,6 +25,7 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiFullProfileModel
 import kotlinx.serialization.json.JsonObject
+import java.io.File
 
 class MainViewModel(val noobleApi: NoobleApi) : ViewModel() {
     val selfViewModel = SelfViewModel(noobleApi)
@@ -38,6 +44,9 @@ class MainViewModel(val noobleApi: NoobleApi) : ViewModel() {
     private val _displayedBadge = mutableStateOf<NoobleApiBadgeModel?>(null)
     val displayedBadge: State<NoobleApiBadgeModel?> = _displayedBadge
 
+    private val _upLoadingProfileIcon = mutableStateOf<Pair<ImageBitmap, File>?>(null)
+    val upLoadingProfileIcon: State<Pair<ImageBitmap, File>?> = _upLoadingProfileIcon
+
     val retrieveClassDataViewModel = RetrieveDataViewModel<Triple<NoobleApiClassModel, List<Pair<String, NoobleApiAccountProfileModel>>, NoobleApiAccountProfileModel>>(noobleApi)
 
     fun openBadge(badge: NoobleApiBadgeModel)
@@ -48,6 +57,16 @@ class MainViewModel(val noobleApi: NoobleApi) : ViewModel() {
     fun closeBadge()
     {
         _displayedBadge.value = null
+    }
+
+    fun openUploadFileDialog(context: Context, profileUri: Uri)
+    {
+        _upLoadingProfileIcon.value = uriToCroppedImageFile(context, profileUri)
+    }
+
+    fun closeUploadFileDialog()
+    {
+        _upLoadingProfileIcon.value = null
     }
 
     val downloadViewModel by lazy {
@@ -80,3 +99,5 @@ class DownloadViewModel(private val dao: DownloadedFileEntityDAO) : ViewModel() 
         }
     }
 }
+
+

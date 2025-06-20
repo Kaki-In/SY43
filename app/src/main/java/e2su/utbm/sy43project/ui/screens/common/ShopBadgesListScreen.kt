@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import e2su.tools.class_wrap.extensions.toImageBitmapDefinedInSY43Context
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.ui.views.BadgePreview
@@ -103,7 +104,7 @@ fun ShopBadgesListScreen(
                     val badgeThumbnail = viewModel.noobleApi.badges.getThumbnail(badge.name, badge.level)
 
                     badge.maxLevel = badgeInfo.maxLevel
-                    badge.loadedThumbnail = BitmapFactory.decodeStream(badgeThumbnail).asImageBitmap()
+                    badge.loadedThumbnail = badgeThumbnail.toImageBitmapDefinedInSY43Context()
 
                 }
 
@@ -113,7 +114,7 @@ fun ShopBadgesListScreen(
                     val badgeThumbnail = viewModel.noobleApi.badges.getThumbnail(badge.name, badge.level)
 
                     badge.maxLevel = badgeInfo.maxLevel
-                    badge.loadedThumbnail = BitmapFactory.decodeStream(badgeThumbnail).asImageBitmap()
+                    badge.loadedThumbnail = badgeThumbnail.toImageBitmapDefinedInSY43Context()
 
                 }
 

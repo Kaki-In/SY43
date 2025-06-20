@@ -1,9 +1,8 @@
 package e2su.utbm.sy43project.api.service
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import androidx.compose.ui.graphics.asImageBitmap
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import e2su.tools.class_wrap.extensions.toImageBitmapDefinedInSY43Context
 import e2su.utbm.sy43project.api.models.objects.*
 import e2su.utbm.sy43project.api.models.requests.*
 import e2su.utbm.sy43project.api.models.responses.*
@@ -17,7 +16,6 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
 import okhttp3.ResponseBody
 import okhttp3.java.net.cookiejar.JavaNetCookieJar
 import retrofit2.Retrofit
@@ -170,7 +168,7 @@ interface NoobleApiRetrofitService {
 
     @Multipart
     @POST("/resources/upload")
-    suspend fun uploadFile(@Part("name") name: RequestBody, @Part("type") type: RequestBody, @Part file: RequestBody): UploadResourceResponseModel
+    suspend fun uploadFile(@Part("name") name: RequestBody, @Part("type") type: RequestBody, @Part file: MultipartBody.Part): UploadResourceResponseModel
 
     @GET("/safe")
     suspend fun getSafe(): NoobleApiSafeModel
@@ -374,12 +372,10 @@ class ConnectionApi(service: NoobleApiRetrofitService)
 
         if (result != null && result.profile.profileImage != null)
         {
-            result.profile.loadedProfileImage = BitmapFactory.decodeStream(
-                _service.downloadFile(
-                    result.profile.profileImage,
-                    NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
-                ).byteStream()
-            ).asImageBitmap()
+            result.profile.loadedProfileImage = _service.downloadFile(
+                result.profile.profileImage,
+                NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+            ).toImageBitmapDefinedInSY43Context()
         }
 
         return  result
@@ -461,12 +457,10 @@ class ProfilesApi(service: NoobleApiRetrofitService)
 
         if (profileInformation.profileImage != null && loadImage)
         {
-            profileInformation.loadedProfileImage = BitmapFactory.decodeStream(
-                _service.downloadFile(
-                    profileInformation.profileImage,
-                    NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
-                ).byteStream()
-            ).asImageBitmap()
+            profileInformation.loadedProfileImage = _service.downloadFile(
+                profileInformation.profileImage,
+                NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+            ).toImageBitmapDefinedInSY43Context()
         }
 
         return profileInformation
@@ -479,7 +473,7 @@ class ProfilesApi(service: NoobleApiRetrofitService)
         )
     }
 
-    suspend fun update(firstName: String, lastName: String, profileImage: String, activeDecoration: String, activeBadges: List<String>, description: String)
+    suspend fun update(firstName: String, lastName: String, profileImage: String?, activeDecoration: String?, activeBadges: List<String>, description: String)
     {
         return _service.updateProfile(
             UpdateProfileRequestModel(firstName, lastName, profileImage, activeDecoration, activeBadges, description)
@@ -512,14 +506,18 @@ class ResourcesApi(service: NoobleApiRetrofitService)
             _service.getSelfFiles(type)
     }
 
-    suspend fun upload(fileName: String, fileType: NoobleApiResourceType, file: File): UploadResourceResponseModel
+    suspend fun upload(fileName: String, fileContentName: String, fileType: NoobleApiResourceType, file: File): UploadResourceResponseModel
     {
-        val file = file.asRequestBody("*/*".toMediaTypeOrNull())
+        val requestFile = file.asRequestBody("*/*".toMediaTypeOrNull())
 
         val fileNameArgument = fileName.toRequestBody("text/plain".toMediaTypeOrNull())
         val fileTypeArgument = fileType.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-        return _service.uploadFile(fileNameArgument, fileTypeArgument, file)
+        return _service.uploadFile(fileNameArgument, fileTypeArgument, MultipartBody.Part.createFormData(
+            name = "file",
+            filename = fileContentName,
+            body = requestFile
+        ))
     }
 
 }
