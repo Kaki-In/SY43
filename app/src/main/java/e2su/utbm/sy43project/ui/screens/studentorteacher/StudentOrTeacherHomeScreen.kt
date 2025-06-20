@@ -14,6 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -37,6 +41,22 @@ fun StudentOrTeacherHomeScreen(
 {
     val account = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
 
+    var refreshes by remember {
+        mutableStateOf(false)
+    }
+
+    if (refreshes)
+    {
+        LaunchedEffect(true) {
+            viewModel.selfViewModel.updateConnection(false)
+
+            viewModel.classesRequest.forget()
+            viewModel.threadRequest.forget()
+
+            refreshes = false
+        }
+    }
+
     PullToRefreshBox(
         isRefreshing = (
             viewModel.classesRequest.requestState.value is CurrentDataRequestUiState.Loading
@@ -44,8 +64,7 @@ fun StudentOrTeacherHomeScreen(
             viewModel.threadRequest.requestState.value is CurrentDataRequestUiState.Loading
         ),
         onRefresh = {
-            viewModel.classesRequest.forget()
-            viewModel.threadRequest.forget()
+            refreshes = true
         },
         modifier = Modifier.fillMaxSize()
     ) {

@@ -3,6 +3,7 @@ package e2su.utbm.sy43project.viewmodels
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Picture
+import android.media.Image
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +16,7 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiFullProfileModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
 import e2su.utbm.sy43project.api.models.objects.NoobleApiSafeModel
 import e2su.utbm.sy43project.api.models.responses.ForgotPasswordResponseModel
@@ -35,7 +37,8 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
     val selfState: State<SelfUiState> = _selfState
 
     val retrieveSafeRequest = RetrieveDataViewModel<NoobleApiSafeModel>(noobleApi)
-    val retrieveProfileRequest = RetrieveDataViewModel<NoobleApiFullProfileModel>(noobleApi)
+    val retrieveSentProfileIcons = RetrieveDataViewModel<List<ImageBitmap>>(noobleApi)
+    val retrieveSentDecorationsBanner = RetrieveDataViewModel<List<ImageBitmap>>(noobleApi)
 
     suspend fun logout()
     {

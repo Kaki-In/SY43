@@ -166,7 +166,7 @@ interface NoobleApiRetrofitService {
     suspend fun getSelfFiles(): List<NoobleApiResourceModel>
 
     @GET("/resources/get-self-files")
-    suspend fun getSelfFiles(request: GetSelfFilesWithTypeRequestModel): List<NoobleApiResourceModel>
+    suspend fun getSelfFiles(@Query("type") type: NoobleApiResourceType): List<NoobleApiResourceModel>
 
     @Multipart
     @POST("/resources/upload")
@@ -509,9 +509,7 @@ class ResourcesApi(service: NoobleApiRetrofitService)
         return if (type == null)
             _service.getSelfFiles()
         else
-            _service.getSelfFiles(
-                GetSelfFilesWithTypeRequestModel(type)
-            )
+            _service.getSelfFiles(type)
     }
 
     suspend fun upload(fileName: String, fileType: NoobleApiResourceType, file: File): UploadResourceResponseModel

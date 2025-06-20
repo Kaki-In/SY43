@@ -16,5 +16,5 @@ data class NoobleApiResourceModel (
     @SerialName("sent_date") val sentDate: Instant,
     @SerialName("sender") val sender: String,
     @SerialName("size") val size: Int,
-    @SerialName("file_type") val filetype: NoobleApiResourceType
+    @SerialName("filetype") val filetype: NoobleApiResourceType
 )

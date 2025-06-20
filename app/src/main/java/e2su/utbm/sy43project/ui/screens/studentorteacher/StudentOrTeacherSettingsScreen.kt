@@ -21,7 +21,7 @@ fun StudentOrTeacherSettingsScreen(
     {
         Text(
             text = "Settings",
-            fontSize = 20.sp,
+            fontSize = 28.sp,
             modifier = Modifier.padding(4.dp)
         )
 

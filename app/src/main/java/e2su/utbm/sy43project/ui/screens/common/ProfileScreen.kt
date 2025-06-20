@@ -32,6 +32,7 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiFullProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
+import e2su.utbm.sy43project.api.models.objects.NoobleApiRole
 import e2su.utbm.sy43project.ui.views.ClassPreview
 import e2su.utbm.sy43project.ui.views.ProfileBadgesListView
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
@@ -56,7 +57,7 @@ fun ProfileScreen(
 
                 val classes = mutableListOf<NoobleApiClassModel>()
 
-                for (classId in information.classes!!)
+                for (classId in information.classes?:listOf())
                 {
                     classes.add(requestViewModel.getNoobleApi().classes.getData(classId))
                 }
@@ -228,24 +229,28 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(
-                        text = "Followed classes :",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
+                    if (profileData.role != NoobleApiRole.ROLE_ADMIN)
+                    {
+                        Text(
+                            text = "Followed classes :",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
 
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        for (noobleClass in classesData) {
-                            ClassPreview(
-                                noobleClass,
-                                onClassClicked = {
-                                    onClassClick(noobleClass.id)
-                                }
-                            )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            for (noobleClass in classesData) {
+                                ClassPreview(
+                                    noobleClass,
+                                    onClassClicked = {
+                                        onClassClick(noobleClass.id)
+                                    }
+                                )
+                            }
                         }
+
                     }
 
                 }

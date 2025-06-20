@@ -178,7 +178,7 @@ fun StudentOrTeacherNavGraph(
 
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         setDataAndType(fileUri, "application/octet-stream")
-                        // ou setDataAndType(fileUri, file.mimeType ?: "application/octet-stream")
+                        // setDataAndType(fileUri, file.mimeType ?: "application/octet-stream")
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
 
