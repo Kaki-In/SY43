@@ -36,6 +36,7 @@ fun ConnectedAsAdminAppSide(
             onOpenHome = {
             },
             onOpenClasses = {
+                AdminNavigationManager.classListPageAction.navigate()
             },
             onOpenThread = {
             },

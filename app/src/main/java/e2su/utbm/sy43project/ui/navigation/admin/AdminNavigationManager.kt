@@ -5,5 +5,6 @@ import e2su.tools.navigate.NeedsIdNavigateActionManager
 
 object AdminNavigationManager {
     val profilePageAction = NeedsIdNavigateActionManager<String>()
+    val classListPageAction = NavigateActionManager()
 }
 

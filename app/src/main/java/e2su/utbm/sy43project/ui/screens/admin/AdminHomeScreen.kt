@@ -43,8 +43,8 @@ fun AdminHomeScreen(navController: NavHostController, viewModel: MainViewModel, 
             Text("Se déconnecter")
         }
 
-        Button(onClick = { navController.navigate("class_overview") }) {
-            Text(text = "Go to class overview Screen")
+        Button(onClick = { navController.navigate("class_list") }) {
+            Text(text = "Go to class list Screen")
         }
         Button(onClick = { navController.navigate("class") }) {
             Text(text = "Go to class Screen")

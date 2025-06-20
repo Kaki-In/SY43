@@ -11,6 +11,7 @@ import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
+import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
@@ -53,15 +54,6 @@ fun AdminNavGraph(
             )
         }
 
-        composable(AdminNavRoutes.CLASS.route) { backStackEntry ->
-            val classId = backStackEntry.arguments?.getString("className") ?: ""
-
-            ClassDetailsScreen(
-                mainViewModel = viewModel,
-                classId
-            )
-        }
-
         composable(AdminNavRoutes.ACTIVITY.route) {
             ActivityScreen()
         }
@@ -80,6 +72,17 @@ fun AdminNavGraph(
         }
 
         composable(AdminNavRoutes.SHOP.route) {
+        }
+
+        composable(AdminNavRoutes.CLASS_LIST.route){
+            AdminAllClassesScreen(
+                classesRequestViewModel = viewModel.retrieveClassesListRequest,
+                onClassClicked = { className ->
+                    navController.navigate(
+                        AdminNavRoutes.CLASS_DETAIL.route + "/$className"
+                    )
+                },
+            )
         }
 
         composable(
