@@ -10,12 +10,14 @@ enum class AdminNavRoutes(val route: String) {
     SETTINGS("settings"),
     DOWNLOADS("downloads"),
     ALL_CLASSES("all_classes"),
-    ALL_USERS("all_users");
+    ALL_USERS("all_users"),
+    EDIT_USER_ACCOUNT("edit_user/{accountId}");
 
     companion object {
         fun createClassOverviewRoute(className: String) = "class_overview/$className"
         fun createClassDetailsRoute(className: String) = "class/$className"
         fun createProfileRoute(accountName: String) = "profile/$accountName"
+        fun createEditUserRoute(accountName: String) = "edit_user/$accountName"
     }
 }
 

@@ -20,6 +20,7 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
 import e2su.utbm.sy43project.api.models.responses.ListBadgesResponseModel
 import e2su.utbm.sy43project.NoobleApp
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
@@ -50,6 +51,8 @@ class MainViewModel(val noobleApi: NoobleApi) : ViewModel() {
     val retrieveClassDataViewModel = RetrieveDataViewModel<Triple<NoobleApiClassModel, List<Pair<String, NoobleApiAccountProfileModel>>, NoobleApiAccountProfileModel>>(noobleApi)
 
     val retrieveAllClassesRequest = RetrieveDataViewModel<List<NoobleApiClassModel>>(noobleApi)
+
+    val retrieveAllStudentsClassRequest = RetrieveDataViewModel<List<NoobleApiAccountModel>>(noobleApi)
 
     fun openBadge(badge: NoobleApiBadgeModel)
     {

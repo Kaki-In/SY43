@@ -2,7 +2,6 @@ package e2su.utbm.sy43project.ui.navgraphs
 
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,18 +11,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.local.DownloadedFileEntity
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminSettingsScreen
+import e2su.utbm.sy43project.ui.screens.admin.SelectManagingUserScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
@@ -90,6 +87,10 @@ fun AdminNavGraph(
         navController.navigate(AdminNavRoutes.ALL_USERS.route)
     }
 
+    AdminNavigationManager.editUserPageAccountAction.setClickedAction {
+        navController.navigate(AdminNavRoutes.createEditUserRoute(it))
+    }
+
     NavHost(navController, startDestination = AdminNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
         composable(AdminNavRoutes.HOME.route) {
             AdminHomeScreen(viewModel)
@@ -102,8 +103,7 @@ fun AdminNavGraph(
                 viewModel,
                 accountName,
                 onClassClick = { className ->
-                    if (connectedSelfState.account.profile.classes!!.contains(className))
-                        AdminNavigationManager.classOverviewPageAction.navigate(className)
+                    AdminNavigationManager.classOverviewPageAction.navigate(className)
                 }
             )
         }
@@ -193,7 +193,17 @@ fun AdminNavGraph(
         }
 
         composable(AdminNavRoutes.ALL_USERS.route) {
-            Text("No implemented yet")
+            SelectManagingUserScreen(
+                viewModel
+            )
+            {
+                AdminNavigationManager.editUserPageAccountAction.navigate(it)
+            }
         }
+
+        composable(AdminNavRoutes.EDIT_USER_ACCOUNT.route) {
+            Text("Edit User Account route")
+        }
+
     }
 }
