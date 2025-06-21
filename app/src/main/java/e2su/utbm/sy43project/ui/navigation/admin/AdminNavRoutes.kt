@@ -8,7 +8,8 @@ enum class AdminNavRoutes(val route: String) {
     CLASS_DETAIL("class/{className}"),
     SHOP("shop"),
     SETTINGS("settings"),
-    DOWNLOADS("downloads");
+    DOWNLOADS("downloads"),
+    ALL_CLASSES("all_classes");
 
     companion object {
         fun createClassOverviewRoute(className: String) = "class_overview/$className"

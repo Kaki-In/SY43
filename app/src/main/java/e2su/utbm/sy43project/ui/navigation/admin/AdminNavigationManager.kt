@@ -8,6 +8,7 @@ object AdminNavigationManager {
     val profilePageAction = NeedsIdNavigateActionManager<String>()
     val threadPageAction = NavigateActionManager()
     val classOverviewPageAction = NeedsIdNavigateActionManager<String>()
+    val allClassesPageAction = NavigateActionManager()
     val classDetailsPageAction = NeedsIdNavigateActionManager<String>()
     val shopPageAction = NavigateActionManager()
     val settingsPageAction = NavigateActionManager()

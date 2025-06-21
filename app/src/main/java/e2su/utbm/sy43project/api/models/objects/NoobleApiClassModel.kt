@@ -13,7 +13,7 @@ import kotlinx.serialization.json.JsonObject
 data class NoobleApiClassModel (
     @SerialName("id") val id: String,
     @SerialName("description") val description: String,
-    @SerialName("lastModification") val lastModification: @ParameterName("last_modification") Instant,
-    @SerialName("lastModifier") val lastModifier: @ParameterName("last_modifier") String,
+    @SerialName("last_modification") val lastModification: @ParameterName("last_modification") Instant,
+    @SerialName("last_modifier") val lastModifier: @ParameterName("last_modifier") String,
     @SerialName("name") val name: String
 )

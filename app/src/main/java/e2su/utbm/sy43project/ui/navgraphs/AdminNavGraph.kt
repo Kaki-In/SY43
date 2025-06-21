@@ -25,11 +25,9 @@ import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminSettingsScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
-import e2su.utbm.sy43project.ui.screens.common.ActivityScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.DownloadsScreen
-import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
 import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
@@ -50,6 +48,11 @@ fun AdminNavGraph(
     AdminNavigationManager.classOverviewPageAction.setClickedAction { classId ->
         viewModel.overviewClassRequest.forget()
         navController.navigate(AdminNavRoutes.createClassOverviewRoute(classId))
+    }
+
+    AdminNavigationManager.allClassesPageAction.setClickedAction {
+        viewModel.retrieveAllClassesRequest.forget()
+        navController.navigate(AdminNavRoutes.ALL_CLASSES.route)
     }
 
     AdminNavigationManager.downloadsPageAction.setClickedAction {
@@ -106,7 +109,19 @@ fun AdminNavGraph(
 
             ClassOverviewScreen(
                 classId = className,
-                requestViewModel = viewModel.overviewClassRequest
+                requestViewModel = viewModel.overviewClassRequest,
+                onOpenDetails = {
+                    AdminNavigationManager.classDetailsPageAction.navigate(className)
+                }
+            )
+        }
+
+        composable(AdminNavRoutes.ALL_CLASSES.route) {
+            AdminAllClassesScreen(
+                classesRequestViewModel = viewModel.retrieveAllClassesRequest,
+                onClassClicked = {
+                    AdminNavigationManager.classOverviewPageAction.navigate(it)
+                }
             )
         }
 

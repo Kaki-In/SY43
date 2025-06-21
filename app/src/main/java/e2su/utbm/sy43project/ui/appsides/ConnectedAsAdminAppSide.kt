@@ -50,7 +50,7 @@ fun ConnectedAsAdminAppSide(
                 AdminNavigationManager.threadPageAction.navigate()
             },
             onOpenClasses = {
-//                AdminNavigationManager.classSelectPageAction.navigate()
+                AdminNavigationManager.allClassesPageAction.navigate()
             },
             viewModel = viewModel,
             onToggleDrawerState = {

@@ -19,11 +19,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiRole
 import e2su.utbm.sy43project.api.service.NoobleApi
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import e2su.utbm.sy43project.ui.appsides.ConnectedAsAdminAppSide
+import e2su.utbm.sy43project.ui.appsides.ConnectedAsAdminTeacherAppSide
 import e2su.utbm.sy43project.ui.appsides.ConnectedAsStudentOrTeacherAppSide
 import e2su.utbm.sy43project.ui.appsides.DisconnectedAppSide
 import e2su.utbm.sy43project.ui.appsides.LoadingAppSide
@@ -104,6 +106,7 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 NoobleApiRole.ROLE_TEACHER_ADMIN -> {
+                                    ConnectedAsAdminTeacherAppSide(viewModel = mainViewModel)
                                 }
                             }
                         }

@@ -107,7 +107,7 @@ interface NoobleApiRetrofitService {
     suspend fun getClassAccounts(@Query("class_id") request: String): List<String>
 
     @GET("/classes/search")
-    suspend fun searchClass(request: SearchClassRequestModel): List<NoobleApiClassModel>
+    suspend fun searchClass(@Query("pattern") pattern:String, @Query("offset") offset: Int, @Query("count") count: Int): List<NoobleApiClassModel>
 
     @POST("/classes/remove-account")
     suspend fun removeAccountFromClass(@Body request: RemoveAccountFromClassRequestModel)
@@ -349,7 +349,7 @@ class ClassesApi(service: NoobleApiRetrofitService)
     suspend fun searchClass(pattern: String, count: Int, offset: Int): List<NoobleApiClassModel>
     {
         return _service.searchClass(
-            SearchClassRequestModel(pattern, offset, count)
+            pattern, offset, count
         )
     }
 

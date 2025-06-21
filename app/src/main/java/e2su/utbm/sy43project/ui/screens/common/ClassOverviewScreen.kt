@@ -37,6 +37,7 @@ import kotlinx.serialization.json.JsonObject
 fun ClassOverviewScreen(
     classId: String,
     requestViewModel: RetrieveDataViewModel<Pair<NoobleApiClassModel, JsonObject>>,
+    onOpenDetails: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val requestState = requestViewModel.requestState
@@ -94,7 +95,7 @@ fun ClassOverviewScreen(
 
                         IconButton(
                             onClick = {
-                                StudentOrTeacherNavigationManager.classDetailsPageAction.navigate(classId)
+                                onOpenDetails()
                             }
                         ) {
                             Image(

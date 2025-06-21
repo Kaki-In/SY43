@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.local.DownloadedFileEntity
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
@@ -118,7 +119,11 @@ fun StudentOrTeacherNavGraph(
 
             ClassOverviewScreen(
                 classId = className,
-                requestViewModel = viewModel.overviewClassRequest
+                requestViewModel = viewModel.overviewClassRequest,
+                onOpenDetails = {
+                    AdminNavigationManager.classDetailsPageAction.navigate(className)
+                }
+
             )
         }
 
