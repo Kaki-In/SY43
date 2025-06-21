@@ -141,6 +141,9 @@ fun StudentOrTeacherNavGraph(
                 classId,
                 onAccountClicked = {
                     StudentOrTeacherNavigationManager.profilePageAction.navigate(it)
+                },
+                onAddUserClicked = {
+                    StudentOrTeacherNavigationManager.profilePageAction.navigate(it)
                 }
             )
         }

@@ -21,6 +21,7 @@ import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.local.DownloadedFileEntity
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
+import e2su.utbm.sy43project.ui.screens.admin.AdminAddUserToClassScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminSettingsScreen
@@ -39,8 +40,7 @@ import java.io.File
 fun AdminNavGraph(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier
-)
-{
+) {
     val navController = rememberNavController()
 
     val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
@@ -88,6 +88,11 @@ fun AdminNavGraph(
 
     AdminNavigationManager.usersPageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.ALL_USERS.route)
+    }
+
+    AdminNavigationManager.addUserToClass.setClickedAction { classId: String ->
+        viewModel.retrieveClassesListRequest.forget()
+        navController.navigate(AdminNavRoutes.createAddUserToClassRoute(classId))
     }
 
     NavHost(navController, startDestination = AdminNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
@@ -143,6 +148,9 @@ fun AdminNavGraph(
                 classId,
                 onAccountClicked = {
                     AdminNavigationManager.profilePageAction.navigate(it)
+                },
+                onAddUserClicked = {
+                    AdminNavigationManager.addUserToClass.navigate(classId)
                 }
             )
         }
@@ -162,7 +170,6 @@ fun AdminNavGraph(
 
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         setDataAndType(fileUri, "application/octet-stream")
-                        // setDataAndType(fileUri, file.mimeType ?: "application/octet-stream")
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
 
@@ -178,12 +185,8 @@ fun AdminNavGraph(
             )
         }
 
-        composable (AdminNavRoutes.SETTINGS.route) {
-
-            AdminSettingsScreen(
-                viewModel
-            )
-
+        composable(AdminNavRoutes.SETTINGS.route) {
+            AdminSettingsScreen(viewModel)
         }
 
         composable(AdminNavRoutes.ACTIVITY_THREAD.route) {
@@ -194,6 +197,17 @@ fun AdminNavGraph(
 
         composable(AdminNavRoutes.ALL_USERS.route) {
             Text("No implemented yet")
+        }
+
+        composable(AdminNavRoutes.ADD_USER_TO_CLASS.route) { backStackEntry ->
+            val classId = backStackEntry.arguments?.getString("className") ?: ""
+
+            AdminAddUserToClassScreen(
+                mainViewModel = viewModel,
+                classId = classId,
+                onBack = { navController.popBackStack() },
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }

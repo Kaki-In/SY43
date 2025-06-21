@@ -32,6 +32,10 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import okhttp3.internal.connection.RouteDatabase
 import java.time.Month
+import e2su.utbm.sy43project.api.models.objects.NoobleApiRole
+import androidx.compose.material3.Button
+import androidx.lifecycle.viewmodel.compose.viewModel
+import e2su.utbm.sy43project.viewmodels.SelfUiState
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +44,7 @@ fun ClassDetailsScreen(
     mainViewModel: MainViewModel,
     classId: String,
     onAccountClicked: (String) -> Unit,
+    onAddUserClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (mainViewModel.retrieveClassDataViewModel.requestState.value is CurrentDataRequestUiState.Idle)
@@ -76,6 +81,8 @@ fun ClassDetailsScreen(
             is CurrentDataRequestUiState.Success ->
             {
                 val (classData, classAccounts, lastModifier) = (mainViewModel.retrieveClassDataViewModel.requestState.value as CurrentDataRequestUiState.Success).responseData
+
+                val connectedSelfState = mainViewModel.selfViewModel.selfState.value as SelfUiState.Connected
 
                 val modificationDateTime = classData.lastModification.toLocalDateTime(TimeZone.UTC)
 
@@ -131,10 +138,25 @@ fun ClassDetailsScreen(
 
                     Spacer(Modifier.height(20.dp))
 
-                    Text(
-                        "Accounts in this class",
-                        fontSize = 20.sp
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Accounts in this class",
+                            fontSize = 20.sp
+                        )
+
+                        //if (connectedSelfState.account.role == NoobleApiRole.ROLE_ADMIN) {
+                            Button(
+                                onClick = { onAddUserClicked(classId) },
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) {
+                                Text("Ajouter un utilisateur")
+                            }
+                        //}
+                    }
 
                     Column(
                         verticalArrangement = Arrangement.spacedBy(10.dp),

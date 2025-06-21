@@ -37,8 +37,6 @@ import e2su.utbm.sy43project.ui.navgraphs.DisconnectedNavGraph
 import e2su.utbm.sy43project.ui.navigation.disconnected.DisconnectedNavigationManager
 import e2su.utbm.sy43project.ui.theme.NoobleGreen
 
-// TODO: Check how to round the corners of the the buttons now that I changed their background color
-
 @Composable
 fun LoginScreen(
     viewModel: SelfViewModel,
