@@ -32,7 +32,6 @@ fun DisconnectedDrawer(
 ) {
     val scope = rememberCoroutineScope()
     val items: List<DisconnectedDrawerItem> = listOf(
-        DisconnectedDrawerItem("Login", Icons.AutoMirrored.Filled.Login) { DisconnectedNavigationManager.connectPageAction.navigate() },
         DisconnectedDrawerItem("Documents", Icons.Default.Download) { DisconnectedNavigationManager.downloadsPageAction.navigate() },
     )
 

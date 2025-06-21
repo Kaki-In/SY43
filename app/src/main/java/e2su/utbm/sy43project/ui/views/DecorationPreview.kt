@@ -94,13 +94,13 @@ fun DecorationPreview(
                     Image(
                         painter = painterResource(R.drawable.profile),
                         contentDescription = "User profile image",
-                        modifier = modifier.clip(RoundedCornerShape(4.dp))
+                        modifier = modifier.clip(RoundedCornerShape(4.dp)).size(50.dp).padding(10.dp)
                     )
                 } else {
                     Image(
                         bitmap = profileImage,
                         contentDescription = "User profile image",
-                        modifier = modifier.clip(RoundedCornerShape(4.dp))
+                        modifier = modifier.clip(RoundedCornerShape(4.dp)).size(50.dp).padding(10.dp)
                     )
                 }
 

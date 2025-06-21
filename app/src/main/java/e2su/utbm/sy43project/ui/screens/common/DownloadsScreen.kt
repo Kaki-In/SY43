@@ -20,8 +20,8 @@ fun DownloadsScreen(
     Column(modifier = modifier.padding(16.dp)) {
         Text("Documents téléchargés", style = MaterialTheme.typography.headlineSmall)
         Spacer(Modifier.height(16.dp))
-        LazyColumn {
-            items(downloadedFiles) { file ->
+        Column {
+            for (file in downloadedFiles) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

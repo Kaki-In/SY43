@@ -1,8 +1,17 @@
 package e2su.utbm.sy43project.ui.screens.admin
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -10,56 +19,136 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import e2su.utbm.sy43project.api.models.objects.NoobleApiActivityModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
+import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
+import e2su.utbm.sy43project.ui.views.ActivityPost
+import e2su.utbm.sy43project.ui.views.ClassPreview
+import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
+import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminHomeScreen(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier)
+fun AdminHomeScreen(
+    viewModel: MainViewModel,
+    modifier: Modifier = Modifier
+)
 {
     val account = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
 
-    var logout by remember {
+    var refreshes by remember {
         mutableStateOf(false)
     }
 
-    if (logout)
+    if (refreshes)
     {
         LaunchedEffect(true) {
-            viewModel.selfViewModel.logout()
-        }
+            viewModel.selfViewModel.updateConnection(false)
 
-        logout = false
+            viewModel.classesRequest.forget()
+            viewModel.threadRequest.forget()
+
+            refreshes = false
+        }
     }
 
-    Column(modifier) {
-        Text("Bonjour, " + account.profile.firstName + " " + account.profile.lastName + "! Vous êtes connecté en tant qu'administrateur")
-
-        Button(
-            onClick = {
-                logout = true
-            }
+    PullToRefreshBox(
+        isRefreshing = (
+                viewModel.classesRequest.requestState.value is CurrentDataRequestUiState.Loading
+                        ||
+                        viewModel.threadRequest.requestState.value is CurrentDataRequestUiState.Loading
+                ),
+        onRefresh = {
+            refreshes = true
+        },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier.fillMaxSize().verticalScroll(rememberScrollState())
         ) {
-            Text("Se déconnecter")
-        }
+            Text(
+                "Hello, ${account.profile.firstName} ${account.profile.lastName}",
+                fontSize = 30.sp
+            )
 
-        Button(onClick = { navController.navigate("class_list") }) {
-            Text(text = "Go to class list Screen")
-        }
-        Button(onClick = { navController.navigate("class") }) {
-            Text(text = "Go to class Screen")
-        }
-        Button(onClick = { navController.navigate("select") }) {
-            Text(text = "Go to class selection Screen")
-        }
-        Button(onClick = { navController.navigate("profile_edit") }) {
-            Text(text = "Go to profile edit Screen")
-        }
-        Button (onClick = { navController.navigate("prev_border") }) {
-            Text(text = "Border prev")
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .height(2.dp))
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .height(2.dp))
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            AdminHomeThreadOverview(
+                viewModel.threadRequest
+            )
+
         }
     }
 }
 
+@Composable
+fun AdminHomeThreadOverview(
+    threadRequest: RetrieveDataViewModel<List<NoobleApiActivityModel>>,
+    modifier: Modifier = Modifier
+)
+{
+    if (threadRequest.requestState.value is CurrentDataRequestUiState.Idle)
+    {
+        LaunchedEffect(true) {
+            threadRequest.retrieveData {
+                val result = threadRequest.getNoobleApi().thread.getThread(10, 0, true)
+                return@retrieveData result
+            }
+        }
+    }
 
+    Text(
+        "Your recent activities thread",
+        fontSize = 20.sp,
+        modifier = modifier
+    )
+
+    when (threadRequest.requestState.value)
+    {
+        is CurrentDataRequestUiState.Idle, is CurrentDataRequestUiState.Loading ->
+            Text("Loading...", color = Color.Gray)
+
+        is CurrentDataRequestUiState.Success ->
+        {
+            val successThreadRequestState = threadRequest.requestState.value as CurrentDataRequestUiState.Success
+
+            if (successThreadRequestState.responseData.isEmpty())
+            {
+                Text("No unread activity in the activity thread")
+            } else {
+                Spacer(modifier = Modifier.height(10.dp))
+                for (activity in successThreadRequestState.responseData)
+                {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    ActivityPost(activity.data.title, activity.data.date, activity.data.iconName)
+                }
+            }
+        }
+
+        is CurrentDataRequestUiState.Error ->
+        {
+            val errorState = threadRequest.requestState.value as CurrentDataRequestUiState.Error
+            Text("An error occurred while fetching the thread:" + errorState.reason)
+        }
+    }
+}
 

@@ -1,46 +1,56 @@
 package e2su.utbm.sy43project.ui.appsides
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import e2su.utbm.sy43project.ui.components.NoobleDrawer
+import androidx.compose.ui.graphics.Color
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.ui.components.NoobleIntegrated
 import e2su.utbm.sy43project.ui.drawers.AdminDrawer
+import e2su.utbm.sy43project.ui.drawers.StudentOrTeacherDrawer
 import e2su.utbm.sy43project.ui.navgraphs.AdminNavGraph
+import e2su.utbm.sy43project.ui.navgraphs.StudentOrTeacherNavGraph
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun ConnectedAsAdminAppSide(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier
 )
 {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val selfAccount = (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account
 
-    AdminDrawer(
-        drawerState = drawerState
-    )
-    {
+    AdminDrawer (
+        selfViewModel = viewModel.selfViewModel,
+        drawerState = drawerState,
+        modifier = modifier
+    ) {
         NoobleIntegrated(
             onOpenHome = {
-            },
-            onOpenClasses = {
-                AdminNavigationManager.classListPageAction.navigate()
-            },
-            onOpenThread = {
+                AdminNavigationManager.homePageAction.navigate()
             },
             onOpenShop = {
+                AdminNavigationManager.shopPageAction.navigate()
+            },
+            onOpenThread = {
+                AdminNavigationManager.threadPageAction.navigate()
+            },
+            onOpenClasses = {
+//                AdminNavigationManager.classSelectPageAction.navigate()
             },
             viewModel = viewModel,
             onToggleDrawerState = {
@@ -51,14 +61,14 @@ fun ConnectedAsAdminAppSide(
             modifier = modifier,
             content = {
                 AdminNavGraph(
-                    viewModel
+                    viewModel,
+                    modifier = Modifier.fillMaxSize()
                 )
             },
             onProfileClicked = {
                 AdminNavigationManager.profilePageAction.navigate(selfAccount.id)
             }
         )
-
     }
 
 }

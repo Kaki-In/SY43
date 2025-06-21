@@ -2,6 +2,7 @@ package e2su.utbm.sy43project.ui.navgraphs
 
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,6 @@ import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
 import e2su.utbm.sy43project.ui.screens.common.DownloadsScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.ClassSelectScreen
-import e2su.utbm.sy43project.ui.screens.common.ProfileEditScreen
 import e2su.utbm.sy43project.ui.screens.common.ProfileScreen
 import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.ui.screens.studentorteacher.StudentOrTeacherHomeScreen
@@ -76,14 +76,6 @@ fun StudentOrTeacherNavGraph(
         navController.navigate(StudentOrTeacherNavRoutes.CLASS_SELECT.route)
     }
 
-    StudentOrTeacherNavigationManager.notificationDetailsPageAction.setClickedAction { notificationId ->
-        navController.navigate(StudentOrTeacherNavRoutes.createNotificationDetailsRoute(notificationId))
-    }
-
-    StudentOrTeacherNavigationManager.profileEditPageAction.setClickedAction {
-        navController.navigate(StudentOrTeacherNavRoutes.PROFILE_EDIT.route)
-    }
-
     StudentOrTeacherNavigationManager.threadPageAction.setClickedAction {
         viewModel.retrieveThreadRequest.forget()
         navController.navigate(StudentOrTeacherNavRoutes.ACTIVITY_THREAD.route)
@@ -106,13 +98,9 @@ fun StudentOrTeacherNavGraph(
                 accountName,
                 onClassClick = { className ->
                     if (connectedSelfState.account.profile.classes!!.contains(className))
-                        navController.navigate(StudentOrTeacherNavRoutes.createClassOverviewRoute(className))
+                        StudentOrTeacherNavigationManager.classOverviewPageAction.navigate(className)
                 }
             )
-        }
-
-        composable(StudentOrTeacherNavRoutes.NOTIFICATION_DETAILS.route) {
-            ActivityScreen()
         }
 
         composable(StudentOrTeacherNavRoutes.CLASS_SELECT.route) {
@@ -146,20 +134,6 @@ fun StudentOrTeacherNavGraph(
             ClassDetailsScreen(
                 viewModel,
                 classId
-            )
-        }
-
-        composable(StudentOrTeacherNavRoutes.PROFILE_EDIT.route) {
-            ProfileEditScreen(
-                profile = SampleData.sampleProfile,
-                onSaveClick = { updatedProfile ->
-                    // TODO: Appel API pour sauvegarder les modifications
-                },
-                onNavigateToProfile = {
-                    navController.navigate(StudentOrTeacherNavRoutes.PROFILE.route) {
-                        popUpTo(StudentOrTeacherNavRoutes.PROFILE.route) { inclusive = true }
-                    }
-                }
             )
         }
 
