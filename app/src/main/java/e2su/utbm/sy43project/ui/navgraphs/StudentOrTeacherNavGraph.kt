@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.local.DownloadedFileEntity
-import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
@@ -45,6 +44,7 @@ fun StudentOrTeacherNavGraph(
     val navController = rememberNavController()
 
     val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
+    connectedSelfState.account
 
     StudentOrTeacherNavigationManager.classOverviewPageAction.setClickedAction { classId ->
         viewModel.overviewClassRequest.forget()
@@ -121,7 +121,7 @@ fun StudentOrTeacherNavGraph(
                 classId = className,
                 requestViewModel = viewModel.overviewClassRequest,
                 onOpenDetails = {
-                    AdminNavigationManager.classDetailsPageAction.navigate(className)
+                    StudentOrTeacherNavigationManager.classDetailsPageAction.navigate(className)
                 }
 
             )

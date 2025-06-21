@@ -25,6 +25,8 @@ import e2su.utbm.sy43project.ui.screens.admin.AdminAddUserToClassScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminSettingsScreen
+import e2su.utbm.sy43project.ui.screens.admin.ModifyUserAccountScreen
+import e2su.utbm.sy43project.ui.screens.admin.SelectManagingUserScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassOverviewScreen
@@ -95,6 +97,11 @@ fun AdminNavGraph(
         navController.navigate(AdminNavRoutes.createAddUserToClassRoute(classId))
     }
 
+    AdminNavigationManager.editUserPageAccountAction.setClickedAction {
+        viewModel.retrieveAccountRequest.forget()
+        navController.navigate(AdminNavRoutes.createEditUserRoute(it))
+    }
+
     NavHost(navController, startDestination = AdminNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
         composable(AdminNavRoutes.HOME.route) {
             AdminHomeScreen(viewModel)
@@ -107,8 +114,7 @@ fun AdminNavGraph(
                 viewModel,
                 accountName,
                 onClassClick = { className ->
-                    if (connectedSelfState.account.profile.classes!!.contains(className))
-                        AdminNavigationManager.classOverviewPageAction.navigate(className)
+                    AdminNavigationManager.classOverviewPageAction.navigate(className)
                 }
             )
         }
@@ -170,6 +176,7 @@ fun AdminNavGraph(
 
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         setDataAndType(fileUri, "application/octet-stream")
+                        // setDataAndType(fileUri, file.mimeType ?: "application/octet-stream")
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
 
@@ -196,7 +203,12 @@ fun AdminNavGraph(
         }
 
         composable(AdminNavRoutes.ALL_USERS.route) {
-            Text("No implemented yet")
+            SelectManagingUserScreen(
+                viewModel
+            )
+            {
+                AdminNavigationManager.editUserPageAccountAction.navigate(it)
+            }
         }
 
         composable(AdminNavRoutes.ADD_USER_TO_CLASS.route) { backStackEntry ->
@@ -209,5 +221,15 @@ fun AdminNavGraph(
                 modifier = Modifier.fillMaxSize()
             )
         }
+
+        composable(AdminNavRoutes.EDIT_USER_ACCOUNT.route) { backStackEntry ->
+            val accountId = backStackEntry.arguments?.getString("accountId") ?: ""
+
+            ModifyUserAccountScreen(
+                viewModel,
+                accountId = accountId
+            )
+        }
+
     }
 }

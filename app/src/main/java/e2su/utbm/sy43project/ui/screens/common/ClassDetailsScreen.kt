@@ -176,8 +176,7 @@ fun ClassDetailsScreen(
                             {
                                 val profileImage = account.loadedProfileImage
 
-                                if (profileImage == null)
-                                {
+                                if (profileImage == null) {
                                     Image(
                                         painter = painterResource(R.drawable.profile),
                                         contentDescription = "Account image",
@@ -191,13 +190,26 @@ fun ClassDetailsScreen(
                                     )
                                 }
 
-                                Text(
-                                    text = "${account.firstName} ${account.lastName}",
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize = 17.sp,
+                                Column(
                                     modifier = Modifier.weight(1f)
                                 )
+                                {
+                                    Text(
+                                        text = "${account.firstName} ${account.lastName}",
+                                        fontSize = 17.sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
 
+                                    Spacer(Modifier.height(6.dp))
+
+                                    Text(
+                                        text = account.role!!.description,
+                                        fontStyle = FontStyle.Italic,
+                                        fontSize = 13.sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+
+                                }
                             }
                         }
                     }
