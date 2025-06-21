@@ -86,6 +86,10 @@ fun AdminNavGraph(
         navController.navigate(AdminNavRoutes.SETTINGS.route)
     }
 
+    AdminNavigationManager.usersPageAction.setClickedAction {
+        navController.navigate(AdminNavRoutes.ALL_USERS.route)
+    }
+
     NavHost(navController, startDestination = AdminNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
         composable(AdminNavRoutes.HOME.route) {
             AdminHomeScreen(viewModel)
@@ -136,7 +140,10 @@ fun AdminNavGraph(
 
             ClassDetailsScreen(
                 viewModel,
-                classId
+                classId,
+                onAccountClicked = {
+                    AdminNavigationManager.profilePageAction.navigate(it)
+                }
             )
         }
 
@@ -183,6 +190,10 @@ fun AdminNavGraph(
             ActivitiesThreadScreen(
                 requestModel = viewModel.retrieveThreadRequest,
             )
+        }
+
+        composable(AdminNavRoutes.ALL_USERS.route) {
+            Text("No implemented yet")
         }
     }
 }

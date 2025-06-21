@@ -56,7 +56,7 @@ fun BadgePreview(
                     onClick = onItemClicked
                 )
                 .padding(14.dp)
-                .height(140.dp)
+                .height(155.dp)
         ) {
             if (reachable)
             {

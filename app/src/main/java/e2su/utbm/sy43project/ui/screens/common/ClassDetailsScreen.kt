@@ -39,6 +39,7 @@ import java.time.Month
 fun ClassDetailsScreen(
     mainViewModel: MainViewModel,
     classId: String,
+    onAccountClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (mainViewModel.retrieveClassDataViewModel.requestState.value is CurrentDataRequestUiState.Idle)
@@ -106,7 +107,7 @@ fun ClassDetailsScreen(
                                 painter = painterResource(R.drawable.profile),
                                 contentDescription = "Last modifier image",
                                 modifier = Modifier.size(30.dp).padding(5.dp).clickable(true){
-                                    StudentOrTeacherNavigationManager.profilePageAction.navigate(classData.lastModifier)
+                                    onAccountClicked(classData.lastModifier)
                                 }
                             )
                         } else {
@@ -114,7 +115,7 @@ fun ClassDetailsScreen(
                                 bitmap = modifierImage,
                                 contentDescription = "Last modifier image",
                                 modifier = Modifier.size(30.dp).padding(5.dp).clickable(true){
-                                    StudentOrTeacherNavigationManager.profilePageAction.navigate(classData.lastModifier)
+                                    onAccountClicked(classData.lastModifier)
                                 }
                             )
                         }
@@ -146,7 +147,7 @@ fun ClassDetailsScreen(
                                     .clip(RoundedCornerShape(5.dp))
                                     .clickable(true)
                                     {
-                                        StudentOrTeacherNavigationManager.profilePageAction.navigate(accountId)
+                                        onAccountClicked(accountId)
                                     }
                                     .padding(10.dp)
                             )

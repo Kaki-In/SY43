@@ -138,7 +138,10 @@ fun StudentOrTeacherNavGraph(
 
             ClassDetailsScreen(
                 viewModel,
-                classId
+                classId,
+                onAccountClicked = {
+                    StudentOrTeacherNavigationManager.profilePageAction.navigate(it)
+                }
             )
         }
 

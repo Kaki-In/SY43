@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -42,6 +43,7 @@ fun AdminDrawer(
     val scope = rememberCoroutineScope()
     val items: List<AdminDrawerItem> = listOf(
         AdminDrawerItem("Downloads", Icons.Default.Download) { AdminNavigationManager.downloadsPageAction.navigate() },
+        AdminDrawerItem("Manage users", Icons.Default.People) { AdminNavigationManager.usersPageAction.navigate() },
         AdminDrawerItem("Account settings", Icons.Default.Settings) { AdminNavigationManager.settingsPageAction.navigate() },
         AdminDrawerItem("Logout", Icons.Default.Logout) {
             scope.launch{
