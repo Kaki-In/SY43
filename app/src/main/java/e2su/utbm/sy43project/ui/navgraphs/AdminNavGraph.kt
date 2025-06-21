@@ -20,6 +20,7 @@ import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminSettingsScreen
+import e2su.utbm.sy43project.ui.screens.admin.ModifyUserAccountScreen
 import e2su.utbm.sy43project.ui.screens.admin.SelectManagingUserScreen
 import e2su.utbm.sy43project.ui.screens.common.ActivitiesThreadScreen
 import e2su.utbm.sy43project.ui.screens.common.ClassDetailsScreen
@@ -88,6 +89,7 @@ fun AdminNavGraph(
     }
 
     AdminNavigationManager.editUserPageAccountAction.setClickedAction {
+        viewModel.retrieveAccountRequest.forget()
         navController.navigate(AdminNavRoutes.createEditUserRoute(it))
     }
 
@@ -201,8 +203,13 @@ fun AdminNavGraph(
             }
         }
 
-        composable(AdminNavRoutes.EDIT_USER_ACCOUNT.route) {
-            Text("Edit User Account route")
+        composable(AdminNavRoutes.EDIT_USER_ACCOUNT.route) { backStackEntry ->
+            val accountId = backStackEntry.arguments?.getString("accountId") ?: ""
+
+            ModifyUserAccountScreen(
+                viewModel,
+                accountId = accountId
+            )
         }
 
     }

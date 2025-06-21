@@ -51,8 +51,13 @@ class MainViewModel(val noobleApi: NoobleApi) : ViewModel() {
     val retrieveClassDataViewModel = RetrieveDataViewModel<Triple<NoobleApiClassModel, List<Pair<String, NoobleApiAccountProfileModel>>, NoobleApiAccountProfileModel>>(noobleApi)
 
     val retrieveAllClassesRequest = RetrieveDataViewModel<List<NoobleApiClassModel>>(noobleApi)
-
     val retrieveAllStudentsClassRequest = RetrieveDataViewModel<List<NoobleApiAccountModel>>(noobleApi)
+
+    val retrieveAccountRequest = RetrieveDataViewModel<NoobleApiAccountModel>(noobleApi)
+
+
+    val applyAccountRoleRequest = LaunchActionViewModel(noobleApi)
+    val applyAccountMailRequest = LaunchActionViewModel(noobleApi)
 
     fun openBadge(badge: NoobleApiBadgeModel)
     {

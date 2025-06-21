@@ -64,6 +64,9 @@ interface NoobleApiRetrofitService {
     @GET("/accounts/search")
     suspend fun searchAccount(@Query("pattern") pattern:String, @Query("offset") offset: Int, @Query("count") count: Int): List<NoobleApiAccountModel>
 
+    @GET("/accounts/get-info")
+    suspend fun getAccountInformation(@Query("user_id") userId:String): NoobleApiAccountModel
+
     @POST("/accounts/update-password")
     suspend fun updateAccountPassword(request: UpdatePasswordRequestModel)
 
@@ -234,6 +237,11 @@ class AccountsApi(service: NoobleApiRetrofitService)
         return _service.searchAccount(
             pattern, offset, count
         )
+    }
+
+    suspend fun getAccountInformation(accountId: String): NoobleApiAccountModel
+    {
+        return _service.getAccountInformation(accountId)
     }
 }
 

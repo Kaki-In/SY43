@@ -44,6 +44,7 @@ fun StudentOrTeacherNavGraph(
     val navController = rememberNavController()
 
     val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
+    connectedSelfState.account
 
     StudentOrTeacherNavigationManager.classOverviewPageAction.setClickedAction { classId ->
         viewModel.overviewClassRequest.forget()

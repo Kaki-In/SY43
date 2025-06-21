@@ -37,8 +37,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import e2su.tools.class_wrap.extensions.toImageBitmapDefinedInSY43Context
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
 import e2su.utbm.sy43project.ui.components.LoadingSpinner
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
@@ -73,7 +75,16 @@ fun SelectManagingUserScreen (
 
                 val newUsers = viewModel.noobleApi.accounts.searchAccount(searchingUser, 5, loadedUsers.size)
 
-                loadedUsers += newUsers
+                for (user in newUsers)
+                {
+                    user.profile.profileImage?.let {
+                        user.profile.loadedProfileImage = viewModel.noobleApi.resources.download(it,
+                            NoobleApiResourceType.RESOURCE_TYPE_PROFILE_ICON
+                        ).toImageBitmapDefinedInSY43Context()
+                    }
+
+                    loadedUsers += user
+                }
 
                 if (newUsers.size != 5)
                     loadedUsers += null
@@ -99,6 +110,7 @@ fun SelectManagingUserScreen (
             )
 
             Button(
+                enabled = viewModel.retrieveAllStudentsClassRequest.requestState.value !is CurrentDataRequestUiState.Loading,
                 onClick = {
                     loadedUsers = listOf()
                     viewModel.retrieveAllStudentsClassRequest.forget()
