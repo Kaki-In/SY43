@@ -142,8 +142,6 @@ fun LoginScreen(
             val selfCantConnectState = (selfState.value as SelfUiState.CantConnect)
             val errorMessage = selfCantConnectState.message
 
-            Log.i("TAG", "LoginBlock: " + errorMessage)
-
             if (errorMessage.startsWith("HTTP 401"))
             {
                 Text("Nom d'utilisateur ou mot de passe incorrect")

@@ -99,8 +99,6 @@ class IntegrationExporter: Exporter<JsonObject>("integration") {
         map: ExportersMap,
         modifier: Modifier
     ) {
-        Log.i("TAG", "createView: " + data.toString())
-
         val height = try {data["height"]?.jsonPrimitive?.int!!} catch (exc: Exception) {data["height"]?.jsonPrimitive?.content!!}
         val src = data["src"]?.jsonPrimitive?.content!!.replace("\"", "\\\"")
         val permissions = data["permissions"]?.jsonArray!!

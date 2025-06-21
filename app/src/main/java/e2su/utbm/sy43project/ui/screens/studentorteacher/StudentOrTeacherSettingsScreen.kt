@@ -1,5 +1,7 @@
 package e2su.utbm.sy43project.ui.screens.studentorteacher
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +27,7 @@ import e2su.utbm.sy43project.viewmodels.LaunchActionViewModel
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentOrTeacherSettingsScreen(
@@ -48,7 +51,7 @@ fun StudentOrTeacherSettingsScreen(
 
     PullToRefreshBox(
         modifier = Modifier.fillMaxSize(),
-        isRefreshing = viewModel.selfViewModel.selfState.value is SelfUiState.Loading,
+        isRefreshing = viewModel.selfViewModel.isStillLoadingProfileDetails(),
         onRefresh = {
             isRefreshing = true
         }

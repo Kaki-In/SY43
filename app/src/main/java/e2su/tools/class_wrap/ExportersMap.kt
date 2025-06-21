@@ -46,8 +46,6 @@ public class ExportersMap {
     @Composable
     fun createView(jsonData: JsonObject, modifier: Modifier = Modifier)
     {
-        Log.i("TAG", "createView: " + jsonData)
-
         val type = jsonData["type"]?.jsonPrimitive?.content!!
         val data = jsonData["data"]!!
 

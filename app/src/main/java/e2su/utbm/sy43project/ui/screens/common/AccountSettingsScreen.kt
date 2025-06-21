@@ -79,6 +79,7 @@ import e2su.utbm.sy43project.viewmodels.CurrentActionUiState
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
+import kotlinx.coroutines.selects.select
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @OptIn(ExperimentalLayoutApi::class)
@@ -450,9 +451,12 @@ fun AccountSettingsScreen(
         )
         {
 
+            val selectedBadges = selectedBadges.map { badgeName -> ownedBadges.filter { badge -> badge.name == badgeName }}.filter { badges -> badges.isNotEmpty() }.map{ badgeList -> badgeList[0] }
+
             DecorationSelection(
                 mainViewModel = viewModel,
                 decorationModel = null,
+                badges = selectedBadges,
                 active = accountData.profile.activeDecoration == null,
                 selected = selectedDecoration == null
             ) {
@@ -475,6 +479,7 @@ fun AccountSettingsScreen(
                 DecorationSelection(
                     mainViewModel = viewModel,
                     decorationModel = decorationModel,
+                    badges = selectedBadges,
                     active = accountData.profile.activeDecoration == decorationModel.id,
                     selected = decorationModel.id == selectedDecoration
                 )
@@ -651,6 +656,7 @@ fun DecorationSelection(
     mainViewModel: MainViewModel,
     selected: Boolean,
     active: Boolean,
+    badges: List<NoobleApiBadgeModel>,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 )
@@ -717,13 +723,13 @@ fun DecorationSelection(
                     Image(
                         painter = painterResource(R.drawable.profile),
                         contentDescription = "User profile image",
-                        modifier = modifier.clip(RoundedCornerShape(4.dp))
+                        modifier = modifier.clip(RoundedCornerShape(4.dp)).size(70.dp).padding(10.dp)
                     )
                 } else {
                     Image(
                         bitmap = profileImage,
                         contentDescription = "User profile image",
-                        modifier = modifier.clip(RoundedCornerShape(4.dp))
+                        modifier = modifier.clip(RoundedCornerShape(4.dp)).size(70.dp).padding(10.dp)
                     )
                 }
 
@@ -746,7 +752,7 @@ fun DecorationSelection(
                         color = if (decorationModel == null) MaterialTheme.colorScheme.onBackground else Color.White
                     )
 
-                    ProfileBadgesListView(listOf()) {}
+                    ProfileBadgesListView(badges) {}
 
                     Text(
                         profile.description,

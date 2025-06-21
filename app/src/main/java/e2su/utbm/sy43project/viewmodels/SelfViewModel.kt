@@ -68,6 +68,14 @@ class SelfViewModel(noobleApi: NoobleApi): ViewModel() {
         _selfState.value = SelfUiState.Unknown
     }
 
+    fun isStillLoadingProfileDetails(): Boolean
+    {
+        return retrieveSafeRequest.requestState.value is CurrentDataRequestUiState.Loading
+                || retrieveSentProfileIcons.requestState.value is CurrentDataRequestUiState.Loading
+                || retrieveSentDecorationsBanner.requestState.value is CurrentDataRequestUiState.Loading
+                || retrieveSafeBadgesRequest.requestState.value is CurrentDataRequestUiState.Loading
+    }
+
     suspend fun updateConnection(markLoads: Boolean = true)
     {
         viewModelScope.launch {

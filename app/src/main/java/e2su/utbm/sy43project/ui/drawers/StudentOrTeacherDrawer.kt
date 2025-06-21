@@ -41,7 +41,7 @@ fun StudentOrTeacherDrawer(
     val scope = rememberCoroutineScope()
     val items: List<StudentOrTeacherDrawerItem> = listOf(
         StudentOrTeacherDrawerItem("Downloads", Icons.Default.Download) { StudentOrTeacherNavigationManager.downloadsPageAction.navigate() },
-        StudentOrTeacherDrawerItem("Settings", Icons.Default.Settings) { StudentOrTeacherNavigationManager.settingsPageAction.navigate() },
+        StudentOrTeacherDrawerItem("Account settings", Icons.Default.Settings) { StudentOrTeacherNavigationManager.settingsPageAction.navigate() },
         StudentOrTeacherDrawerItem("Logout", Icons.Default.Logout) {
             scope.launch{
                 selfViewModel.logout()
