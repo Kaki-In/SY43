@@ -14,6 +14,8 @@ object AdminNavigationManager {
     val shopPageAction = NavigateActionManager()
     val settingsPageAction = NavigateActionManager()
     val downloadsPageAction = NavigateActionManager()
+    val addUserToClass = NeedsIdNavigateActionManager<String>()
     val editUserPageAccountAction = NeedsIdNavigateActionManager<String>()
+    val createUserPageAction = NavigateActionManager()
 }
 

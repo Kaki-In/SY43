@@ -2,6 +2,7 @@ package e2su.utbm.sy43project.ui.navgraphs
 
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +12,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import e2su.utbm.sy43project.data.SampleData
 import e2su.utbm.sy43project.local.DownloadedFileEntity
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavRoutes
 import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
+import e2su.utbm.sy43project.ui.screens.admin.AdminAddUserToClassScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminAllClassesScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminHomeScreen
 import e2su.utbm.sy43project.ui.screens.admin.AdminSettingsScreen
@@ -31,14 +36,14 @@ import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import java.io.File
+import e2su.utbm.sy43project.ui.screens.admin.AdminCreateAccountScreen
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun AdminNavGraph(
     viewModel: MainViewModel,
     modifier: Modifier = Modifier
-)
-{
+) {
     val navController = rememberNavController()
 
     val connectedSelfState = viewModel.selfViewModel.selfState.value as SelfUiState.Connected
@@ -55,6 +60,10 @@ fun AdminNavGraph(
 
     AdminNavigationManager.downloadsPageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.DOWNLOADS.route)
+    }
+
+    AdminNavigationManager.createUserPageAction.setClickedAction {
+        navController.navigate(AdminNavRoutes.CREATE_USER.route)
     }
 
     AdminNavigationManager.profilePageAction.setClickedAction { profileId ->
@@ -86,6 +95,11 @@ fun AdminNavGraph(
 
     AdminNavigationManager.usersPageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.ALL_USERS.route)
+    }
+
+    AdminNavigationManager.addUserToClass.setClickedAction { classId: String ->
+        viewModel.retrieveClassesListRequest.forget()
+        navController.navigate(AdminNavRoutes.createAddUserToClassRoute(classId))
     }
 
     AdminNavigationManager.editUserPageAccountAction.setClickedAction {
@@ -135,6 +149,15 @@ fun AdminNavGraph(
             ShopScreen(viewModel = viewModel)
         }
 
+        composable(AdminNavRoutes.CREATE_USER.route) {
+            AdminCreateAccountScreen(
+                viewModel,
+                onBack = { AdminNavigationManager.profilePageAction.setClickedAction { profileId: String ->
+                    navController.navigate(AdminNavRoutes.createProfileRoute(profileId))
+                } }
+            )
+        }
+
         composable(
             route = AdminNavRoutes.CLASS_DETAIL.route
         ) { backStackEntry ->
@@ -145,6 +168,9 @@ fun AdminNavGraph(
                 classId,
                 onAccountClicked = {
                     AdminNavigationManager.profilePageAction.navigate(it)
+                },
+                onAddUserClicked = {
+                    AdminNavigationManager.addUserToClass.navigate(classId)
                 }
             )
         }
@@ -180,12 +206,8 @@ fun AdminNavGraph(
             )
         }
 
-        composable (AdminNavRoutes.SETTINGS.route) {
-
-            AdminSettingsScreen(
-                viewModel
-            )
-
+        composable(AdminNavRoutes.SETTINGS.route) {
+            AdminSettingsScreen(viewModel)
         }
 
         composable(AdminNavRoutes.ACTIVITY_THREAD.route) {
@@ -196,11 +218,25 @@ fun AdminNavGraph(
 
         composable(AdminNavRoutes.ALL_USERS.route) {
             SelectManagingUserScreen(
-                viewModel
+                viewModel,
+                onAccountClicked = {
+                    AdminNavigationManager.editUserPageAccountAction.navigate(it)
+                },
+                onCreateAccountClicked = {
+                    AdminNavigationManager.createUserPageAction.navigate()
+                }
             )
-            {
-                AdminNavigationManager.editUserPageAccountAction.navigate(it)
-            }
+        }
+
+        composable(AdminNavRoutes.ADD_USER_TO_CLASS.route) { backStackEntry ->
+            val classId = backStackEntry.arguments?.getString("className") ?: ""
+
+            AdminAddUserToClassScreen(
+                mainViewModel = viewModel,
+                classId = classId,
+                onBack = { navController.popBackStack() },
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
         composable(AdminNavRoutes.EDIT_USER_ACCOUNT.route) { backStackEntry ->
