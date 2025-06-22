@@ -63,6 +63,7 @@ fun AdminNavGraph(
     }
 
     AdminNavigationManager.createUserPageAction.setClickedAction {
+        viewModel.retrieveProfileRequest.forget()
         navController.navigate(AdminNavRoutes.CREATE_USER.route)
     }
 
@@ -153,6 +154,7 @@ fun AdminNavGraph(
             AdminCreateAccountScreen(
                 viewModel,
                 onBack = { AdminNavigationManager.profilePageAction.setClickedAction { profileId: String ->
+                    viewModel.retrieveProfileRequest.forget()
                     navController.navigate(AdminNavRoutes.createProfileRoute(profileId))
                 } }
             )
