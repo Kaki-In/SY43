@@ -106,7 +106,6 @@ fun ModifyUserAccountScreen(
 
         if (applyingRole)
         {
-            applyingRole = false
             LaunchedEffect(2) {
                 viewModel.applyAccountRoleRequest.execute {
                     viewModel.noobleApi.accounts.modifyRole(account.id, selectedRole)
