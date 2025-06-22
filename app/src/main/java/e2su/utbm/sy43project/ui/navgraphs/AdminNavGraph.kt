@@ -36,6 +36,7 @@ import e2su.utbm.sy43project.ui.screens.common.ShopScreen
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.SelfUiState
 import java.io.File
+import e2su.utbm.sy43project.ui.screens.admin.AdminCreateAccountScreen
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
@@ -59,6 +60,10 @@ fun AdminNavGraph(
 
     AdminNavigationManager.downloadsPageAction.setClickedAction {
         navController.navigate(AdminNavRoutes.DOWNLOADS.route)
+    }
+
+    AdminNavigationManager.createUserPageAction.setClickedAction {
+        navController.navigate(AdminNavRoutes.CREATE_USER.route)
     }
 
     AdminNavigationManager.profilePageAction.setClickedAction { profileId ->
@@ -144,6 +149,15 @@ fun AdminNavGraph(
             ShopScreen(viewModel = viewModel)
         }
 
+        composable(AdminNavRoutes.CREATE_USER.route) {
+            AdminCreateAccountScreen(
+                viewModel,
+                onBack = { AdminNavigationManager.profilePageAction.setClickedAction { profileId: String ->
+                    navController.navigate(AdminNavRoutes.createProfileRoute(profileId))
+                } }
+            )
+        }
+
         composable(
             route = AdminNavRoutes.CLASS_DETAIL.route
         ) { backStackEntry ->
@@ -204,11 +218,14 @@ fun AdminNavGraph(
 
         composable(AdminNavRoutes.ALL_USERS.route) {
             SelectManagingUserScreen(
-                viewModel
+                viewModel,
+                onAccountClicked = {
+                    AdminNavigationManager.editUserPageAccountAction.navigate(it)
+                },
+                onCreateAccountClicked = {
+                    AdminNavigationManager.createUserPageAction.navigate()
+                }
             )
-            {
-                AdminNavigationManager.editUserPageAccountAction.navigate(it)
-            }
         }
 
         composable(AdminNavRoutes.ADD_USER_TO_CLASS.route) { backStackEntry ->

@@ -11,6 +11,7 @@ enum class AdminNavRoutes(val route: String) {
     DOWNLOADS("downloads"),
     ALL_CLASSES("all_classes"),
     ALL_USERS("all_users"),
+    CREATE_USER("create_user"),
     ADD_USER_TO_CLASS("class/{className}/add_user"),
     EDIT_USER_ACCOUNT("edit_user/{accountId}");
 

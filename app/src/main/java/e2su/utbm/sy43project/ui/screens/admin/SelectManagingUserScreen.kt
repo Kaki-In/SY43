@@ -42,6 +42,7 @@ import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
 import e2su.utbm.sy43project.ui.components.LoadingSpinner
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import java.time.Month
@@ -53,6 +54,7 @@ fun SelectManagingUserScreen (
     viewModel: MainViewModel,
     modifier: Modifier = Modifier,
     onAccountClicked: (String) -> Unit,
+    onCreateAccountClicked: () -> Unit
 )
 {
     var searchingUser by remember {
@@ -99,9 +101,21 @@ fun SelectManagingUserScreen (
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Text(text = "All students", fontSize = 24.sp)
+
+        Row{
+            Button(
+                onClick = { onCreateAccountClicked }
+            ) {
+                Text("Create account")
+            }
+        }
+        Row{
+            Text(text = "All students", fontSize = 24.sp)
+            Spacer(Modifier.weight(1f))
+        }
 
         Row {
+
             TextField(
                 searchingUser,
                 onValueChange = {
@@ -220,6 +234,4 @@ fun SelectManagingUserScreen (
             }
         }
     }
-
 }
-
