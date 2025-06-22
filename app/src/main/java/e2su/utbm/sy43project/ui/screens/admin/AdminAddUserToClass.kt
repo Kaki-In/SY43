@@ -21,8 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.R
 import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountModel
+import e2su.utbm.sy43project.api.models.objects.NoobleApiAccountProfileModel
+import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
+import java.lang.Double
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +36,7 @@ fun AdminAddUserToClassScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     var searchText by remember { mutableStateOf("") }
     var searchResults by remember { mutableStateOf<List<NoobleApiAccountModel>>(emptyList()) }
     var isSearching by remember { mutableStateOf(false) }
@@ -128,7 +133,7 @@ fun AdminAddUserToClassScreen(
                                     addingUserId = user.id
                                     coroutineScope.launch {
                                         try {
-                                            mainViewModel.noobleApi.classes.addAccount(classId, user.id)
+                                            mainViewModel.noobleApi.classes.addAccount(user.id, classId)
                                             addSuccess = "${user.profile.firstName} ${user.profile.lastName} a été ajouté à la classe avec succès"
                                         } catch (e: Exception) {
                                             searchError = "Erreur lors de l'ajout: ${e.message}"

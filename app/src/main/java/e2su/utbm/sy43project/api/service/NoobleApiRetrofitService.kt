@@ -62,7 +62,7 @@ interface NoobleApiRetrofitService {
     suspend fun modifyUserRole(@Body request: ModifyUserRoleRequestModel)
 
     @GET("/accounts/search")
-    suspend fun searchAccount(@Query("pattern") pattern:String, @Query("offset") offset: Int, @Query("count") count: Int): List<NoobleApiAccountModel>
+    suspend fun searchAccount(@Query("pattern") pattern:String, @Query("count") count: Int, @Query("offset") offset: Int): List<NoobleApiAccountModel>
 
     @GET("/accounts/get-info")
     suspend fun getAccountInformation(@Query("user_id") userId:String): NoobleApiAccountModel
@@ -235,7 +235,7 @@ class AccountsApi(service: NoobleApiRetrofitService)
     suspend fun searchAccount(pattern: String, count: Int, offset: Int): List<NoobleApiAccountModel>
     {
         return _service.searchAccount(
-            pattern, offset, count
+            pattern, count, offset
         )
     }
 
