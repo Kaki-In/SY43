@@ -13,6 +13,7 @@ import e2su.tools.class_wrap.exporters.IntegrationExporter
 import e2su.tools.class_wrap.exporters.RawTextExporter
 import e2su.tools.class_wrap.exporters.RichTextExporter
 import e2su.tools.class_wrap.exporters.VideoExporter
+import e2su.utbm.sy43project.viewmodels.MainViewModel
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -44,12 +45,12 @@ public class ExportersMap {
     }
 
     @Composable
-    fun createView(jsonData: JsonObject, modifier: Modifier = Modifier)
+    fun createView(jsonData: JsonObject, mainViewModel: MainViewModel, modifier: Modifier = Modifier)
     {
         val type = jsonData["type"]?.jsonPrimitive?.content!!
         val data = jsonData["data"]!!
 
-        (this.getExporter(type) as Exporter<JsonElement>).createView(data, this, modifier = modifier)
+        (this.getExporter(type) as Exporter<JsonElement>).createView(data, this, mainViewModel, modifier = modifier)
 
     }
 

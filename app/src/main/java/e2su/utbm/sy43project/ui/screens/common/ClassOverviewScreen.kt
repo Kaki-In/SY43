@@ -29,12 +29,14 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiClassModel
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavRoutes
 import e2su.utbm.sy43project.ui.navigation.studentorteacher.StudentOrTeacherNavigationManager
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
+import e2su.utbm.sy43project.viewmodels.MainViewModel
 import e2su.utbm.sy43project.viewmodels.RetrieveDataViewModel
 import kotlinx.serialization.json.JsonObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClassOverviewScreen(
+    mainViewModel: MainViewModel,
     classId: String,
     requestViewModel: RetrieveDataViewModel<Pair<NoobleApiClassModel, JsonObject>>,
     onOpenDetails: () -> Unit,
@@ -115,6 +117,7 @@ fun ClassOverviewScreen(
 
                         DEFAULT_EXPORTERS_MAPS.createView(
                             classContent,
+                            mainViewModel,
                             modifier = Modifier.fillMaxSize()
                         )
 

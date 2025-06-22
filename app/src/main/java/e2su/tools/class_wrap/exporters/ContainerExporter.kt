@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
+import e2su.utbm.sy43project.viewmodels.MainViewModel
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -19,7 +20,7 @@ import kotlinx.serialization.json.jsonObject
 class ContainerExporter: Exporter<JsonObject>("container") {
 
     @Composable
-    override fun createView(data: JsonObject, map: ExportersMap, modifier: Modifier) {
+    override fun createView(data: JsonObject, map: ExportersMap, mainViewModel: MainViewModel, modifier: Modifier) {
         val children = data["children"]?.jsonArray!!
 
         Column (modifier = modifier.padding(0.dp)) {
@@ -34,7 +35,7 @@ class ContainerExporter: Exporter<JsonObject>("container") {
             {
                 var childData = children[i].jsonObject
 
-                map.createView(childData, modifier = Modifier.padding(5.dp))
+                map.createView(childData, mainViewModel, modifier = Modifier.padding(5.dp))
             }
 
             Spacer(

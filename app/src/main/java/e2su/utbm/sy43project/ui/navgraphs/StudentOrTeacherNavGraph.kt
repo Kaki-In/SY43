@@ -118,6 +118,7 @@ fun StudentOrTeacherNavGraph(
             val className = entry.arguments?.getString("className")!!
 
             ClassOverviewScreen(
+                viewModel,
                 classId = className,
                 requestViewModel = viewModel.overviewClassRequest,
                 onOpenDetails = {

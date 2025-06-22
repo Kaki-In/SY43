@@ -16,6 +16,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import e2su.tools.class_wrap.Exporter
 import e2su.tools.class_wrap.ExportersMap
+import e2su.utbm.sy43project.viewmodels.MainViewModel
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
@@ -97,6 +98,7 @@ class IntegrationExporter: Exporter<JsonObject>("integration") {
     override fun createView(
         data: JsonObject,
         map: ExportersMap,
+        mainViewModel: MainViewModel,
         modifier: Modifier
     ) {
         val height = try {data["height"]?.jsonPrimitive?.int!!} catch (exc: Exception) {data["height"]?.jsonPrimitive?.content!!}

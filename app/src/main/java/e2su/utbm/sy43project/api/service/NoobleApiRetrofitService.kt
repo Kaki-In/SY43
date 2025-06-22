@@ -31,7 +31,7 @@ import java.net.CookieManager
 import java.net.CookiePolicy
 
 
-private fun getRetrofitService(ctx: Context, baseUrl: String): Retrofit
+private fun getRetrofitService(ctx: Context, baseUrl: String): Pair<Retrofit, CookieManager>
 {
     val cookieHandler = CookieManager(
         PersistentCookieStore(ctx),
@@ -44,7 +44,7 @@ private fun getRetrofitService(ctx: Context, baseUrl: String): Retrofit
         .client(OkHttpClient().newBuilder().cookieJar(JavaNetCookieJar(cookieHandler)).build())
         .build()
 
-    return retrofitService
+    return Pair(retrofitService, cookieHandler)
 }
 
 
@@ -576,8 +576,12 @@ class ThreadApi(service: NoobleApiRetrofitService)
 }
 
 class NoobleApi(ctx: Context, baseUrl: String) {
+    lateinit var cookiesHandler: CookieManager
+
     private val _service : NoobleApiRetrofitService by lazy {
-        getRetrofitService(ctx, baseUrl).create(NoobleApiRetrofitService::class.java)
+        val (retrofit, cookies) = getRetrofitService(ctx, baseUrl)
+        cookiesHandler = cookies
+        return@lazy retrofit.create(NoobleApiRetrofitService::class.java)
     }
 
     val accounts = AccountsApi(_service)

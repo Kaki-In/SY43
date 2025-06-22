@@ -26,12 +26,14 @@ import e2su.utbm.sy43project.NoobleApp
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import androidx.core.net.toUri
+import e2su.utbm.sy43project.viewmodels.MainViewModel
 import kotlinx.coroutines.Dispatchers
 
 class FileExporter : Exporter<JsonObject>("file") {
 
     @Composable
-    override fun createView(data: JsonObject, map: ExportersMap, modifier: Modifier) {
+    override fun createView(data: JsonObject, map: ExportersMap,
+                            mainViewModel: MainViewModel, modifier: Modifier) {
         val src = data["src"]?.jsonPrimitive?.content!!
         val filename: String = data["filename"]?.jsonPrimitive?.content!!
         val description: String = data["description"]?.jsonPrimitive?.content!!
