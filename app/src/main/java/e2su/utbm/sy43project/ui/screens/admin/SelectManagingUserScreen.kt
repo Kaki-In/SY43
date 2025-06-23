@@ -91,7 +91,7 @@ fun SelectManagingUserScreen (
                 if (newUsers.size != 5)
                     loadedUsers += null
 
-                return@retrieveData loadedUsers.filter { it != null }.map { it -> it as NoobleApiAccountModel } + newUsers
+                return@retrieveData loadedUsers.filter { it != null }.map { it -> it as NoobleApiAccountModel }
             }
         }
     }

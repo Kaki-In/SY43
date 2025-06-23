@@ -1,4 +1,4 @@
-package e2su.nooble.models
+package e2su.utbm.sy43project.data
 
 import android.content.Context
 import androidx.room.Database

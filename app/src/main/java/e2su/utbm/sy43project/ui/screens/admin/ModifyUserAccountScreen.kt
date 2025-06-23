@@ -45,7 +45,7 @@ fun ModifyUserAccountScreen(
     modifier: Modifier = Modifier
 )
 {
-    if (viewModel.retrieveAccountRequest.requestState.value is CurrentDataRequestUiState.Idle)
+    if (viewModel.retrieveAccountRequest.requestState.value is CurrentDataRequestUiState.Idle && accountId != (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account.id)
     {
         LaunchedEffect(true) {
             viewModel.retrieveAccountRequest.retrieveData {

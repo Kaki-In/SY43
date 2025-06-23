@@ -2,7 +2,7 @@ package e2su.utbm.sy43project
 
 import android.app.Application
 import androidx.room.Room
-import e2su.nooble.models.AppDatabase
+import e2su.utbm.sy43project.data.AppDatabase
 
 class NoobleApp : Application() {
     companion object {

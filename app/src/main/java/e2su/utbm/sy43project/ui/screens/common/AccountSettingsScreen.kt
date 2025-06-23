@@ -72,7 +72,6 @@ import e2su.utbm.sy43project.api.models.objects.NoobleApiBadgeModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiDecorationModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceModel
 import e2su.utbm.sy43project.api.models.objects.NoobleApiResourceType
-import e2su.utbm.sy43project.ui.components.BadgePreview
 import e2su.utbm.sy43project.ui.components.LoadingSpinner
 import e2su.utbm.sy43project.ui.views.ProfileBadgesListView
 import e2su.utbm.sy43project.viewmodels.CurrentActionUiState

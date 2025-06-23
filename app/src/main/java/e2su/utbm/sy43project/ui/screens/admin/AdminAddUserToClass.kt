@@ -46,23 +46,19 @@ fun AdminAddUserToClassScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val performSearch: () -> Unit = {
-        if (searchText.length >= 3) {
-            isSearching = true
-            searchError = null
-            addSuccess = null
-            coroutineScope.launch {
-                try {
-                    val results = mainViewModel.noobleApi.accounts.searchAccount(searchText, count = 5, offset = 0)
-                    searchResults = results
-                } catch (e: Exception) {
-                    searchError = "Erreur lors de la recherche: ${e.message}"
-                    searchResults = emptyList()
-                } finally {
-                    isSearching = false
-                }
+        isSearching = true
+        searchError = null
+        addSuccess = null
+        coroutineScope.launch {
+            try {
+                val results = mainViewModel.noobleApi.accounts.searchAccount(searchText, count = 5, offset = 0)
+                searchResults = results
+            } catch (e: Exception) {
+                searchError = "Erreur lors de la recherche: ${e.message}"
+                searchResults = emptyList()
+            } finally {
+                isSearching = false
             }
-        } else {
-            searchError = "Entrez au moins 3 caractères pour rechercher"
         }
     }
 
