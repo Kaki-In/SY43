@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import e2su.utbm.sy43project.api.models.objects.NoobleApiRole
 import e2su.utbm.sy43project.ui.components.LoadingSpinner
+import e2su.utbm.sy43project.ui.navigation.admin.AdminNavigationManager
 import e2su.utbm.sy43project.viewmodels.CurrentActionUiState
 import e2su.utbm.sy43project.viewmodels.CurrentDataRequestUiState
 import e2su.utbm.sy43project.viewmodels.MainViewModel
@@ -120,6 +121,26 @@ fun ModifyUserAccountScreen(
             }
         }
 
+        var deletingAccount by remember { mutableStateOf(false) }
+
+        if (deletingAccount)
+        {
+            deletingAccount = false
+            LaunchedEffect(2) {
+                viewModel.deleteAccountRequest.execute {
+                    viewModel.noobleApi.accounts.delete(account.id)
+
+                    Toast
+                        .makeText(context,
+                            "The user has been deleted successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                        .show()
+                }
+            }
+        }
+
+
         var applyingMail by remember {
             mutableStateOf(false)
         }
@@ -127,7 +148,7 @@ fun ModifyUserAccountScreen(
         if (applyingMail)
         {
             applyingMail = false
-            LaunchedEffect(2) {
+            LaunchedEffect(3) {
                 viewModel.applyAccountMailRequest.execute {
                     viewModel.noobleApi.accounts.modifyMail(account.id, mailAddress)
 
@@ -137,6 +158,8 @@ fun ModifyUserAccountScreen(
                             Toast.LENGTH_SHORT
                         )
                         .show()
+                    viewModel.retrieveAllStudentsRequest.forget()
+                    AdminNavigationManager.usersPageAction.navigate()
                 }
             }
         }
@@ -228,6 +251,13 @@ fun ModifyUserAccountScreen(
                 modifier = Modifier.padding(5.dp)
             ) {
                 Text("Apply mail address")
+            }
+            Button(
+                enabled = viewModel.deleteAccountRequest.requestState.value !is CurrentActionUiState.Loading || accountId == (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account.id,
+                onClick = { deletingAccount = true },
+                modifier = Modifier.padding(5.dp)
+            ) {
+                Text("Delete account")
             }
         }
 

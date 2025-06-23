@@ -174,6 +174,7 @@ fun AdminCreateAccountScreen(
                         )
                         successMessage = "Compte créé avec succès"
                         errorMessage = null
+                        onBack(newAccountId ?: "")
                     } catch (e: Exception) {
                         errorMessage = "Erreur lors de la création du compte: ${e.message}"
                         successMessage = null
@@ -182,15 +183,6 @@ fun AdminCreateAccountScreen(
                     }
                 }
             }
-        }
-
-        // Bouton de retour
-        Button(
-            onClick = {onBack(newAccountId ?: "")},
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            Text("Profil du nouvel utilisateur", color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }
