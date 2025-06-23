@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -136,6 +137,7 @@ fun ModifyUserAccountScreen(
                             Toast.LENGTH_SHORT
                         )
                         .show()
+                    AdminNavigationManager.usersPageAction.navigate()
                 }
             }
         }
@@ -158,8 +160,6 @@ fun ModifyUserAccountScreen(
                             Toast.LENGTH_SHORT
                         )
                         .show()
-                    viewModel.retrieveAllStudentsRequest.forget()
-                    AdminNavigationManager.usersPageAction.navigate()
                 }
             }
         }
@@ -255,7 +255,13 @@ fun ModifyUserAccountScreen(
             Button(
                 enabled = viewModel.deleteAccountRequest.requestState.value !is CurrentActionUiState.Loading || accountId == (viewModel.selfViewModel.selfState.value as SelfUiState.Connected).account.id,
                 onClick = { deletingAccount = true },
-                modifier = Modifier.padding(5.dp)
+                modifier = Modifier.padding(5.dp),
+                colors = ButtonColors(
+                    containerColor = Color(0xFFc32919),
+                    contentColor = MaterialTheme.colorScheme.onBackground,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurface
+                )
             ) {
                 Text("Delete account")
             }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -93,6 +94,7 @@ fun AdminNavGraph(
     }
 
     AdminNavigationManager.usersPageAction.setClickedAction {
+        viewModel.retrieveAllStudentsRequest.forget()
         navController.navigate(AdminNavRoutes.ALL_USERS.route)
     }
 
@@ -106,7 +108,11 @@ fun AdminNavGraph(
         navController.navigate(AdminNavRoutes.createEditUserRoute(it))
     }
 
-    NavHost(navController, startDestination = AdminNavRoutes.HOME.route, modifier = modifier.fillMaxSize()) {
+    NavHost(
+        navController,
+        startDestination = AdminNavRoutes.HOME.route,
+        modifier = modifier.fillMaxSize()
+    ) {
         composable(AdminNavRoutes.HOME.route) {
             AdminHomeScreen(viewModel)
         }
