@@ -164,23 +164,21 @@ fun AdminCreateAccountScreen(
         Spacer(Modifier.height(16.dp))
 
         if (isSubmitting) {
-            if (viewModel.retrieveAccountRequest.requestState.value is CurrentDataRequestUiState.Idle) {
-                LaunchedEffect(true) {
-                    try {
-                        newAccountId = viewModel.noobleApi.accounts.create(
-                            emailInput,
-                            firstNameInput,
-                            lastNameInput
-                        )
-                        successMessage = "Compte créé avec succès"
-                        errorMessage = null
-                        onBack(newAccountId ?: "")
-                    } catch (e: Exception) {
-                        errorMessage = "Erreur lors de la création du compte: ${e.message}"
-                        successMessage = null
-                    } finally {
-                        isSubmitting = false
-                    }
+            LaunchedEffect(true) {
+                try {
+                    newAccountId = viewModel.noobleApi.accounts.create(
+                        emailInput,
+                        firstNameInput,
+                        lastNameInput
+                    )
+                    successMessage = "Compte créé avec succès"
+                    errorMessage = null
+                    onBack(newAccountId ?: "")
+                } catch (e: Exception) {
+                    errorMessage = "Erreur lors de la création du compte: ${e.message}"
+                    successMessage = null
+                } finally {
+                    isSubmitting = false
                 }
             }
         }
