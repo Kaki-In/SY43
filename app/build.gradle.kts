@@ -12,6 +12,13 @@ android {
     namespace = "e2su.utbm.sy43project"
     compileSdk = 35
 
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
+
     defaultConfig {
         applicationId = "e2su.utbm.sy43project"
         minSdk = 28
@@ -79,4 +86,9 @@ dependencies {
     ksp("androidx.room:room-compiler:2.7.1")
     implementation("androidx.room:room-ktx:2.7.1")
     implementation("io.coil-kt.coil3:coil-compose:3.2.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.8.3")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.8.3")
+    testImplementation("io.mockk:mockk:1.14.4")
+    androidTestImplementation("io.mockk:mockk-android:1.14.4")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }
